@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{543234C7-C5D2-426E-8E90-838F3670A15D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>assignment_2</RootNamespace>
+    <AssemblyName>assignment_2</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Background.cs" />
+    <Compile Include="Classes\Bullet.cs" />
+    <Compile Include="Components\Arrow.cs" />
+    <Compile Include="Components\DragHandler.cs" />
+    <Compile Include="Components\LineSegment.cs" />
+    <Compile Include="Components\NLineSegment.cs" />
+    <Compile Include="Components\test.cs" />
+    <Compile Include="Components\TextField.cs" />
+    <Compile Include="gxpengine\AnimationSprite.cs" />
+    <Compile Include="gxpengine\Canvas.cs" />
+    <Compile Include="gxpengine\Core\BlendMode.cs" />
+    <Compile Include="gxpengine\Core\BoxCollider.cs" />
+    <Compile Include="gxpengine\Core\Collider.cs" />
+    <Compile Include="gxpengine\Core\GLContext.cs" />
+    <Compile Include="gxpengine\Core\Rectangle.cs" />
+    <Compile Include="gxpengine\Core\Texture2D.cs" />
+    <Compile Include="gxpengine\Core\Transformable.cs" />
+    <Compile Include="gxpengine\Core\Vector2.cs" />
+    <Compile Include="gxpengine\FMOD\FMOD.cs" />
+    <Compile Include="gxpengine\Game.cs" />
+    <Compile Include="gxpengine\GameObject.cs" />
+    <Compile Include="gxpengine\Managers\CollisionManager.cs" />
+    <Compile Include="gxpengine\Managers\UpdateManager.cs" />
+    <Compile Include="gxpengine\Mathf.cs" />
+    <Compile Include="gxpengine\OpenGL\GL.cs" />
+    <Compile Include="gxpengine\Pivot.cs" />
+    <Compile Include="gxpengine\Sound.cs" />
+    <Compile Include="gxpengine\SoundChannel.cs" />
+    <Compile Include="gxpengine\Sprite.cs" />
+    <Compile Include="gxpengine\Utils\Input.cs" />
+    <Compile Include="gxpengine\Utils\Key.cs" />
+    <Compile Include="gxpengine\Utils\MouseHandler.cs" />
+    <Compile Include="gxpengine\Utils\Time.cs" />
+    <Compile Include="gxpengine\Utils\Utils.cs" />
+    <Compile Include="Classes\MyGame.cs" />
+    <Compile Include="Classes\Tank.cs" />
+    <Compile Include="Classes\Target.cs" />
+    <Compile Include="Classes\UnitTest.cs" />
+    <Compile Include="Classes\Vec2.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -47,6 +47,7 @@
     <Compile Include="Classes\Background.cs" />
     <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
+    <Compile Include="Classes\Spaceship.cs" />
     <Compile Include="Components\Arrow.cs" />
     <Compile Include="Components\DragHandler.cs" />
     <Compile Include="Components\LineSegment.cs" />

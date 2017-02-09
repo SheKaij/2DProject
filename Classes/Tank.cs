@@ -150,13 +150,6 @@ namespace GXPEngine
                 RotationSpeed();
             }
 
-            else
-            {
-                _velocity.x *= 0.95f;
-                _velocity.y *= 0.9555f;
-                _travelSpeed *= 0.955f;
-            }
-
             if (Input.GetKey(Key.S))
             {
                 _travelSpeed -= 0.5f;

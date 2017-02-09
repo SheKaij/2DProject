@@ -22,32 +22,27 @@ namespace GXPEngine
 
         public static float Deg2Rad(float pDegrees)
         {
-            pDegrees = pDegrees * (Mathf.PI / 180);
-            return pDegrees;
+            return pDegrees * (Mathf.PI / 180);
         }
 
         public static float Rad2Deg(float pRadians)
         {
-            pRadians = pRadians * (180 / Mathf.PI);
-            return pRadians;
+            return pRadians * (180 / Mathf.PI);
         }
 
-        //public static Vec2 GetUnitVectorRadians(Vec2 targetVec)
-        //{
-        //    Vec2 unitRadVec = new Vec2((targetVec.x * Mathf.Cos() / targetVec.x * Mathf.Sin(/*theta*/));
-        //    return unitRadVec;
-        //}
+        public static Vec2 GetUnitVectorRadians(float angle)
+        {
+            return new Vec2(Mathf.Cos(angle), Mathf.Sin(angle));
+        }
 
-        //public static float GetUnitVectorDegrees()
-        //{
-        //    float unitDegVec = Mathf.Atan2(pUnitY, pUnitX);
-        //    unitDegVec *= 180 / Mathf.PI;
-        //    return unitDegVec;
-        //}
+        public static Vec2 GetUnitVectorDegrees(float angle)
+        {
+            return GetUnitVectorRadians(Rad2Deg(angle));
+        }
 
         //public static float RandomUnitVector()
         //{
-        //    float randomUnitVec = 
+        //    float randomUnitVec =
         //    return unitDegVec;
         //}
 
@@ -88,6 +83,13 @@ namespace GXPEngine
                 y = y / getLength;
             }
                return this;
+        }
+
+        public Vec2 SetLength(float length)
+        {
+            this.Normalize();
+            this.Scale(length);
+            return this;
         }
 
         public Vec2 Clone()         // Instantiates a new vector, which copies the properties of the parsed in other vector

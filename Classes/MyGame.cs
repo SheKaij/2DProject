@@ -102,6 +102,6 @@ public class MyGame : Game
            _tank.Respawn();
         }
 
-        _tank.position = _tank.position.RotateAroundDegrees(width / 2, height / 2, 0.01f);
+        //_tank.position = _tank.position.RotateAroundDegrees(width / 2, height / 2, 0.01f);
     }
 }

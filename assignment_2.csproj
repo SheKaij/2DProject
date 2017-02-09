@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Background.cs" />
+    <Compile Include="Classes\Barrel.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />
     <Compile Include="Components\DragHandler.cs" />

@@ -28,9 +28,10 @@ public class Target : Canvas
         graphics.FillPolygon(
                     new SolidBrush(_ballColor), 
                     new PointF[] {
-                    new PointF (2*radius, radius),
-                    new PointF (0, 2*radius),
-                    new PointF (0, 0)
+                    new PointF (0, 0),                  //top left
+                    new PointF (2*radius, 0),           //top right
+                    new PointF (2*radius, 2*radius),    //bottom right
+                    new PointF (0, 2*radius)            //bottom left
             }
         );
     }

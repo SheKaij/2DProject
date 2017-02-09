@@ -16,15 +16,19 @@ namespace GXPEngine
         private float _travelSpeed;
         private float _rotationSpeed;
 
+        private bool _hasControl = false;
+
         private Barrel _barrel;
 
-        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, Color? pColor = null) : base("tank_assets\\tanks\\bodies\\pz_kpfw_iv.png")
+        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("tank_assets\\tanks\\bodies\\pz_kpfw_iv.png")
         {
             SetOrigin(width / 2, height / 2);
 
             radius = pRadius;
             position = pPosition;
             velocity = pVelocity;
+            hasControl = pHasControl;
+            
 
             _targetPos = new Vec2(Input.mouseX, Input.mouseY);
 
@@ -36,6 +40,18 @@ namespace GXPEngine
 
             _barrel = new Barrel();
             AddChild(_barrel);
+        }
+
+        public bool hasControl
+        {
+            set
+            {
+                _hasControl = value;
+            }
+            get
+            {
+                return _hasControl;
+            }
         }
 
         public float travelSpeed
@@ -149,8 +165,7 @@ namespace GXPEngine
                 _velocity.y = Mathf.Sin(radians) * _travelSpeed;
                 RotationSpeed();
             }
-
-            //x += _travelSpeed;
+            
             _velocity.x *= 0.9555f;
             _velocity.y *= 0.9555f;
             _travelSpeed *= 0.955f;
@@ -161,22 +176,27 @@ namespace GXPEngine
                 _travelSpeed = 0;
                 _velocity.SetXY(0, 0);
             }
+
+            if (_travelSpeed == 0)
+            {
+                RotationSpeed();
+            }
         }
 
         public void RotationSpeed()
         {
             if (Input.GetKey(Key.D))
             {
-                _rotationSpeed += 1f;
+                _rotationSpeed += 0.66f;
             }
 
             if (Input.GetKey(Key.A))
             {
-                _rotationSpeed -= 1f;
+                _rotationSpeed -= 0.66f;
             }
 
             rotation = _rotationSpeed;
-            //_rotationSpeed *= 0.9f;
+            //_rotationSpeed *= 0.99f;
         }
 
         public void Respawn()
@@ -189,7 +209,6 @@ namespace GXPEngine
 
         public void Step()
         {
-            //_velocity.Add(_acceleration);
             _position.Add(_velocity);
 
             x = _position.x;
@@ -199,32 +218,10 @@ namespace GXPEngine
 
         public void Update()
         {
-            HandleMovement();
-
-            _barrel.BarrelRotation();
-
-            //Console.WriteLine(_travelSpeed);
-        }
-
-        public class Barrel : Sprite
-        {
-
-            public Barrel() : base("tank_assets\\tanks\\barrels\\pz_kpfw_iv.png")
+            if (hasControl == true)
             {
-                SetOrigin(width / 2, height / 2);
-            }
-
-            public void BarrelRotation()
-            {
-                Vec2 _distance = new Vec2();
-                _distance.x = Input.mouseX - parent.x;
-                _distance.y = Input.mouseY - parent.y;
-                rotation =  _distance.GetAngleDegrees()- parent.rotation;
-            }
-
-            public void Update()
-            {
-                BarrelRotation();
+                HandleMovement();
+                _barrel.BarrelRotation();
             }
         }
     }

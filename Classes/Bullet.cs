@@ -6,14 +6,30 @@ public class Bullet : Sprite
 {
     private Vec2 _position;
     private Vec2 _velocity;
+    private int _mass;
 
-    public Bullet(Vec2 pPosition = null, Vec2 pVelocity = null) : base("tank_assets\\bullet.png")
+    public Bullet(int pMass, Vec2 pPosition = null, Vec2 pVelocity = null) : base("tank_assets\\bullet.png")
     {
         position = pPosition;
+        mass = pMass;
         velocity = pVelocity;
+
+
 
         x = position.x;
         y = position.y;
+    }
+
+    public int mass
+    {
+        set
+        {
+            _mass = value;
+        }
+        get
+        {
+            return _mass;
+        }
     }
 
     public Vec2 position

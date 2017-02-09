@@ -152,7 +152,7 @@ namespace GXPEngine
 
             else
             {
-                _velocity.x *= 0.9555f;
+                _velocity.x *= 0.95f;
                 _velocity.y *= 0.9555f;
                 _travelSpeed *= 0.955f;
             }
@@ -177,10 +177,10 @@ namespace GXPEngine
                 _velocity.SetXY(0, 0);
             }
 
-            if (_travelSpeed == 0)
-            {
-                RotationSpeed();
-            }
+            //if (_travelSpeed == 0)
+            //{
+            //    RotationSpeed();
+            //}
         }
 
         public void RotationSpeed()
@@ -220,6 +220,7 @@ namespace GXPEngine
         {
             if (hasControl == true)
             {
+                RotationSpeed();
                 HandleMovement();
                 _barrel.BarrelRotation();
             }

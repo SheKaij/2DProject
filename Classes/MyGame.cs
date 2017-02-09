@@ -171,7 +171,7 @@ public class MyGame : Game
         HandleHUD();
 
         ScoreDetection();
-        OrbitGravity();
+        //OrbitGravity();
         
         if (Input.GetKeyDown(Key.R))
         {

@@ -48,5 +48,19 @@ public class Bullet : Sprite
         x = _position.x;
         y = _position.y;
     }
+
+    private void OnCollision(GameObject other)
+    {
+        if (other is Target)
+        {
+            Destroy();
+            //Increase score
+        }
+
+        if (other is TextField)
+        {
+            Destroy();
+        }
+    }
 }
 

@@ -4,11 +4,13 @@ using System.Drawing;
 
 public class MyGame : Game
 {
-    // a change
+
     static void Main()
     {
         new MyGame().Start();
     }
+
+    //change
 
     private Tank _currentTank = null;
     private Tank _tank1 = null;

@@ -27,6 +27,8 @@ public class MyGame : Game
     private string _currentPlayer;
     private int _totalScore = 0;
     private const float BULLETSPEED = 24;
+    private float _gravForce;
+    private const float _gravForceConstant = 6.67408f * 10f - 11f;
 
     public MyGame() : base(1920, 600, false)
     {
@@ -96,7 +98,7 @@ public class MyGame : Game
         if (Input.GetMouseButtonDown(0))
         {
             // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
-            _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
+            _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
 
             //Rotate the bullet the way the barrel was rotated towards
@@ -138,15 +140,18 @@ public class MyGame : Game
         {
             if (_bullet.x > _target.x - 350 && _bullet.x < _target.x + 350 && _bullet.y > _target.y - 100 && _bullet.y < _target.y + 100)
             {
-                _bullet.position = _bullet.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.02f);
+                _bullet.position = _bullet.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.05f);
 
-                // THIS IS THE ORBIT
+                //This would be the Newton formula for calculating the gravitational force
+                
+
+                // Calculate the distance between the bullet and the center of the target
                 Vec2 _distance = new Vec2();
                 _distance.x = _target.position.x - _bullet.position.x;
                 _distance.y = _target.position.y - _bullet.position.y;
                 _bullet.rotation = _distance.GetAngleDegrees();
 
-                // THIS IS GRAVITY
+                // This would be gravity
                 //_tank.velocity.x += 1;
 
                 //DONE: SET THE CENTER ORBIT POINT AT A TARGET
@@ -173,6 +178,21 @@ public class MyGame : Game
            _tank1.Respawn();
         }
 
+        if (Input.GetKey(Key.TAB))
+        {
+            if (_currentTank.travelSpeed != 0)
+            {
+                _currentTank.position = _currentTank.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.05f);
+
+                // THIS IS THE ORBIT
+                Vec2 _distance = new Vec2();
+                _distance.x = _target.position.x - _currentTank.position.x;
+                _distance.y = _target.position.y - _currentTank.position.y;
+                _currentTank.rotation = _currentTank.velocity.GetAngleDegrees();
+            }
+        }
+
+        Console.WriteLine(_currentTank.velocity);
         // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
         if (Input.GetKeyDown(Key.ONE))
         {

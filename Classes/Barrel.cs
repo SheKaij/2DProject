@@ -3,7 +3,7 @@ using GXPEngine;
 
 public class Barrel : Sprite
 {
-    public Barrel() : base("tank_assets\\tanks\\barrels\\pz_kpfw_iv.png")
+    public Barrel() : base("assets\\tanks\\barrels\\pz_kpfw_iv.png")
     {
         SetOrigin(width / 2, height / 2);
     }

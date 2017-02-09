@@ -115,10 +115,10 @@ namespace GXPEngine.Core
 		//														Load()
 		//------------------------------------------------------------------------------------------------------------------------
 		private void Load(string filename) {
-			_filename = filename;
+			_filename = "../../"+ filename;
 			Bitmap bitmap;
 			try {
-				bitmap = new Bitmap(filename);
+				bitmap = new Bitmap(_filename);
 			} catch {
 				throw new Exception("Image " + filename + " cannot be found.");
 			}

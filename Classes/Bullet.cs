@@ -8,7 +8,7 @@ public class Bullet : Sprite
     private Vec2 _velocity;
     private int _mass;
 
-    public Bullet(int pMass, Vec2 pPosition = null, Vec2 pVelocity = null) : base("tank_assets\\bullet.png")
+    public Bullet(int pMass, Vec2 pPosition = null, Vec2 pVelocity = null) : base("assets\\bullet.png")
     {
         position = pPosition;
         mass = pMass;

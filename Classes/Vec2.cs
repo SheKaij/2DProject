@@ -117,12 +117,12 @@ namespace GXPEngine
 
         public void SetAngleDegrees(float newAngleDegrees)
         {
-            
+            //
         }
 
         public void SetAngleRadians(float newAngleRadians)
         {
-
+            //
         }
 
         public void RotateDegrees()

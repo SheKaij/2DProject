@@ -7,7 +7,7 @@ using GXPEngine;
 
 public class Background : Sprite
 {
-    public Background() : base("tank_assets\\desert.png")
+    public Background() : base("assets\\desert.png")
     {
         //Empty
     }

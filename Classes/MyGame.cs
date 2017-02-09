@@ -26,9 +26,9 @@ public class MyGame : Game
 
     private string _currentPlayer;
     private int _totalScore = 0;
-    private const float BULLETSPEED = 24;
+    private const float BULLETSPEED = 8;
     private float _gravForce;
-    private const float _gravForceConstant = 6.67408f * 10f - 11f;
+    private const float _gravForceConstant = 6.67408f * 10 - 11;
 
     public MyGame() : base(1920, 600, false)
     {
@@ -149,7 +149,7 @@ public class MyGame : Game
                 Vec2 _distance = new Vec2();
                 _distance.x = _target.position.x - _bullet.position.x;
                 _distance.y = _target.position.y - _bullet.position.y;
-                _bullet.rotation = _distance.GetAngleDegrees();
+                //_bullet.rotation = _distance.GetAngleDegrees();
 
                 // This would be gravity
                 //_tank.velocity.x += 1;
@@ -171,7 +171,7 @@ public class MyGame : Game
         HandleHUD();
 
         ScoreDetection();
-        //OrbitGravity();
+        OrbitGravity();
         
         if (Input.GetKeyDown(Key.R))
         {

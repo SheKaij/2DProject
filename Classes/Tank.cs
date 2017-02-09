@@ -20,7 +20,7 @@ namespace GXPEngine
 
         private Barrel _barrel;
 
-        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("tank_assets\\tanks\\bodies\\pz_kpfw_iv.png")
+        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("assets\\tanks\\bodies\\pz_kpfw_iv.png")
         {
             SetOrigin(width / 2, height / 2);
 

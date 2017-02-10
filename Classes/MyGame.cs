@@ -1,6 +1,7 @@
 using System;
 using GXPEngine;
 using System.Drawing;
+using System.Collections;
 
 public class MyGame : Game
 {
@@ -10,24 +11,27 @@ public class MyGame : Game
         new MyGame().Start();
     }
 
+    private const float BULLETSPEED = 15;
+    private readonly float GRAVITATIONAL_FORCE = 30000f;
+
     private Sound _sfxShooting;
     private Sound _bgMusicSound;
     private SoundChannel _playMusic;
 
-    private Tank _currentTank = null;
-    private Tank _tank1 = null;
-    private Tank _tank2 = null;
-
     private Background _background1 = null;
 
+    private Tank _currentTank;
+    private Tank _tank1;
+    private Tank _tank2;
+    
     private Bullet _bullet;
-    private Target _target = null;
+    private Planet _planet = null;
     private TextField tf = null;
     private UnitTest _unitTest = null;
 
     private string _currentPlayer;
     private int _totalScore = 0;
-    private const float BULLETSPEED = 3;
+    
 
     public MyGame() : base(1920, 600, false)
     {
@@ -49,8 +53,8 @@ public class MyGame : Game
         AddChild(_tank2);
         _tank2.hasControl = false;
 
-        _target = new Target(30, new Vec2(width * 0.5f, height / 2));
-        AddChild(_target);
+        _planet = new Planet(30, new Vec2(width * 0.5f, height / 2));
+        AddChild(_planet);
 
         tf = TextField.CreateTextField("Control: Player 0" + "\n"
                                      + "Speed: 00 mph" + "\n"
@@ -62,50 +66,58 @@ public class MyGame : Game
 
     public void HandleBoundaries()
     {
-        if (_currentTank.position.x + _currentTank.width / 2 < 0)       // if tank goes left, continue to the right
+        if (_currentTank.position.x < 0)       // if tank goes left, continue to the right
         {
-            _currentTank.position.x = width + _currentTank.width / 2;
+            _currentTank.position.x = 0;
+            _currentTank.velocity.x = 0;
         }
-        else if (_currentTank.position.x - _currentTank.width / 2 > width)
+        else if (_currentTank.position.x > width)
         {
-            _currentTank.position.x = 0 - _currentTank.width / 2;
+            _currentTank.position.x = width;
+            _currentTank.velocity.x = 0;
         }
 
 
-        if (_currentTank.position.y + _currentTank.height < 0)
+        if (_currentTank.position.y < 0)
         {
-            _currentTank.position.y = height + _currentTank.height;
+            _currentTank.position.y = 0;
+            _currentTank.velocity.y = 0;
         }
-        else if (_currentTank.position.y - _currentTank.height > height)
+        else if (_currentTank.position.y > height)
         {
-            _currentTank.position.y = 0 - _currentTank.height;
+            _currentTank.position.y = height;
+            _currentTank.velocity.y = 0;
         }
     }
 
     public void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _bullet == null)
         {
             // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
             _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
             _sfxShooting.Play();
             _currentTank.shotsLeft -= 1;
+            _bullet.velocity = new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y);
+            _bullet.velocity.Normalize();
+            _bullet.velocity.Scale(BULLETSPEED);
+            _bullet.rotation = _bullet.velocity.GetAngleDegrees();
 
-            //Rotate the bullet the way the barrel was rotated towards
-            _bullet.rotation = _currentTank.barrel.rotation + _currentTank.rotation;
         }
 
         if (_bullet != null)
         {
-            float angleInRadians = _bullet.rotation * Mathf.PI / 180;
+            //float angleInRadians = _bullet.rotation * Mathf.PI / 180;
 
-            _bullet.velocity.x = BULLETSPEED * Mathf.Cos(angleInRadians);
-            _bullet.velocity.y = BULLETSPEED * Mathf.Sin(angleInRadians);
+            //_bullet.velocity.x = BULLETSPEED * Mathf.Cos(angleInRadians);
+            //_bullet.velocity.y = BULLETSPEED * Mathf.Sin(angleInRadians);
+            _bullet.rotation = _bullet.velocity.GetAngleDegrees();
 
             if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
             {
                 _bullet.Destroy();
+                _bullet = null;
             }
         }
     }
@@ -116,11 +128,12 @@ public class MyGame : Game
         {
             foreach (GameObject item in _bullet.GetCollisions())
             {
-                if (item is Target)
+                if (item is Planet)
                 {
                     _bullet.sfxDestroyed.Play();
                     _currentTank.score += 10;
                     _bullet.Destroy();
+                    _bullet = null;
                 }
 
                 if (item is Tank && item != _currentTank)
@@ -128,6 +141,7 @@ public class MyGame : Game
                     _bullet.sfxDestroyed.Play();
                     _currentTank.score += 50;
                     _bullet.Destroy();
+                    _bullet = null;
 
                 }
             }
@@ -154,7 +168,6 @@ public class MyGame : Game
     {
         if (_currentTank == _tank2 && _currentTank.shotsLeft <= 0)
         {
-            _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank1;
             _tank2.shotsLeft = 5;
             _tank1.hasControl = true;
@@ -163,7 +176,6 @@ public class MyGame : Game
 
         if (_currentTank == _tank1 && _currentTank.shotsLeft <= 0)
         {
-            _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank2;
             _tank1.shotsLeft = 5;
             _tank1.hasControl = false;
@@ -172,9 +184,9 @@ public class MyGame : Game
     }
     private void OrbitGravity()
     {
-        if (_bullet != null)
+        if (_bullet != null )
         {
-           Vec2 _gravity = new Vec2((_target.position.x - _bullet.position.x), (_target.position.y - _bullet.position.y));
+           Vec2 _gravity = new Vec2((_planet.position.x - _bullet.position.x), (_planet.position.y - _bullet.position.y));
 			float distLength = _gravity.Length();
 			_gravity.Normalize();
 			Console.WriteLine(distLength);
@@ -188,6 +200,42 @@ public class MyGame : Game
 		}
     }
 
+    private void CheckControls()
+    {
+        if (Input.GetKeyDown(Key.R))
+        {
+            _tank1.Respawn();
+        }
+
+        // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
+        if (Input.GetKeyDown(Key.ONE))
+        {
+            _currentTank = _tank1;
+            _tank1.shotsLeft = 5;
+            _tank1.hasControl = true;
+            _tank2.hasControl = false;
+        }
+
+        if (Input.GetKeyDown(Key.TWO))
+        {
+            _currentTank = _tank2;
+            _tank2.shotsLeft = 5;
+            _tank1.hasControl = false;
+            _tank2.hasControl = true;
+        }
+    }
+
+    private void HandleGravity()
+    {
+        if (_bullet != null)
+        {
+            Vec2 gravityVector = new Vec2(_planet.x - _bullet.x, _planet.y - _bullet.y);
+            gravityVector.Normalize();
+            gravityVector.Scale(GRAVITATIONAL_FORCE / Mathf.Pow(_bullet.DistanceTo(_planet), 2));
+            _bullet.velocity.Add(gravityVector);
+        }
+    }
+    
     private void Update()
     {
         HandleAttack();
@@ -195,32 +243,16 @@ public class MyGame : Game
         HandleHUD();
         CheckHitCollision();
         TurnCheck();
-        OrbitGravity();
+        HandleGravity();
+        //OrbitGravity();
+        CheckControls();
 
         Console.WriteLine(_currentTank.score);
         
-        if (Input.GetKeyDown(Key.R))
-        {
-           _tank1.Respawn();
-        }
-
-        // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
-        if (Input.GetKeyDown(Key.ONE))
-        {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank1;
-            _tank1.hasControl = true;
-            _tank2.hasControl = false;
-        }
-
-        if (Input.GetKeyDown(Key.TWO))
-        {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank2;
-            _tank1.hasControl = false;
-            _tank2.hasControl = true;
-        }
+        
         //_tank.position = _tank.position.RotateAroundDegrees(width / 2, height / 2, 0.01f);
         //NOTE: Ask Martins to check sourcetree for the previous project, 'Flexman', as the code for the score system/health bars might be needed
     }
+
+    
 }

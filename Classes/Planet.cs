@@ -2,12 +2,12 @@
 using System.Drawing;
 using GXPEngine;
 
-public class Target : Sprite
+public class Planet : Sprite
 {
     public readonly int radius;
     private Vec2 _position;
 
-    public Target(int pRadius, Vec2 pPosition = null) : base("assets\\prototype_planet.png")
+    public Planet(int pRadius, Vec2 pPosition = null) : base("assets\\prototype_planet.png")
     {
         radius = pRadius;
         position = pPosition;

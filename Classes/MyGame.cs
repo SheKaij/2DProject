@@ -27,9 +27,7 @@ public class MyGame : Game
 
     private string _currentPlayer;
     private int _totalScore = 0;
-    private const float BULLETSPEED = 8;
-    private float _gravForce;
-    private const float _gravForceConstant = 6.67408f * 10 - 11;
+    private const float BULLETSPEED = 3;
 
     public MyGame() : base(1920, 600, false)
     {
@@ -89,7 +87,7 @@ public class MyGame : Game
         if (Input.GetMouseButtonDown(0))
         {
             // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
-            _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
+            _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
             _sfxShooting.Play();
             _currentTank.shotsLeft -= 1;
@@ -176,30 +174,18 @@ public class MyGame : Game
     {
         if (_bullet != null)
         {
-            if (_bullet.x > _target.x - 350 && _bullet.x < _target.x + 350 && _bullet.y > _target.y - 100 && _bullet.y < _target.y + 100)
-            {
-                _bullet.position = _bullet.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.05f);
+           Vec2 _gravity = new Vec2((_target.position.x - _bullet.position.x), (_target.position.y - _bullet.position.y));
+			float distLength = _gravity.Length();
+			_gravity.Normalize();
+			Console.WriteLine(distLength);
 
-                //This would be the Newton formula for calculating the gravitational force
-                
+			if (distLength < 400)
+			{
+				Console.WriteLine(_gravity);
+				_bullet.velocity.Add(_gravity);
+			}
 
-                // Calculate the distance between the bullet and the center of the target
-                Vec2 _distance = new Vec2();
-                _distance.x = _target.position.x - _bullet.position.x;
-                _distance.y = _target.position.y - _bullet.position.y;
-                //_bullet.rotation = _distance.GetAngleDegrees();
-
-                // This would be gravity
-                //_tank.velocity.x += 1;
-
-                //DONE: SET THE CENTER ORBIT POINT AT A TARGET
-                //DONE: LET BULLETS ROTATE AROUND A TARGET
-                //DONE: DESTROY A BULLET 
-
-                //NEW PROBLEMS: BULLETS DON'T HONE TOWARDS TARGET
-                //NEW PROBLEMS: BULLETS SHOULD BE MADE CANNONS, A ROUND OBJECT, SO THAT THE ROTATION DOESN'T LOOK OFF
-            }
-        }
+		}
     }
 
     private void Update()
@@ -209,7 +195,7 @@ public class MyGame : Game
         HandleHUD();
         CheckHitCollision();
         TurnCheck();
-        //OrbitGravity();
+        OrbitGravity();
 
         Console.WriteLine(_currentTank.score);
         

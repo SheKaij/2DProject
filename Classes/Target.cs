@@ -7,13 +7,13 @@ public class Target : Sprite
     public readonly int radius;
     private Vec2 _position;
 
-    public Target(int pRadius, Vec2 pPosition = null, Color? pColor = null) : base("assets\\prototype_planet.png")
+    public Target(int pRadius, Vec2 pPosition = null) : base("assets\\prototype_planet.png")
     {
         radius = pRadius;
         position = pPosition;
         SetOrigin(width / 2, height / 2);
 
-        SetScaleXY(0.5f);
+        SetScaleXY(0.25f);
         x = game.width / 2;
         y = game.height / 2;
 

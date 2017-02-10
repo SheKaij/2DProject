@@ -13,7 +13,7 @@ public class Target : Sprite
         position = pPosition;
         SetOrigin(width / 2, height / 2);
 
-        SetScaleXY(0.25f);
+        SetScaleXY(0.5f);
         x = game.width / 2;
         y = game.height / 2;
 

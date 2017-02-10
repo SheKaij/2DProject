@@ -37,9 +37,9 @@ namespace GXPEngine
 			uint loop = FMOD.FMOD_LOOP_OFF; // no loop
 			if ( looping ) loop = FMOD.FMOD_LOOP_NORMAL;
 			if ( streaming ) {
-				FMOD.System_CreateStream( _system, filename, loop, 0, out _id );	
+				FMOD.System_CreateStream( _system, "../../" + filename, loop, 0, out _id );	
 			} else {
-				FMOD.System_CreateSound( _system, filename, loop, 0, out _id );
+				FMOD.System_CreateSound( _system, "../../" + filename, loop, 0, out _id );
 			}
 		}
 		

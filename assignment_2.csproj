@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Background.cs" />
-    <Compile Include="Classes\Barrel.cs" />
+    <Compile Include="Classes\Turret.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />
     <Compile Include="Components\DragHandler.cs" />
@@ -66,6 +66,7 @@
     <Compile Include="gxpengine\FMOD\FMOD.cs" />
     <Compile Include="gxpengine\Game.cs" />
     <Compile Include="gxpengine\GameObject.cs" />
+    <Compile Include="gxpengine\HUD.cs" />
     <Compile Include="gxpengine\Managers\CollisionManager.cs" />
     <Compile Include="gxpengine\Managers\UpdateManager.cs" />
     <Compile Include="gxpengine\Mathf.cs" />

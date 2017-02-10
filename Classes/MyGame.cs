@@ -10,14 +10,15 @@ public class MyGame : Game
         new MyGame().Start();
     }
 
+    private Sound _sfxShooting;
+    private Sound _bgMusicSound;
+    private SoundChannel _playMusic;
+
     private Tank _currentTank = null;
     private Tank _tank1 = null;
     private Tank _tank2 = null;
 
     private Background _background1 = null;
-    private Background _background2 = null;
-    private Background _background3 = null;
-    private Background _background4 = null;
 
     private Bullet _bullet = null;
     private Target _target = null;
@@ -33,33 +34,22 @@ public class MyGame : Game
     public MyGame() : base(1920, 600, false)
     {
         _unitTest = new UnitTest();
+
+        _sfxShooting = new Sound("assets\\sfx\\placeholder_shoot2.wav");
+        _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
+        _playMusic = _bgMusicSound.Play();
         
-        // REAL CHEAP BACKGROUND TRICK, SHOULD PROBABLY USE A FOR LOOP
         _background1 = new Background();
         AddChild(_background1);
-
-        _background2 = new Background();
-        AddChild(_background2);
-        _background2.x = game.width / 2;
-
-        _background3 = new Background();
-        AddChild(_background3);
-        _background3.y = game.height / 2;
-
-        _background4 = new Background();
-        AddChild(_background4);
-        _background4.x = game.width / 2;
-        _background4.y = game.height / 2;
 
         _tank1 = new Tank(30, new Vec2(width * 0.25f, height * 0.33f));
         AddChild(_tank1);
         _currentTank = _tank1;      // I want player 1 to start the game
         _tank1.hasControl = true;
-        
+
         _tank2 = new Tank(30, new Vec2(width * 0.25f, height * 0.66f));
         AddChild(_tank2);
-        //_tank2.rotation = 180;
-        //_tank2.hasControl = false;
+        _tank2.hasControl = false;
 
         _target = new Target(30, new Vec2(width * 0.5f, height / 2));
         AddChild(_target);
@@ -100,6 +90,7 @@ public class MyGame : Game
             // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
             _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
+            _sfxShooting.Play();
 
             //Rotate the bullet the way the barrel was rotated towards
             _bullet.rotation = _currentTank.barrel.rotation + _currentTank.rotation;
@@ -130,7 +121,7 @@ public class MyGame : Game
         else if (_currentTank == _tank2) { _currentPlayer = "2"; }
 
         tf.text = "Control: Player " + _currentPlayer + "\n"
-                + "Speed: " + Math.Abs(Math.Round(_currentTank.travelSpeed)) + "  Mph" + "\n"
+                + "Speed: " + Math.Abs(Math.Round(_currentTank.velocity.x)) + "  Mph" + "\n"
                 + "Score: " + _totalScore;
     }
 
@@ -178,25 +169,10 @@ public class MyGame : Game
            _tank1.Respawn();
         }
 
-        if (Input.GetKey(Key.TAB))
-        {
-            if (_currentTank.travelSpeed != 0)
-            {
-                _currentTank.position = _currentTank.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.05f);
-
-                // THIS IS THE ORBIT
-                Vec2 _distance = new Vec2();
-                _distance.x = _target.position.x - _currentTank.position.x;
-                _distance.y = _target.position.y - _currentTank.position.y;
-                _currentTank.rotation = _currentTank.velocity.GetAngleDegrees();
-            }
-        }
-
-        Console.WriteLine(_currentTank.velocity);
         // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
         if (Input.GetKeyDown(Key.ONE))
         {
-            _currentTank.travelSpeed = 0;
+            _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank1;
             _tank1.hasControl = true;
             _tank2.hasControl = false;
@@ -204,7 +180,7 @@ public class MyGame : Game
 
         if (Input.GetKeyDown(Key.TWO))
         {
-            _currentTank.travelSpeed = 0;
+            _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank2;
             _tank1.hasControl = false;
             _tank2.hasControl = true;

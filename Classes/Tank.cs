@@ -8,37 +8,46 @@ namespace GXPEngine
         //public but still readonly, can only be assigned once and cannot be overwritten after this
         public readonly int radius;
 
+        private Sound _sfxEngine;
+
         private Vec2 _position;
         private Vec2 _velocity;
+        private Vec2 _acceleration;
         private Vec2 _targetPos;
         private Vec2 _targetDelta;
 
-        private float _travelSpeed;
-        private float _rotationSpeed;
+        private float _flightAcceleration = 0.1f;
+        private const float FLIGHTFRICTION = 0.98f;
+
+        public float _rotationalAcceleration;
+        public float _rotationalVelocity;
+
+        private const float ROTATIONACCELERATION = 0.001f;
+        private const float ROTATIONFRICTION = 0.95f;
 
         private bool _hasControl = false;
 
-        private Barrel _barrel;
+        private Turret _barrel;
 
-        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("assets\\tanks\\bodies\\pz_kpfw_iv.png")
+        public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("assets\\spaceship\\ship.png")
         {
-            SetOrigin(width / 2, height / 2);
+            SetOrigin(width * 0.40f, height / 2);
 
             radius = pRadius;
             position = pPosition;
             velocity = pVelocity;
             hasControl = pHasControl;
             
+            _acceleration = Vec2.zero;
+
+            _sfxEngine = new Sound("assets\\sfx\\placeholder_engine1.wav", false, false);
 
             _targetPos = new Vec2(Input.mouseX, Input.mouseY);
 
             x = position.x;
             y = position.y;
 
-            _travelSpeed = 0;
-            _rotationSpeed = 0;
-
-            _barrel = new Barrel();
+            _barrel = new Turret();
             AddChild(_barrel);
         }
 
@@ -58,11 +67,11 @@ namespace GXPEngine
         {
             set
             {
-                _travelSpeed = value;
+                _flightAcceleration = value;
             }
             get
             {
-                return _travelSpeed;
+                return _flightAcceleration;
             }
         }
 
@@ -78,7 +87,7 @@ namespace GXPEngine
             }
         }
 
-        public Barrel barrel
+        public Turret barrel
         {
             set
             {
@@ -143,72 +152,85 @@ namespace GXPEngine
 
             if (Input.GetKey(Key.W))
             {
-                _travelSpeed += 0.5f;
                 float radians = rotation * Mathf.PI / 180;
-                _velocity.x = Mathf.Cos(radians) * _travelSpeed;
-                _velocity.y = Mathf.Sin(radians) * _travelSpeed;
+                _acceleration.x = Mathf.Cos(radians) * _flightAcceleration;
+                _acceleration.y = Mathf.Sin(radians) * _flightAcceleration;
                 RotationSpeed();
             }
 
             else
             {
-                _velocity.x *= 0.95f;
-                _velocity.y *= 0.9555f;
-                _travelSpeed *= 0.955f;
+                _acceleration.SetXY(0, 0);
             }
 
-            if (Input.GetKey(Key.S))
+            if (_acceleration.x < 1 && _acceleration.x < -1 && _acceleration.y < 1 && _acceleration.y < -1)
             {
-                _travelSpeed -= 0.5f;
-                float radians = rotation * Mathf.PI / 180;
-                _velocity.x = Mathf.Cos(radians) * _travelSpeed;
-                _velocity.y = Mathf.Sin(radians) * _travelSpeed;
-                RotationSpeed();
-            }
-            
-            _velocity.x *= 0.9555f;
-            _velocity.y *= 0.9555f;
-            _travelSpeed *= 0.955f;
-            Step();
-
-            if (_travelSpeed < 0.3 && _travelSpeed > -0.3)
-            {
-                _travelSpeed = 0;
                 _velocity.SetXY(0, 0);
             }
-
-            //if (_travelSpeed == 0)
-            //{
-            //    RotationSpeed();
-            //}
+            _velocity.Scale(FLIGHTFRICTION);
+            Step();
         }
 
         public void RotationSpeed()
         {
             if (Input.GetKey(Key.D))
             {
-                _rotationSpeed += 0.66f;
+                _rotationalAcceleration += ROTATIONACCELERATION;
             }
 
-            if (Input.GetKey(Key.A))
+            else if (Input.GetKey(Key.A))
             {
-                _rotationSpeed -= 0.66f;
+                _rotationalAcceleration -= ROTATIONACCELERATION;
             }
 
-            rotation = _rotationSpeed;
-            //_rotationSpeed *= 0.99f;
+            else
+            {
+                _rotationalAcceleration = 0;
+            }
+
+            if (Input.GetKeyUp(Key.D) || Input.GetKeyUp(Key.A))
+            {
+                _rotationalAcceleration = 0;
+            }
+            
+            _rotationalVelocity *= ROTATIONFRICTION;
+            _rotationalVelocity += _rotationalAcceleration;
+
+            if (_rotationalVelocity > 1 && _flightAcceleration != 0)
+            {
+                _rotationalVelocity = 1;
+            }
+
+            else if (_rotationalVelocity > 2)
+            {
+                _rotationalVelocity = 2;
+            }
+
+
+            if (_rotationalVelocity < -1 && _flightAcceleration != 0)
+            {
+                _rotationalVelocity = -1;
+            }
+
+            else if (_rotationalVelocity < -2)
+            {
+                _rotationalVelocity = -2;
+                
+            }
+
+            rotation += _rotationalVelocity;
         }
 
         public void Respawn()
         {
             position.SetXY(game.width / 2, game.height / 2);
             rotation = 0;
-            _travelSpeed = 0;
-            _rotationSpeed = 0;
+            _flightAcceleration = 0;
         }
 
         public void Step()
         {
+            _velocity.Add(_acceleration);
             _position.Add(_velocity);
 
             x = _position.x;
@@ -220,9 +242,10 @@ namespace GXPEngine
         {
             if (hasControl == true)
             {
+                Console.WriteLine(_acceleration);
                 RotationSpeed();
                 HandleMovement();
-                _barrel.BarrelRotation();
+                _barrel.TurretRotation();
             }
         }
     }

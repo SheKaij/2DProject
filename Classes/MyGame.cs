@@ -24,15 +24,15 @@ public class MyGame : Game
     private PlanetManager _pm = null;
     private Planet _planet = null;
     private TextField tf = null;
-    private UnitTest _unitTest = null;
 
     private string _currentPlayer;
+
     private const float BULLETSPEED = 8;
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
+
     public MyGame() : base(1920, 1080, false)
     {
-        _unitTest = new UnitTest();
 
         _sfxShooting = new Sound("assets\\sfx\\placeholder_shoot2.wav");
         _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
@@ -90,7 +90,8 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0))
         {
-            _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
+            _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
+
             AddChild(_bullet);
             _sfxShooting.Play();
             _currentTank.shotsLeft -= 1;
@@ -212,6 +213,7 @@ public class MyGame : Game
         CheckHitCollision();
         TurnCheck();
         //OrbitGravity();
+
         
         if (Input.GetKeyDown(Key.R))
         {

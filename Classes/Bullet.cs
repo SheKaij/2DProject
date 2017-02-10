@@ -6,15 +6,13 @@ public class Bullet : Sprite
 {
     private Vec2 _position;
     private Vec2 _velocity;
-    private int _mass;
 
     private Sound _sfxDestroyed;
 
-    public Bullet(int pMass, Vec2 pPosition = null, Vec2 pVelocity = null) : base("assets\\bullet.png")
+    public Bullet(Vec2 pPosition = null, Vec2 pVelocity = null) : base("assets\\bullet.png")
     {
         SetOrigin(width / 2, height / 2);
         position = pPosition;
-        mass = pMass;
         velocity = pVelocity;
 
         _sfxDestroyed = new Sound("assets\\sfx\\placeholder_hit2.wav", false, true);
@@ -32,18 +30,6 @@ public class Bullet : Sprite
         get
         {
             return _sfxDestroyed;
-        }
-    }
-
-    public int mass
-    {
-        set
-        {
-            _mass = value;
-        }
-        get
-        {
-            return _mass;
         }
     }
 

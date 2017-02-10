@@ -17,11 +17,13 @@ namespace assignment_2.Classes
         public Vec2 Position { get; set; }
         public Vec2 Velocity { get; set; }
         public Vec2 Acceleration { get; set; }
+        public Vec2 Friction { get; set; }
         public Vec2 Target { get; set; }
+        public float Mass { get; set; }
         public float Direction { get; set; }
         public bool HasControl { get; set; }
 
-        public Spaceship(string image, Vec2 position, float direction, bool hasControl) : base(image)
+        public Spaceship(string image, Vec2 position, float mass, float direction, bool hasControl) : base(image)
         {
             Position = position;
             Velocity = new Vec2();
@@ -46,15 +48,6 @@ namespace assignment_2.Classes
                 Acceleration.SetXY(0, 0);
             }
 
-            if (Input.GetKey(Key.S))
-            {
-                Acceleration = Vec2.GetUnitVectorDegrees((Direction + 180) % 360);
-            }
-            else
-            {
-                Acceleration.SetXY(0, 0);
-            }
-
             if (Input.GetKey(Key.D))
             {
                 Direction += ROTATION_SPEED;
@@ -68,6 +61,10 @@ namespace assignment_2.Classes
 
         public void HandleFriction()
         {
+            if (Velocity.Length() > 0)
+            {
+                Acceleration.Add()
+            }
             //if (Speed != 0)
             //{
             //    if (Math.Abs(Speed) < STOPPED_AT)

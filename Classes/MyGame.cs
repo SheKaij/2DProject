@@ -20,18 +20,17 @@ public class MyGame : Game
 
     private Background _background1 = null;
 
-    private Bullet _bullet;
-    private Target _target = null;
+    private Bullet _bullet = null;
+    private PlanetManager _pm = null;
+    private Planet _planet = null;
     private TextField tf = null;
     private UnitTest _unitTest = null;
 
     private string _currentPlayer;
-    private int _totalScore = 0;
     private const float BULLETSPEED = 8;
-    private float _gravForce;
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
-    public MyGame() : base(1920, 600, false)
+    public MyGame() : base(1920, 1080, false)
     {
         _unitTest = new UnitTest();
 
@@ -51,8 +50,11 @@ public class MyGame : Game
         AddChild(_tank2);
         _tank2.hasControl = false;
 
-        _target = new Target(30, new Vec2(width * 0.5f, height / 2));
-        AddChild(_target);
+        _pm = new PlanetManager();
+        _pm.createPlanets();
+
+        _planet = new Planet(30, 10, new Vec2(width * 0.5f, height / 2));
+        AddChild(_planet);
 
         tf = TextField.CreateTextField("Control: Player 0" + "\n"
                                      + "Speed: 00 mph" + "\n"
@@ -88,7 +90,6 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
             _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
             _sfxShooting.Play();
@@ -116,23 +117,31 @@ public class MyGame : Game
     {
         if (_bullet != null)
         {
-            foreach (GameObject item in _bullet.GetCollisions())
+            foreach (Planet planet in _pm.GetAllPlanets())
             {
-                if (item is Target)
+                foreach (GameObject item in planet.GetCollisions())
                 {
-                    _bullet.sfxDestroyed.Play();
-                    _currentTank.score += 10;
-                    _bullet.Destroy();
-                }
+                    if (item is Bullet)
+                    {
+                        (item as Bullet).sfxDestroyed.Play();
+                        _currentTank.score += 10;
+                        _planet.health--;
+                        Console.WriteLine(_planet.health);
+                        (item as Bullet).Destroy();
+                    }
 
-                if (item is Tank && item != _currentTank)
-                {
-                    _bullet.sfxDestroyed.Play();
-                    _currentTank.score += 50;
-                    _bullet.Destroy();
-
+                    if (item is Tank)
+                    {
+                        (item as Tank).Destroy();
+                    }
                 }
             }
+            //if (item is Tank && item != _currentTank)
+            //{
+            //    (item as Bullet).sfxDestroyed.Play();
+            //    _currentTank.score += 50;
+            //    (item as Bullet).Destroy();
+            //}
         }
     }
 
@@ -176,28 +185,21 @@ public class MyGame : Game
     {
         if (_bullet != null)
         {
-            if (_bullet.x > _target.x - 350 && _bullet.x < _target.x + 350 && _bullet.y > _target.y - 100 && _bullet.y < _target.y + 100)
+            if (_bullet.x > _planet.x - 350 && _bullet.x < _planet.x + 350 && _bullet.y > _planet.y - 100 && _bullet.y < _planet.y + 100)
             {
-                _bullet.position = _bullet.position.RotateAroundDegrees(_target.position.x, _target.position.y, 0.05f);
+                _bullet.position = _bullet.position.RotateAroundDegrees(_planet.position.x, _planet.position.y, 0.05f);
 
                 //This would be the Newton formula for calculating the gravitational force
                 
 
                 // Calculate the distance between the bullet and the center of the target
                 Vec2 _distance = new Vec2();
-                _distance.x = _target.position.x - _bullet.position.x;
-                _distance.y = _target.position.y - _bullet.position.y;
+                _distance.x = _planet.position.x - _bullet.position.x;
+                _distance.y = _planet.position.y - _bullet.position.y;
                 //_bullet.rotation = _distance.GetAngleDegrees();
 
                 // This would be gravity
                 //_tank.velocity.x += 1;
-
-                //DONE: SET THE CENTER ORBIT POINT AT A TARGET
-                //DONE: LET BULLETS ROTATE AROUND A TARGET
-                //DONE: DESTROY A BULLET 
-
-                //NEW PROBLEMS: BULLETS DON'T HONE TOWARDS TARGET
-                //NEW PROBLEMS: BULLETS SHOULD BE MADE CANNONS, A ROUND OBJECT, SO THAT THE ROTATION DOESN'T LOOK OFF
             }
         }
     }
@@ -210,8 +212,6 @@ public class MyGame : Game
         CheckHitCollision();
         TurnCheck();
         //OrbitGravity();
-
-        Console.WriteLine(_currentTank.score);
         
         if (Input.GetKeyDown(Key.R))
         {

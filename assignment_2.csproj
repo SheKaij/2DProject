@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Background.cs" />
+    <Compile Include="Classes\BulletFactory.cs" />
+    <Compile Include="Classes\PlanetFactory.cs" />
     <Compile Include="Classes\Turret.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />
@@ -82,8 +84,7 @@
     <Compile Include="gxpengine\Utils\Utils.cs" />
     <Compile Include="Classes\MyGame.cs" />
     <Compile Include="Classes\Tank.cs" />
-    <Compile Include="Classes\Target.cs" />
-    <Compile Include="Classes\UnitTest.cs" />
+    <Compile Include="Classes\Planet.cs" />
     <Compile Include="Classes\Vec2.cs" />
   </ItemGroup>
   <ItemGroup>

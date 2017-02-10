@@ -10,9 +10,12 @@ public class Turret : Sprite
 
     public void TurretRotation()
     {
-        Vec2 _distance = new Vec2();
-        _distance.x = Input.mouseX - parent.x;
-        _distance.y = Input.mouseY - parent.y;
-        rotation = _distance.GetAngleDegrees() - parent.rotation;
+        if (parent != null)
+        {
+            Vec2 _distance = new Vec2();
+            _distance.x = Input.mouseX - parent.x;
+            _distance.y = Input.mouseY - parent.y;
+            rotation = _distance.GetAngleDegrees() - parent.rotation;
+        }
     }
 }

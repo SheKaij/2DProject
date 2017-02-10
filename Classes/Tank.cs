@@ -16,6 +16,8 @@ namespace GXPEngine
         private Vec2 _targetPos;
         private Vec2 _targetDelta;
 
+        private int _shotsLeft = 5;
+
         private float _flightAcceleration = 0.1f;
         private const float FLIGHTFRICTION = 0.98f;
 
@@ -26,6 +28,7 @@ namespace GXPEngine
         private const float ROTATIONFRICTION = 0.95f;
 
         private bool _hasControl = false;
+        private int _score;
 
         private Turret _barrel;
 
@@ -49,6 +52,30 @@ namespace GXPEngine
 
             _barrel = new Turret();
             AddChild(_barrel);
+        }
+
+        public int shotsLeft
+        {
+            get
+            {
+                return _shotsLeft;
+            }
+            set
+            {
+                _shotsLeft = value;
+            }
+        }
+
+        public int score
+        {
+            get
+            {
+                return _score;
+            }
+            set
+            {
+                _score = value;
+            }
         }
 
         public bool hasControl
@@ -242,7 +269,6 @@ namespace GXPEngine
         {
             if (hasControl == true)
             {
-                Console.WriteLine(_acceleration);
                 RotationSpeed();
                 HandleMovement();
                 _barrel.TurretRotation();

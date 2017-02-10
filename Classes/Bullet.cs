@@ -23,6 +23,18 @@ public class Bullet : Sprite
         y = position.y;
     }
 
+    public Sound sfxDestroyed
+    {
+        set
+        {
+            _sfxDestroyed = value;
+        }
+        get
+        {
+            return _sfxDestroyed;
+        }
+    }
+
     public int mass
     {
         set
@@ -66,21 +78,6 @@ public class Bullet : Sprite
 
         x = _position.x;
         y = _position.y;
-    }
-
-    private void OnCollision(GameObject other)
-    {
-        if (other is Target)
-        {
-            _sfxDestroyed.Play();
-            Destroy();
-            //Increase score
-        }
-
-        if (other is TextField)
-        {
-            Destroy();
-        }
     }
 }
 

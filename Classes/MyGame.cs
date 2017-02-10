@@ -20,7 +20,7 @@ public class MyGame : Game
 
     private Background _background1 = null;
 
-    private Bullet _bullet = null;
+    private Bullet _bullet;
     private Target _target = null;
     private TextField tf = null;
     private UnitTest _unitTest = null;
@@ -55,8 +55,9 @@ public class MyGame : Game
         AddChild(_target);
 
         tf = TextField.CreateTextField("Control: Player 0" + "\n"
-                                     + "Speed: 000 mph" + "\n" 
-                                     + "Score: 00");
+                                     + "Speed: 00 mph" + "\n"
+                                     + "Score: 0000" + "\n"
+                                     + "Shots left: 0");
         tf.backgroundColor = Color.White;
         AddChild(tf);
     }
@@ -91,6 +92,7 @@ public class MyGame : Game
             _bullet = new Bullet(20, new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
             _sfxShooting.Play();
+            _currentTank.shotsLeft -= 1;
 
             //Rotate the bullet the way the barrel was rotated towards
             _bullet.rotation = _currentTank.barrel.rotation + _currentTank.rotation;
@@ -110,9 +112,33 @@ public class MyGame : Game
         }
     }
 
-    public void ScoreDetection()
+    private void CheckHitCollision()
     {
-       OnDestroy();
+        if (_bullet != null)
+        {
+            foreach (GameObject item in _bullet.GetCollisions())
+            {
+                if (item is Target)
+                {
+                    _bullet.sfxDestroyed.Play();
+                    _currentTank.score += 10;
+                    _bullet.Destroy();
+                }
+
+                if (item is Tank && item != _currentTank)
+                {
+                    _bullet.sfxDestroyed.Play();
+                    _currentTank.score += 50;
+                    _bullet.Destroy();
+
+                }
+            }
+        }
+    }
+
+    public void ScoreIncrease()
+    {
+        _currentTank.score += 100;
     }
 
     private void HandleHUD()
@@ -122,9 +148,30 @@ public class MyGame : Game
 
         tf.text = "Control: Player " + _currentPlayer + "\n"
                 + "Speed: " + Math.Abs(Math.Round(_currentTank.velocity.x)) + "  Mph" + "\n"
-                + "Score: " + _totalScore;
+                + "Score: " + _currentTank.score + "\n"
+                + "Shots left: " + _currentTank.shotsLeft;
     }
 
+    private void TurnCheck()
+    {
+        if (_currentTank == _tank2 && _currentTank.shotsLeft <= 0)
+        {
+            _currentTank.velocity.SetXY(0, 0);
+            _currentTank = _tank1;
+            _tank2.shotsLeft = 5;
+            _tank1.hasControl = true;
+            _tank2.hasControl = false;
+        }
+
+        if (_currentTank == _tank1 && _currentTank.shotsLeft <= 0)
+        {
+            _currentTank.velocity.SetXY(0, 0);
+            _currentTank = _tank2;
+            _tank1.shotsLeft = 5;
+            _tank1.hasControl = false;
+            _tank2.hasControl = true;
+        }
+    }
     private void OrbitGravity()
     {
         if (_bullet != null)
@@ -155,14 +202,16 @@ public class MyGame : Game
         }
     }
 
-    void Update()
+    private void Update()
     {
         HandleAttack();
         HandleBoundaries();
         HandleHUD();
-
-        ScoreDetection();
+        CheckHitCollision();
+        TurnCheck();
         //OrbitGravity();
+
+        Console.WriteLine(_currentTank.score);
         
         if (Input.GetKeyDown(Key.R))
         {

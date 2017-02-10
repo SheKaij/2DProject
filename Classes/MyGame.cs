@@ -11,7 +11,7 @@ public class MyGame : Game
         new MyGame().Start();
     }
 
-    private const float BULLETSPEED = 15;
+    private const float BULLETSPEED = 0.1f;
     private readonly float GRAVITATIONAL_FORCE = 30000f;
 
     private Sound _sfxShooting;
@@ -99,8 +99,9 @@ public class MyGame : Game
             AddChild(_bullet);
             _sfxShooting.Play();
             _currentTank.shotsLeft -= 1;
+
             _bullet.velocity = new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y);
-            _bullet.velocity.Normalize();
+            //_bullet.velocity.Normalize();
             _bullet.velocity.Scale(BULLETSPEED);
             _bullet.rotation = _bullet.velocity.GetAngleDegrees();
 
@@ -108,10 +109,6 @@ public class MyGame : Game
 
         if (_bullet != null)
         {
-            //float angleInRadians = _bullet.rotation * Mathf.PI / 180;
-
-            //_bullet.velocity.x = BULLETSPEED * Mathf.Cos(angleInRadians);
-            //_bullet.velocity.y = BULLETSPEED * Mathf.Sin(angleInRadians);
             _bullet.rotation = _bullet.velocity.GetAngleDegrees();
 
             if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
@@ -182,23 +179,6 @@ public class MyGame : Game
             _tank2.hasControl = true;
         }
     }
-    private void OrbitGravity()
-    {
-        if (_bullet != null )
-        {
-           Vec2 _gravity = new Vec2((_planet.position.x - _bullet.position.x), (_planet.position.y - _bullet.position.y));
-			float distLength = _gravity.Length();
-			_gravity.Normalize();
-			Console.WriteLine(distLength);
-
-			if (distLength < 400)
-			{
-				Console.WriteLine(_gravity);
-				_bullet.velocity.Add(_gravity);
-			}
-
-		}
-    }
 
     private void CheckControls()
     {
@@ -244,7 +224,6 @@ public class MyGame : Game
         CheckHitCollision();
         TurnCheck();
         HandleGravity();
-        //OrbitGravity();
         CheckControls();
 
         Console.WriteLine(_currentTank.score);

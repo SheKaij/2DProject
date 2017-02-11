@@ -32,14 +32,14 @@ namespace GXPEngine
             return pRadians;
         }
 
-        public static Vec2 GetUnitVectorRadians(float angle)
+        public static Vec2 GetUnitVectorRadians(float pRadians)
         {
-            return new Vec2(Mathf.Cos(angle), Mathf.Sin(angle));
+            return new Vec2(Mathf.Cos(pRadians), Mathf.Sin(pRadians));
         }
 
-        public static Vec2 GetUnitVectorDegrees(float angle)
+        public static Vec2 GetUnitVectorDegrees(float pDegrees)
         {
-            return GetUnitVectorRadians(Rad2Deg(angle));
+            return GetUnitVectorRadians(Deg2Rad(pDegrees));
         }
 
         //public static float RandomUnitVector()

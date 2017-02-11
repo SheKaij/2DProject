@@ -11,10 +11,9 @@ public class MyGame : Game
         new MyGame().Start();
     }
 
-    private const float BULLETSPEED = 0.1f;
+    private const float BULLETSPEED = 0.05f;
     private readonly float GRAVITATIONAL_FORCE = 30000f;
-
-    private Sound _sfxShooting;
+    
     private Sound _bgMusicSound;
     private SoundChannel _playMusic;
 
@@ -36,22 +35,18 @@ public class MyGame : Game
     public MyGame() : base(1920, 600, false)
     {
         _unitTest = new UnitTest();
-
-        _sfxShooting = new Sound("assets\\sfx\\placeholder_shoot2.wav");
         _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
         _playMusic = _bgMusicSound.Play();
         
         _background1 = new Background();
         AddChild(_background1);
 
-        _tank1 = new Tank(30, new Vec2(width * 0.25f, height * 0.33f));
+        _tank1 = new Tank(new Vec2(width * 0.25f, height * 0.33f), true);
         AddChild(_tank1);
         _currentTank = _tank1;      // I want player 1 to start the game
-        _tank1.hasControl = true;
 
-        _tank2 = new Tank(30, new Vec2(width * 0.25f, height * 0.66f));
+        _tank2 = new Tank(new Vec2(width * 0.25f, height * 0.66f), false);
         AddChild(_tank2);
-        _tank2.hasControl = false;
 
         _planet = new Planet(30, new Vec2(width * 0.5f, height / 2));
         AddChild(_planet);
@@ -66,7 +61,7 @@ public class MyGame : Game
 
     public void HandleBoundaries()
     {
-        if (_currentTank.position.x < 0)       // if tank goes left, continue to the right
+        if (_currentTank.position.x < 0)  
         {
             _currentTank.position.x = 0;
             _currentTank.velocity.x = 0;
@@ -94,14 +89,11 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0) && _bullet == null)
         {
-            // I WOULD LIKE TO DO THIS ALL WITH A 'CURRENT-TANK' INSTANCE
             _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
             AddChild(_bullet);
-            _sfxShooting.Play();
-            _currentTank.shotsLeft -= 1;
+            _currentTank.bulletCount -= 1;
 
             _bullet.velocity = new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y);
-            //_bullet.velocity.Normalize();
             _bullet.velocity.Scale(BULLETSPEED);
             _bullet.rotation = _bullet.velocity.GetAngleDegrees();
 
@@ -109,8 +101,6 @@ public class MyGame : Game
 
         if (_bullet != null)
         {
-            _bullet.rotation = _bullet.velocity.GetAngleDegrees();
-
             if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
             {
                 _bullet.Destroy();
@@ -127,7 +117,6 @@ public class MyGame : Game
             {
                 if (item is Planet)
                 {
-                    _bullet.sfxDestroyed.Play();
                     _currentTank.score += 10;
                     _bullet.Destroy();
                     _bullet = null;
@@ -135,7 +124,6 @@ public class MyGame : Game
 
                 if (item is Tank && item != _currentTank)
                 {
-                    _bullet.sfxDestroyed.Play();
                     _currentTank.score += 50;
                     _bullet.Destroy();
                     _bullet = null;
@@ -158,25 +146,25 @@ public class MyGame : Game
         tf.text = "Control: Player " + _currentPlayer + "\n"
                 + "Speed: " + Math.Abs(Math.Round(_currentTank.velocity.x)) + "  Mph" + "\n"
                 + "Score: " + _currentTank.score + "\n"
-                + "Shots left: " + _currentTank.shotsLeft;
+                + "Shots left: " + _currentTank.bulletCount;
     }
 
     private void TurnCheck()
     {
-        if (_currentTank == _tank2 && _currentTank.shotsLeft <= 0)
+        if (_currentTank == _tank2 && _currentTank.bulletCount <= 0)
         {
             _currentTank = _tank1;
-            _tank2.shotsLeft = 5;
-            _tank1.hasControl = true;
-            _tank2.hasControl = false;
+            _tank2.bulletCount = 5;
+            _tank1.isActive = true;
+            _tank2.isActive = false;
         }
 
-        if (_currentTank == _tank1 && _currentTank.shotsLeft <= 0)
+        if (_currentTank == _tank1 && _currentTank.bulletCount <= 0)
         {
             _currentTank = _tank2;
-            _tank1.shotsLeft = 5;
-            _tank1.hasControl = false;
-            _tank2.hasControl = true;
+            _tank1.bulletCount = 5;
+            _tank1.isActive = false;
+            _tank2.isActive = true;
         }
     }
 
@@ -184,24 +172,24 @@ public class MyGame : Game
     {
         if (Input.GetKeyDown(Key.R))
         {
-            _tank1.Respawn();
+            _tank1.Respawn(Vec2.zero);
         }
 
         // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
         if (Input.GetKeyDown(Key.ONE))
         {
             _currentTank = _tank1;
-            _tank1.shotsLeft = 5;
-            _tank1.hasControl = true;
-            _tank2.hasControl = false;
+            _tank1.bulletCount = 5;
+            _tank1.isActive = true;
+            _tank2.isActive = false;
         }
 
         if (Input.GetKeyDown(Key.TWO))
         {
             _currentTank = _tank2;
-            _tank2.shotsLeft = 5;
-            _tank1.hasControl = false;
-            _tank2.hasControl = true;
+            _tank2.bulletCount = 5;
+            _tank1.isActive = false;
+            _tank2.isActive = true;
         }
     }
 

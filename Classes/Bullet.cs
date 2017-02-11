@@ -4,66 +4,46 @@ using GXPEngine;
 
 public class Bullet : Sprite
 {
-    private Vec2 _position;
-    private Vec2 _velocity;
+    private Sound _sfxDestroyed = new Sound("assets\\sfx\\placeholder_hit2.wav", false, true);
+    private Sound _sfxShot = new Sound("assets\\sfx\\placeholder_shoot2.wav");
 
-    private Sound _sfxDestroyed;
+    public Vec2 position { get; set; }
+    public Vec2 velocity { get; set; }
+    public float speed { get; set; }
 
-    public Bullet(Vec2 pPosition = null, Vec2 pVelocity = null) : base("assets\\bullet.png")
+    
+
+    public Bullet(Vec2 pPosition = null, float pSpeed = 0) : base("assets\\bullet.png")
     {
-        SetOrigin(width / 2, height / 2);
         position = pPosition;
-        velocity = pVelocity;
+        velocity = new Vec2(0,0);
+        speed = pSpeed;
+        
 
-        _sfxDestroyed = new Sound("assets\\sfx\\placeholder_hit2.wav", false, true);
+        SetOrigin(width / 2, height / 2);
 
+        x = position.x;
+        y = position.y;
+
+        _sfxShot.Play();
+    }
+
+
+
+
+    public void Update()
+    {
+        rotation = velocity.GetAngleDegrees();
+
+        position.Add(velocity);
         x = position.x;
         y = position.y;
     }
 
-    public Sound sfxDestroyed
+    public override void Destroy()
     {
-        set
-        {
-            _sfxDestroyed = value;
-        }
-        get
-        {
-            return _sfxDestroyed;
-        }
-    }
-
-    public Vec2 position
-    {
-        set
-        {
-            _position = value ?? Vec2.zero;
-        }
-        get
-        {
-            return _position;
-        }
-    }
-
-    public Vec2 velocity
-    {
-        set
-        {
-            _velocity = value ?? Vec2.zero;
-        }
-        get
-        {
-            return _velocity;
-        }
-    }
-
-    public void Update()
-    {
-        // Add the angle to the position
-        _position.Add(_velocity);
-
-        x = _position.x;
-        y = _position.y;
+        _sfxDestroyed.Play();
+        base.Destroy();
     }
 }
 

@@ -2,68 +2,49 @@
 using GXPEngine;
 
 
-public class Bullet : Sprite
+public abstract class Bullet : Sprite
 {
-    private Vec2 _position;
-    private Vec2 _velocity;
-
-    private Sound _sfxDestroyed;
-
-    public Bullet(Vec2 pPosition = null, Vec2 pVelocity = null) : base("assets\\bullet.png")
+    public enum BulletType
     {
-        SetOrigin(width / 2, height / 2);
-        position = pPosition;
-        velocity = pVelocity;
+        STANDARD,
+        CLUSTER
+    }
 
-        _sfxDestroyed = new Sound("assets\\sfx\\placeholder_hit2.wav", false, true);
+    protected Sound _shotSound;
+    protected Sound _hitSound;
+    protected float _speed;
+
+    public Vec2 position { get; set; }
+    public Vec2 velocity { get; set; }
+
+    public Bullet(Vec2 position, Vec2 velocity, string pAsset, String shotSound,  String hitSound,  float speed) : base(pAsset)
+    {
+        this.position = position;
+        this.velocity = velocity.Scale(speed);
+
+        _shotSound = new Sound (shotSound);
+        _hitSound = new Sound (hitSound);
+        _speed = speed;
+
+        SetOrigin(width / 2, height / 2);
 
         x = position.x;
         y = position.y;
+        rotation = velocity.GetAngleDegrees();
+
+        _shotSound.Play();
     }
 
-    public Sound sfxDestroyed
-    {
-        set
-        {
-            _sfxDestroyed = value;
-        }
-        get
-        {
-            return _sfxDestroyed;
-        }
-    }
-
-    public Vec2 position
-    {
-        set
-        {
-            _position = value ?? Vec2.zero;
-        }
-        get
-        {
-            return _position;
-        }
-    }
-
-    public Vec2 velocity
-    {
-        set
-        {
-            _velocity = value ?? Vec2.zero;
-        }
-        get
-        {
-            return _velocity;
-        }
-    }
+    protected abstract void Move();
 
     public void Update()
     {
-        // Add the angle to the position
-        _position.Add(_velocity);
+        Move();
+    }
 
-        x = _position.x;
-        y = _position.y;
+    public override void Destroy()
+    {
+        _hitSound.Play();
+        base.Destroy();
     }
 }
-

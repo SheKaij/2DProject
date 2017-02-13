@@ -10,7 +10,7 @@ public class Test_hitbox : Canvas
 
     private float _area;
     private float _circumference;
-
+    private Canvas hitbox;
     private Color _hitboxColor;
 
     public Test_hitbox(int pWidth, int Pheight) : base(pWidth, Pheight)
@@ -25,7 +25,7 @@ public class Test_hitbox : Canvas
         _circumference = 2 * Mathf.PI * _radius;
 
         _hitboxColor = Color.Red;
-        Draw();
+        //DrawCircle();
 
         Console.WriteLine("Test radius: " + _radius);
         Console.WriteLine("Test area: " + _area);

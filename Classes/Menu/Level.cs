@@ -1,26 +1,39 @@
 ﻿using System;
 using System.Drawing;
 using GXPEngine;
+using assignment_2.Classes;
+using System.Collections.Generic;
 
 public class Level : GameObject
 {
-    private MyGame _myGame;
+    private static Level _instance;
+    public static Level Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new Level();
+            }
+            return _instance;
+        }
+    }
+    private readonly float GRAVITATIONAL_FORCE = 30000f;
+    private const float BULLETSPEED = 0.05f;
 
-    private Sound _sfxShooting;
+    private Background _background1;
     private Sound _bgMusicSound;
     private SoundChannel _playMusic;
 
-    private Tank _currentTank = null;
-    private Tank _tank1 = null;
-    private Tank _tank2 = null;
-
-    private Background _background1 = null;
-    private Test_hitbox _test = null;
-    private Button _button = null;
+    private Tank _currentTank;
+    private Tank _tank1;
+    private Tank _tank2;
+    private List<Planet> _planets;
+    private List<Bullet> _bullets;
 
     private Bullet _bullet = null;
-    private PlanetManager _pm = null;
-    private Planet _planet = null;
+    //private PlanetManager _pm = null;
+    //private Planet _planet = null;
     private TextField tf = null;
 
     private float _distanceX;
@@ -29,34 +42,41 @@ public class Level : GameObject
 
     private string _currentPlayer;
 
-    private const float BULLETSPEED = 8;
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
-    public Level(MyGame pMyGame) : base()
+    private Level() : base()
     {
-        _myGame = pMyGame;
-
-        _sfxShooting = new Sound("assets\\sfx\\placeholder_shoot2.wav");
         _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
         //_playMusic = _bgMusicSound.Play();
 
         _background1 = new Background();
         AddChild(_background1);
 
-        _tank1 = new Tank(30, new Vec2(game.width * 0.25f, game.height * 0.33f));
+        _tank1 = new Tank(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
         AddChild(_tank1);
-        _currentTank = _tank1;      // I want player 1 to start the game
-        _tank1.hasControl = true;
+        _currentTank = _tank1;
 
-        _tank2 = new Tank(30, new Vec2(game.width * 0.25f, game.height * 0.66f));
+        _tank2 = new Tank(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
         AddChild(_tank2);
-        _tank2.hasControl = false;
 
-        _pm = new PlanetManager();
-        //_pm.createPlanets();
+        _planets = new List<Planet>();
+        _bullets = new List<Bullet>();
 
-        _planet = new Planet(30, 10, new Vec2(game.width * 0.5f, game.height / 2));
-        //AddChild(_planet);
+        Planet planet = new Planet(new Vec2(game.width * 0.3f, game.height * 0.2f), 10);
+        _planets.Add(planet);
+        AddChild(planet);
+
+        planet = new Planet(new Vec2(game.width * 0.2f, game.height * 0.8f), 10);
+        _planets.Add(planet);
+        AddChild(planet);
+
+        planet = new Planet(new Vec2(game.width * 0.5f, game.height * 0.6f), 10);
+        _planets.Add(planet);
+        AddChild(planet);
+
+        planet = new Planet(new Vec2(game.width * 0.7f, game.height * 0.4f), 10);
+        _planets.Add(planet);
+        AddChild(planet);
 
         tf = TextField.CreateTextField("Control: Player 0" + "\n"
                                      + "Speed: 00 mph" + "\n"
@@ -64,148 +84,142 @@ public class Level : GameObject
                                      + "Shots left: 0");
         tf.backgroundColor = Color.White;
         AddChild(tf);
-
-        _test = new Test_hitbox(256, 256);
-        AddChild(_test);
-        _test.x = game.width / 2;
-        _test.y = game.height / 2;
-
-        //_button = new Button(300, 100);
-        //AddChild(_button);
-        //_button.x = game.width / 2;
-        //_button.y = game.height * 0.8f;
     }
 
-    public void HandleBoundaries()
+    public void HandleBoarders()
     {
-        if (_currentTank.position.x + _currentTank.width / 2 < 0)       // if tank goes left, continue to the right
+        if (_currentTank.position.x < 0)
         {
-            _currentTank.position.x = game.width + _currentTank.width / 2;
+            _currentTank.position.x = 0;
+            _currentTank.velocity.x = 0;
         }
-        else if (_currentTank.position.x - _currentTank.width / 2 > game.width)
+        else if (_currentTank.position.x > game.width)
         {
-            _currentTank.position.x = 0 - _currentTank.width / 2;
+            _currentTank.position.x = game.width;
+            _currentTank.velocity.x = 0;
         }
 
-
-        if (_currentTank.position.y + _currentTank.height < 0)
+        if (_currentTank.position.y < 0)
         {
-            _currentTank.position.y = game.height + _currentTank.height;
+            _currentTank.position.y = 0;
+            _currentTank.velocity.y = 0;
         }
-        else if (_currentTank.position.y - _currentTank.height > game.height)
+        else if (_currentTank.position.y > game.height)
         {
-            _currentTank.position.y = 0 - _currentTank.height;
+            _currentTank.position.y = game.height;
+            _currentTank.velocity.y = 0;
+        }
+
+        for (int i = _bullets.Count - 1; i >= 0; i--)
+        {
+            if (_bullets[i].x > game.width + 100 || _bullets[i].x < - 100 || _bullets[i].y > game.height + 100 || _bullets[i].y < - 100)
+            {
+                _bullets[i].Destroy();
+                _bullets.RemoveAt(i);
+            }
         }
     }
 
     private void TestCollision()
     {
-        if (_bullet != null)
-        {
-            _distanceX = _bullet.x - _test.x;
-            _distanceY = _bullet.y - _test.y;
-            _distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
+        //if (_bullet != null)
+        //{
+        //    _distanceX = _bullet.x - _test.x;
+        //    _distanceY = _bullet.y - _test.y;
+        //    _distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
 
-            if (_distanceTotal < _test.radius)
-            {
-                _bullet.velocity.SetXY(0, 0);
-            }
-        }
+        //    if (_distanceTotal < _test.radius)
+        //    {
+        //        _bullet.velocity.SetXY(0, 0);
+        //    }
+        //}
 
-        _distanceX = _currentTank.x - _test.x;
-        _distanceY = _currentTank.y - _test.y;
-        _distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
+        //_distanceX = _currentTank.x - _test.x;
+        //_distanceY = _currentTank.y - _test.y;
+        //_distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
 
-        if (_distanceTotal < _test.radius)
-        {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank.hasControl = false;
+        //if (_distanceTotal < _test.radius)
+        //{
+        //    _currentTank.velocity.SetXY(0, 0);
+        //    _currentTank.isActive = false;
 
-            if (_currentTank.alpha > 0.05f && _currentTank.barrel.alpha > 0.05f)
-            {
-                _currentTank.alpha *= 0.95f;
-                _currentTank.barrel.alpha *= 0.95f;
-            }
+        //    if (_currentTank.alpha > 0.05f && _currentTank.turret.alpha > 0.05f)
+        //    {
+        //        _currentTank.alpha *= 0.95f;
+        //        _currentTank.turret.alpha *= 0.95f;
+        //    }
 
-            else
-            {
-                _currentTank.Destroy();
-                _currentTank.barrel.Destroy();
+        //    else
+        //    {
+        //        _currentTank.Destroy();
+        //        _currentTank.turret.Destroy();
 
-                if (_currentTank == _tank1)
-                {
-                    _currentTank = _tank2;
-                    _tank2.hasControl = true;
-                }
+        //        if (_currentTank == _tank1)
+        //        {
+        //            _currentTank = _tank2;
+        //            _tank2.isActive = true;
+        //        }
 
-                else if (_currentTank == _tank2)
-                {
-                    _currentTank = _tank1;
-                    _tank1.hasControl = true;
-                }
-            }
-        }
+        //        else if (_currentTank == _tank2)
+        //        {
+        //            _currentTank = _tank1;
+        //            _tank1.isActive = true;
+        //        }
+        //    }
+        //}
     }
 
     public void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _bullet == null)
         {
-            _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
-
-            AddChild(_bullet);
-            _sfxShooting.Play();
-            _currentTank.shotsLeft -= 1;
-
-            //Rotate the bullet the way the barrel was rotated towards
-            _bullet.rotation = _currentTank.barrel.rotation + _currentTank.rotation;
-        }
-
-        if (_bullet != null)
-        {
-            float angleInRadians = _bullet.rotation * Mathf.PI / 180;
-
-            _bullet.velocity.x = BULLETSPEED * Mathf.Cos(angleInRadians);
-            _bullet.velocity.y = BULLETSPEED * Mathf.Sin(angleInRadians);
-
-            if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
-            {
-                _bullet.Destroy();
-            }
+            Bullet bullet = BulletFactory.Create(_currentTank.bulletType, _currentTank.position.Clone(), new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y));
+            _bullets.Add(bullet);
+            AddChild(bullet);
+            _currentTank.bulletCount -= 1;
         }
     }
 
     private void CheckHitCollision()
     {
-        if (_bullet != null)
+        foreach (Planet planet in _planets)
         {
-            foreach (Planet planet in _pm.GetAllPlanets())
+            for (int i = _bullets.Count - 1; i >= 0; i--)
             {
-                foreach (GameObject item in planet.GetCollisions())
+                if (planet.Contains(_bullets[i].position))
                 {
-                    if (item is Bullet)
-                    {
-                        (item as Bullet).sfxDestroyed.Play();
-                        _currentTank.score += 10;
-                        _planet.health--;
-                        Console.WriteLine(_planet.health);
-                        (item as Bullet).Destroy();
-                    }
-
-                    if (item is Tank)
-                    {
-                        (item as Tank).Destroy();
-                    }
+                    _bullets[i].Destroy();
+                    _bullets.RemoveAt(i);
                 }
             }
-            //if (item is Tank && item != _currentTank)
-            //{
-            //    (item as Bullet).sfxDestroyed.Play();
-            //    _currentTank.score += 50;
-            //    (item as Bullet).Destroy();
-            //}
         }
+
+        //foreach (Planet planet in _pm.GetAllPlanets())
+        //{
+        //    foreach (GameObject item in planet.GetCollisions())
+        //    {
+        //        if (item is Bullet)
+        //        {
+        //            _currentTank.score += 10;
+        //            _planet.health--;
+        //            Console.WriteLine(_planet.health);
+        //            (item as Bullet).Destroy();
+        //        }
+
+        //        if (item is Tank)
+        //        {
+        //            (item as Tank).Destroy();
+        //        }
+        //    }
     }
+
+
+    //if (item is Tank && item != _currentTank)
+    //{
+    //    (item as Bullet).sfxDestroyed.Play();
+    //    _currentTank.score += 50;
+    //    (item as Bullet).Destroy();
+    //}
 
     public void ScoreIncrease()
     {
@@ -220,48 +234,40 @@ public class Level : GameObject
         tf.text = "Control: Player " + _currentPlayer + "\n"
                 + "Speed: " + Math.Abs(Math.Round(_currentTank.velocity.x)) + "  Mph" + "\n"
                 + "Score: " + _currentTank.score + "\n"
-                + "Shots left: " + _currentTank.shotsLeft;
+                + "Shots left: " + _currentTank.bulletCount;
     }
 
     private void TurnCheck()
     {
-        if (_currentTank == _tank2 && _currentTank.shotsLeft <= 0)
+        if (_currentTank == _tank2 && _currentTank.bulletCount <= 0)
         {
             _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank1;
-            _tank2.shotsLeft = 5;
-            _tank1.hasControl = true;
-            _tank2.hasControl = false;
+            _tank2.bulletCount = 5;
+            _tank1.isActive = true;
+            _tank2.isActive = false;
         }
 
-        if (_currentTank == _tank1 && _currentTank.shotsLeft <= 0)
+        if (_currentTank == _tank1 && _currentTank.bulletCount <= 0)
         {
             _currentTank.velocity.SetXY(0, 0);
             _currentTank = _tank2;
-            _tank1.shotsLeft = 5;
-            _tank1.hasControl = false;
-            _tank2.hasControl = true;
+            _tank1.bulletCount = 5;
+            _tank1.isActive = false;
+            _tank2.isActive = true;
         }
     }
-    private void OrbitGravity()
+
+    private void HandleGravity()
     {
-        if (_bullet != null)
+        foreach(Planet planet in _planets)
         {
-            if (_bullet.x > _planet.x - 350 && _bullet.x < _planet.x + 350 && _bullet.y > _planet.y - 100 && _bullet.y < _planet.y + 100)
+            foreach (Bullet bullet in _bullets)
             {
-                _bullet.position = _bullet.position.RotateAroundDegrees(_planet.position.x, _planet.position.y, 0.05f);
-
-                //This would be the Newton formula for calculating the gravitational force
-
-
-                // Calculate the distance between the bullet and the center of the target
-                Vec2 _distance = new Vec2();
-                _distance.x = _planet.position.x - _bullet.position.x;
-                _distance.y = _planet.position.y - _bullet.position.y;
-                //_bullet.rotation = _distance.GetAngleDegrees();
-
-                // This would be gravity
-                //_tank.velocity.x += 1;
+                Vec2 gravityVector = new Vec2(planet.x - bullet.x, planet.y - bullet.y);
+                gravityVector.Normalize();
+                gravityVector.Scale(GRAVITATIONAL_FORCE / Mathf.Pow(bullet.DistanceTo(planet), 2));
+                bullet.velocity.Add(gravityVector);
             }
         }
     }
@@ -269,36 +275,11 @@ public class Level : GameObject
     private void Update()
     {
         HandleAttack();
-        HandleBoundaries();
+        HandleBoarders();
         HandleHUD();
         CheckHitCollision();
         TurnCheck();
         TestCollision();
-        //OrbitGravity();
-
-
-        if (Input.GetKeyDown(Key.R))
-        {
-            _tank1.Respawn();
-        }
-
-        // CURRENT PLAYER CONTROL SWITCHING PROTOTYPE
-        if (Input.GetKeyDown(Key.ONE))
-        {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank1;
-            _tank1.hasControl = true;
-            _tank2.hasControl = false;
-        }
-
-        if (Input.GetKeyDown(Key.TWO))
-        {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank2;
-            _tank1.hasControl = false;
-            _tank2.hasControl = true;
-        }
-        //_tank.position = _tank.position.RotateAroundDegrees(width / 2, height / 2, 0.01f);
-        //NOTE: Ask Martins to check sourcetree for the previous project, 'Flexman', as the code for the score system/health bars might be needed
+        HandleGravity();
     }
 }

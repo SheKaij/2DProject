@@ -25,7 +25,7 @@ public class PlanetManager : GameObject
     {
         for (int i = 0; i < SMALL_PLANET_COUNT; i++)
         {
-            _planet = new Planet(30, 10, new Vec2(game.width * 0.5f, game.height / 2));
+            _planet = new Planet(new Vec2(game.width * 0.5f, game.height / 2), 10);
             game.AddChild(_planet);
             _listOfPlanets.Add(_planet);
 

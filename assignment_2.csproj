@@ -53,6 +53,7 @@
     <Compile Include="Classes\Menu\ShopScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />
     <Compile Include="Classes\Menu\ResultScreen.cs" />
+    <Compile Include="Classes\StandardBullet.cs" />
     <Compile Include="Classes\Test_hitbox.cs" />
     <Compile Include="Classes\Turret.cs" />
     <Compile Include="Classes\Bullet.cs" />

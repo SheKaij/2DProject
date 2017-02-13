@@ -8,14 +8,8 @@ public class Turret : Sprite
         SetOrigin(width / 2, height / 2);
     }
 
-    public void TurretRotation()
+    public void Move()
     {
-        if (parent != null)
-        {
-            Vec2 _distance = new Vec2();
-            _distance.x = Input.mouseX - parent.x;
-            _distance.y = Input.mouseY - parent.y;
-            rotation = _distance.GetAngleDegrees() - parent.rotation;
-        }
+        rotation = new Vec2(Input.mouseX - parent.x, Input.mouseY - parent.y).GetAngleDegrees() - parent.rotation;
     }
 }

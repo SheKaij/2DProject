@@ -51,7 +51,7 @@ public class MyGame : Game
             //    AddChild(_options);
             //    break;
             case GameState.LEVEL:
-                _level = new Level(this);
+                _level = Level.Instance;
                 AddChild(_level);
                 break;
             //case GameState.RESULT:

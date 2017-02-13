@@ -15,7 +15,13 @@ namespace GXPEngine
 			y = pY;
 		}
 
-		public override string ToString ()
+        public Vec2(Vec2 vector)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
+
+        public override string ToString ()
 		{
 			return String.Format ("({0}, {1})", x, y);
 		}
@@ -32,18 +38,15 @@ namespace GXPEngine
             return pRadians;
         }
 
-        //public static Vec2 GetUnitVectorRadians(Vec2 targetVec)
-        //{
-        //    Vec2 unitRadVec = new Vec2((targetVec.x * Mathf.Cos() / targetVec.x * Mathf.Sin(/*theta*/));
-        //    return unitRadVec;
-        //}
+        public static Vec2 GetUnitVectorRadians(float pRadians)
+        {
+            return new Vec2(Mathf.Cos(pRadians), Mathf.Sin(pRadians));
+        }
 
-        //public static float GetUnitVectorDegrees()
-        //{
-        //    float unitDegVec = Mathf.Atan2(pUnitY, pUnitX);
-        //    unitDegVec *= 180 / Mathf.PI;
-        //    return unitDegVec;
-        //}
+        public static Vec2 GetUnitVectorDegrees(float pDegrees)
+        {
+            return GetUnitVectorRadians(Deg2Rad(pDegrees));
+        }
 
         //public static float RandomUnitVector()
         //{

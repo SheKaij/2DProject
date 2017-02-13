@@ -4,47 +4,27 @@ using GXPEngine;
 
 public class Planet : Sprite
 {
-    public readonly int radius;
-    private Vec2 _position;
-    private int _health;
+    private int _radius;
 
-    public Planet(int pRadius, int pHealth, Vec2 pPosition = null, Color? pColor = null) : base("assets\\prototype_planet.png")
+    public Vec2 position { get; set; }
+    public int health { get; set; }
+
+    public Planet(Vec2 position, int health) : base("assets\\prototype_planet.png")
     {
-        radius = pRadius;
-        position = pPosition;
-        health = pHealth;
+        _radius = height / 8;
+        this.position = position;
+        this.health = health;
+
         SetOrigin(width / 2, height / 2);
 
         SetScaleXY(0.25f);
-        x = game.width / 2;
-        y = game.height / 2;
-
-        
-
+        x = position.x;
+        y = position.y;
     }
 
-    public int health
+    public bool Contains(Vec2 vector)
     {
-        set
-        {
-            _health = value;
-        }
-        get
-        {
-            return _health;
-        }
-    }
-
-    public Vec2 position
-    {
-        set
-        {
-            _position = value ?? Vec2.zero;
-        }
-        get
-        {
-            return _position;
-        }
+        return position.Clone().Substract(vector).Length() <= _radius;
     }
 
     private void Update()

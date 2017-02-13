@@ -1,39 +1,25 @@
-﻿using System;
+﻿using GXPEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GXPEngine;
-using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using static Bullet;
 
-public class BulletManager : GameObject
+namespace assignment_2.Classes
 {
-    private const int BULLETS_LEFT = 5;
-
-    private List<Bullet> _listOfBullets = new List<Bullet>();
-
-    private Bullet _currentBullet;
-    private Bullet _regularBullet;
-    private Bullet _slowBullet;
-    private Bullet _fastBullet;
-
-    public BulletManager()
+    public static class BulletFactory
     {
-        // empty
-    }
-    
 
-    private void Update()
-    {
-        // empty
-    }
-
-    public Bullet GetBullet()
-    {
-        return _currentBullet;
-    }
-
-    public List<Bullet> GetAllBullets()
-    {
-        return _listOfBullets;
+        public static Bullet Create(BulletType type, Vec2 position, Vec2 velocity)
+        {
+            switch (type)
+            {
+                case BulletType.STANDARD :
+                    return new StandardBullet(position, velocity);
+                default:
+                    return null;
+            }
+        }
     }
 }

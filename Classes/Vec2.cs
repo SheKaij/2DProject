@@ -15,7 +15,13 @@ namespace GXPEngine
 			y = pY;
 		}
 
-		public override string ToString ()
+        public Vec2(Vec2 vector)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
+
+        public override string ToString ()
 		{
 			return String.Format ("({0}, {1})", x, y);
 		}

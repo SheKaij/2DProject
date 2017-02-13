@@ -2,13 +2,21 @@ using System;
 using GXPEngine;
 using System.Drawing;
 using System.Collections;
+using assignment_2.Classes;
 
 public class MyGame : Game
 {
-
-    static void Main()
+    private static MyGame _instance;
+    public static MyGame Instance
     {
-        new MyGame().Start();
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new MyGame();
+            }
+            return _instance;
+        }
     }
 
     private const float BULLETSPEED = 0.05f;
@@ -30,10 +38,15 @@ public class MyGame : Game
 
     private string _currentPlayer;
     private int _totalScore = 0;
-    
 
-    public MyGame() : base(1920, 600, false)
+    static void Main()
     {
+        new MyGame().Start();
+    }
+
+    private MyGame() : base(1920, 600, false)
+    {
+
         _unitTest = new UnitTest();
         _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
         _playMusic = _bgMusicSound.Play();
@@ -89,24 +102,21 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0) && _bullet == null)
         {
-            _bullet = new Bullet(new Vec2(_currentTank.position.x, _currentTank.position.y));
+            _bullet = BulletFactory.Create(BulletType.STANDARD, new Vec2(_currentTank.position), new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y).Scale(BULLETSPEED)) ;
             AddChild(_bullet);
             _currentTank.bulletCount -= 1;
-
-            _bullet.velocity = new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y);
-            _bullet.velocity.Scale(BULLETSPEED);
-            _bullet.rotation = _bullet.velocity.GetAngleDegrees();
+            
 
         }
 
-        if (_bullet != null)
-        {
-            if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
-            {
-                _bullet.Destroy();
-                _bullet = null;
-            }
-        }
+        //if (_bullet != null)
+        //{
+        //    if (_bullet.x > game.width || _bullet.x < 0 || _bullet.y > game.height || _bullet.y < 0)
+        //    {
+        //        _bullet.Destroy();
+        //        _bullet = null;
+        //    }
+        //}
     }
 
     private void CheckHitCollision()

@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Background.cs" />
+    <Compile Include="Classes\BulletFactory.cs" />
+    <Compile Include="Classes\BulletType.cs" />
+    <Compile Include="Classes\StandardBullet.cs" />
     <Compile Include="Classes\Turret.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />

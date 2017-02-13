@@ -1,4 +1,5 @@
-﻿using System;
+﻿using assignment_2.Classes;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -18,6 +19,7 @@ namespace GXPEngine
         public Vec2 velocity { get; set; }
         public float angular_velocity { get; set; } 
         public bool isActive { get; set; }
+        public BulletType bulletType { get; set; }
         public int bulletCount { get; set; }
 
         public int score { get; set; }
@@ -34,6 +36,7 @@ namespace GXPEngine
             velocity = Vec2.zero;
             angular_velocity = 0;
             isActive = pIsActive;
+            bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
 
             _sfxEngine = new Sound("assets\\sfx\\placeholder_engine1.wav", false, false);
@@ -63,17 +66,12 @@ namespace GXPEngine
                 angular_velocity -= ANGULAR_ACCELERATION;
             }
 
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    Bullet bullet = new Bullet(new Vec2(position.x, position.y));
-            //    bullet.velocity = new Vec2(Input.mouseX - x, Input.mouseY - y).Scale(bullet.speed);
-            //    bullet.rotation = bullet.velocity.GetAngleDegrees();
-
-            //    bullets.Add(bullet);
-            //    bulletCount -= 1;
-
-            //    AddChild(bullet);
-            //}
+            if (Input.GetMouseButtonDown(0) && _bullet == null)
+            {
+                Bullet bullet = BulletFactory.Create(BulletType.STANDARD, new Vec2(position), new Vec2(Input.mouseX - x, Input.mouseY - y)));
+                AddChild(_bullet);
+                _currentTank.bulletCount -= 1;
+            }
         }
 
         private void HandleFriction()
@@ -95,15 +93,9 @@ namespace GXPEngine
             {
                 angular_velocity = 0;
             }
-
         }
 
-        public void Respawn(Vec2 pPostion)
-        {
-            position = (pPostion);
-        }
-
-        public void Step()
+        private void Move()
         {
             rotation += angular_velocity;
             position.Add(velocity);
@@ -111,6 +103,15 @@ namespace GXPEngine
             y = position.y;
         }
 
+        public void Shoot()
+        {
+
+        }
+
+        public void Respawn(Vec2 pPostion)
+        {
+            position = (pPostion);
+        }
 
         public void Update()
         {
@@ -120,7 +121,7 @@ namespace GXPEngine
                 turret.Move();
             }
             HandleFriction();
-            Step();
+            Move();
         }
     }
 }

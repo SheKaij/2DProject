@@ -2,47 +2,46 @@
 using GXPEngine;
 
 
-public class Bullet : Sprite
+public abstract class Bullet : Sprite
 {
-    private Sound _sfxDestroyed = new Sound("assets\\sfx\\placeholder_hit2.wav", false, true);
-    private Sound _sfxShot = new Sound("assets\\sfx\\placeholder_shoot2.wav");
-
+    protected Sound _shotSound;
+    protected Sound _hitSound;
+    protected float _speed;
+    
     public Vec2 position { get; set; }
     public Vec2 velocity { get; set; }
-    public float speed { get; set; }
 
     
 
-    public Bullet(Vec2 pPosition = null, float pSpeed = 0) : base("assets\\bullet.png")
+    public Bullet(string pAsset) : base(pAsset)
     {
-        position = pPosition;
-        velocity = new Vec2(0,0);
-        speed = pSpeed;
-        
-
         SetOrigin(width / 2, height / 2);
 
         x = position.x;
         y = position.y;
-
-        _sfxShot.Play();
+        rotation = velocity.GetAngleDegrees();
     }
 
+    protected abstract void Move();
 
-
+    private void HandleBoarders()
+    {
+        
+        if (x > game.width || x < 0 || y > game.height || y < 0)
+        {
+            Destroy();
+        }
+    }
 
     public void Update()
     {
-        rotation = velocity.GetAngleDegrees();
-
-        position.Add(velocity);
-        x = position.x;
-        y = position.y;
+        Move();
+        HandleBoarders();
     }
 
     public override void Destroy()
     {
-        _sfxDestroyed.Play();
+        _hitSound.Play();
         base.Destroy();
     }
 }

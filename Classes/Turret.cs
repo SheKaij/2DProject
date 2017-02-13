@@ -10,6 +10,6 @@ public class Turret : Sprite
 
     public void Move()
     {
-        rotation = new Vec2(Input.mouseX - parent.x, Input.mouseY - parent.y).GetAngleDegrees();
+        rotation = new Vec2(Input.mouseX - parent.x, Input.mouseY - parent.y).GetAngleDegrees() - parent.rotation;
     }
 }

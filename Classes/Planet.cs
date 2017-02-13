@@ -4,15 +4,25 @@ using GXPEngine;
 
 public class Planet : Sprite
 {
+    public enum PlanetType
+    {
+        SMALL,
+        MEDIUM,
+        BIG,
+        LARGE
+    }
+
     private int _radius;
 
     public Vec2 position { get; set; }
+    public float mass { get; set; }
     public int health { get; set; }
 
-    public Planet(Vec2 position, int health) : base("assets\\prototype_planet.png")
+    public Planet(Vec2 position, float mass, int health, String asset) : base(asset)
     {
         _radius = height / 8;
         this.position = position;
+        this.mass = mass;
         this.health = health;
 
         SetOrigin(width / 2, height / 2);

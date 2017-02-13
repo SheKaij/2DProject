@@ -3,6 +3,7 @@ using System.Drawing;
 using GXPEngine;
 using assignment_2.Classes;
 using System.Collections.Generic;
+using static Planet;
 
 public class Level : GameObject
 {
@@ -32,13 +33,7 @@ public class Level : GameObject
     private List<Bullet> _bullets;
 
     private Bullet _bullet = null;
-    //private PlanetManager _pm = null;
-    //private Planet _planet = null;
     private TextField tf = null;
-
-    private float _distanceX;
-    private float _distanceY;
-    private float _distanceTotal;
 
     private string _currentPlayer;
 
@@ -62,19 +57,19 @@ public class Level : GameObject
         _planets = new List<Planet>();
         _bullets = new List<Bullet>();
 
-        Planet planet = new Planet(new Vec2(game.width * 0.3f, game.height * 0.2f), 10);
+        Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = new Planet(new Vec2(game.width * 0.2f, game.height * 0.8f), 10);
+        planet = PlanetFactory.Create(PlanetType.MEDIUM, new Vec2(game.width * 0.2f, game.height * 0.8f));
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = new Planet(new Vec2(game.width * 0.5f, game.height * 0.6f), 10);
+        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.6f));
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = new Planet(new Vec2(game.width * 0.7f, game.height * 0.4f), 10);
+        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.7f, game.height * 0.4f));
         _planets.Add(planet);
         AddChild(planet);
 
@@ -266,7 +261,7 @@ public class Level : GameObject
             {
                 Vec2 gravityVector = new Vec2(planet.x - bullet.x, planet.y - bullet.y);
                 gravityVector.Normalize();
-                gravityVector.Scale(GRAVITATIONAL_FORCE / Mathf.Pow(bullet.DistanceTo(planet), 2));
+                gravityVector.Scale(GRAVITATIONAL_FORCE * planet.mass / Mathf.Pow(bullet.DistanceTo(planet), 2));
                 bullet.velocity.Add(gravityVector);
             }
         }

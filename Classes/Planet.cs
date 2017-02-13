@@ -19,6 +19,8 @@ public class Planet : Sprite
         x = game.width / 2;
         y = game.height / 2;
 
+        
+
     }
 
     public int health

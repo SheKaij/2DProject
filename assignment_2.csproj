@@ -46,7 +46,14 @@
   <ItemGroup>
     <Compile Include="Classes\Background.cs" />
     <Compile Include="Classes\BulletFactory.cs" />
+    <Compile Include="Classes\Button.cs" />
+    <Compile Include="Classes\Menu\Level.cs" />
+    <Compile Include="Classes\Menu\OptionScreen.cs" />
     <Compile Include="Classes\PlanetFactory.cs" />
+    <Compile Include="Classes\Menu\ShopScreen.cs" />
+    <Compile Include="Classes\Menu\StartScreen.cs" />
+    <Compile Include="Classes\Menu\ResultScreen.cs" />
+    <Compile Include="Classes\Test_hitbox.cs" />
     <Compile Include="Classes\Turret.cs" />
     <Compile Include="Classes\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />

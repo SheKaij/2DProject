@@ -2,7 +2,7 @@
 using System.Drawing;
 using GXPEngine;
 
-public class Planet : Sprite
+public class Planet : AnimationSprite
 {
     public enum PlanetType
     {
@@ -18,16 +18,16 @@ public class Planet : Sprite
     public float mass { get; set; }
     public int health { get; set; }
 
-    public Planet(Vec2 position, float mass, int health, String asset) : base(asset)
+    public Planet(Vec2 position, float mass, int health, float scale, String asset) : base(asset, 3, 2)
     {
-        _radius = height / 8;
+        _radius = (int)(400/2*scale);
         this.position = position;
         this.mass = mass;
         this.health = health;
 
         SetOrigin(width / 2, height / 2);
 
-        SetScaleXY(0.25f);
+        SetScaleXY(scale);
         x = position.x;
         y = position.y;
     }
@@ -42,6 +42,11 @@ public class Planet : Sprite
         if (health <= 0)
         {
             this.Destroy();
+        }
+
+        if (Input.GetKeyDown(Key.ONE))
+        {
+            NextFrame();
         }
     }
 }

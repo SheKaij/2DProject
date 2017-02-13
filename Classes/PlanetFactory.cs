@@ -15,13 +15,13 @@ namespace assignment_2.Classes
             switch (type)
             {
                 case PlanetType.SMALL:
-                    return new Planet(position, 0.5f, 5, "assets\\prototype_planet.png");
+                    return new Planet(position, 0.5f, 5, 0.2f, "assets\\planet_Tilesheets\\Planet_U_500.png");
                 case PlanetType.MEDIUM:
-                    return new Planet(position, 1f, 10, "assets\\prototype_planet.png");
+                    return new Planet(position, 1f, 10, 0.4f, "assets\\planet_Tilesheets\\Planet_L_500.png");
                 case PlanetType.BIG:
-                    return new Planet(position, 1.5f, 15, "assets\\prototype_planet.png");
+                    return new Planet(position, 2f, 15, 0.6f, "assets\\planet_Tilesheets\\Planet_E_500.png");
                 case PlanetType.LARGE:
-                    return new Planet(position, 2f, 20, "assets\\prototype_planet.png");
+                    return new Planet(position, 8f, 20, 0.8f, "assets\\planet_Tilesheets\\Planet_Q_500.png");
                 default:
                     return null;
             }

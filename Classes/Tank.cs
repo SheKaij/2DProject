@@ -114,12 +114,22 @@ namespace GXPEngine
             position = (pPostion);
         }
 
+        private void FireParticles()
+        {
+            Particle _particle = new Particle("assets/spaceship/flames.png", 4 , 1);
+            game.AddChild(_particle);
+            _particle.currentFrame = 0;
+            _particle.SetXY(x, y);
+            _particle.rotation = rotation + 90;
+        }
+
         public void Update()
         {
             if (isActive)
             {
                 HandleControls();
                 turret.Move();
+                //FireParticles();
             }
             HandleFriction();
             Move();

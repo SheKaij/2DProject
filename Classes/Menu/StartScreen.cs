@@ -8,8 +8,9 @@ public class StartScreen : GameObject
     private Button _playButton, _optionsButton, _exitButton;
     private TextField _title;
 
-    private float _distanceX;
-    private float _distanceY;
+    private float _distancePlayX, _distanceOptionsX, _distanceExitX;
+    private float _distancePlayY, _distanceOptionsY, _distanceExitY;
+    private bool _hoverPlayButton, _hoverOptionsButton, _hoverExitButton;
 
 
     public StartScreen(MyGame pMyGame) : base()
@@ -37,12 +38,19 @@ public class StartScreen : GameObject
 
     private void MouseHover()
     {
-        _distanceX = Mathf.Abs(Input.mouseX - _playButton.x);
-        _distanceY = Mathf.Abs(Input.mouseY - _playButton.y);
+        _distancePlayX = Mathf.Abs(Input.mouseX - _playButton.x);
+        _distancePlayY = Mathf.Abs(Input.mouseY - _playButton.y);
 
-        if (_distanceX < _playButton.width / 2 && _distanceY < _playButton.height / 2)
+        _distanceOptionsX = Mathf.Abs(Input.mouseX - _optionsButton.x);
+        _distanceOptionsY = Mathf.Abs(Input.mouseY - _optionsButton.y);
+
+        _distanceExitX = Mathf.Abs(Input.mouseX - _exitButton.x);
+        _distanceExitY = Mathf.Abs(Input.mouseY - _exitButton.y);
+
+        if (_distancePlayX < _playButton.width / 2 && _distancePlayY < _playButton.height / 2)
         {
             _playButton.alpha = 0.5f;
+            _hoverPlayButton = true;
             Clickable();
         }
 
@@ -50,21 +58,82 @@ public class StartScreen : GameObject
         {
             _playButton.alpha = 1f;
             _playButton.color = Color.DarkBlue;
+            _hoverPlayButton = false;
         }
 
+        if (_distanceOptionsX < _optionsButton.width / 2 && _distanceOptionsY < _optionsButton.height / 2)
+        {
+            _optionsButton.alpha = 0.5f;
+            _hoverOptionsButton = true;
+            Clickable();
+        }
+
+        else
+        {
+            _optionsButton.alpha = 1f;
+            _optionsButton.color = Color.DarkBlue;
+            _hoverOptionsButton = false;
+        }
+
+        if (_distanceExitX < _exitButton.width / 2 && _distanceExitY < _exitButton.height / 2)
+        {
+            _exitButton.alpha = 0.5f;
+            _hoverExitButton = true;
+            Clickable();
+        }
+
+        else
+        {
+            _exitButton.alpha = 1f;
+            _exitButton.color = Color.DarkBlue;
+            _hoverExitButton = false;
+        }
     }
 
     private void Clickable()
     {
         if (Input.GetMouseButton(0))
         {
-            _playButton.color = Color.DarkRed;
+            if (_hoverPlayButton == true)
+            {
+                _playButton.color = Color.DarkRed;
+            }
+
+            else if (_hoverOptionsButton == true)
+            {
+                _optionsButton.color = Color.DarkRed;
+            }
+
+            else if (_hoverExitButton == true)
+            {
+                _exitButton.color = Color.DarkRed;
+                if (Input.GetMouseButtonUp(0))
+                {
+                    _exitButton.color = Color.DarkBlue;
+                    _myGame.Destroy();
+                    Environment.Exit(0);
+                }
+            }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            _playButton.color = Color.DarkBlue;
-            _myGame.SetState(MyGame.GameState.LEVEL);
+            if (_hoverPlayButton == true)
+            {
+                _playButton.color = Color.DarkBlue;
+                _myGame.SetState(MyGame.GameState.LEVEL);
+            }
+
+            else if (_hoverOptionsButton == true)
+            {
+                _optionsButton.color = Color.DarkBlue;
+                _myGame.SetState(MyGame.GameState.OPTIONS);
+            }
+
+            else if (_hoverOptionsButton == true)
+            {
+                
+            }
         }
     }
 

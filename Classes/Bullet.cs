@@ -37,9 +37,18 @@ public abstract class Bullet : Sprite
 
     protected abstract void Move();
 
+    private void BulletTrail()
+    {
+        Particle _particle = new Particle("assets/bullet.png", 1, 1);
+        game.AddChild(_particle);
+        _particle.SetXY(x, y);
+        _particle.rotation = rotation;
+    }
+
     public void Update()
     {
         Move();
+        BulletTrail();
     }
 
     public override void Destroy()

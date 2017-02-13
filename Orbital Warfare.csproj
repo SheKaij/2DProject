@@ -49,6 +49,7 @@
     <Compile Include="Classes\Button.cs" />
     <Compile Include="Classes\Menu\Level.cs" />
     <Compile Include="Classes\Menu\OptionScreen.cs" />
+    <Compile Include="Classes\Particle.cs" />
     <Compile Include="Classes\PlanetFactory.cs" />
     <Compile Include="Classes\Menu\ShopScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />

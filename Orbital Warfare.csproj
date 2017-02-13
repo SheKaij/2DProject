@@ -50,10 +50,10 @@
     <Compile Include="Classes\Menu\Level.cs" />
     <Compile Include="Classes\Menu\OptionScreen.cs" />
     <Compile Include="Classes\Particle.cs" />
-    <Compile Include="Classes\PlanetFactory.cs" />
     <Compile Include="Classes\Menu\ShopScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />
     <Compile Include="Classes\Menu\ResultScreen.cs" />
+    <Compile Include="Classes\PlanetFactory.cs" />
     <Compile Include="Classes\StandardBullet.cs" />
     <Compile Include="Classes\Test_hitbox.cs" />
     <Compile Include="Classes\Turret.cs" />

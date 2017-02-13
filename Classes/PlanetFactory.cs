@@ -1,50 +1,30 @@
-﻿using System;
+﻿using GXPEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GXPEngine;
-using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using static Planet;
 
-public class PlanetManager : GameObject
+namespace assignment_2.Classes
 {
-    private const int TOTAL_AMOUNT_PLANETS = 6;
-    private const int SMALL_PLANET_COUNT = 3;
-    private const int MEDIUM_PLANET_COUNT = 2;
-    private const int LARGE_PLANET_COUNT = 1;
-
-    private List<Planet> _listOfPlanets = new List<Planet>();
-    private Planet _planet;
-    private int[] _planetPosition = new int[] { 0, 0 };
-
-    public PlanetManager()
+    public static class PlanetFactory
     {
-        // empty
-    }
-
-    public void createPlanets()
-    {
-        for (int i = 0; i < SMALL_PLANET_COUNT; i++)
+        public static Planet Create(PlanetType type, Vec2 position)
         {
-            _planet = new Planet(new Vec2(game.width * 0.5f, game.height / 2), 10);
-            game.AddChild(_planet);
-            _listOfPlanets.Add(_planet);
-
-            _planet.SetXY(Utils.Random(_planet.width, game.width - _planet.width), Utils.Random(_planet.height, game.height));
+            switch (type)
+            {
+                case PlanetType.SMALL:
+                    return new Planet(position, 0.5f, 5, 0.2f, "assets\\planet_Tilesheets\\Planet_U_500.png");
+                case PlanetType.MEDIUM:
+                    return new Planet(position, 1f, 10, 0.4f, "assets\\planet_Tilesheets\\Planet_L_500.png");
+                case PlanetType.BIG:
+                    return new Planet(position, 2f, 15, 0.6f, "assets\\planet_Tilesheets\\Planet_E_500.png");
+                case PlanetType.LARGE:
+                    return new Planet(position, 8f, 20, 0.8f, "assets\\planet_Tilesheets\\Planet_Q_500.png");
+                default:
+                    return null;
+            }
         }
-    }
-
-    private void Update()
-    {
-        // empty
-    }
-
-    public Planet GetPlanet()
-    {
-        return _planet;
-    }
-
-    public List<Planet> GetAllPlanets()
-    {
-        return _listOfPlanets;
     }
 }

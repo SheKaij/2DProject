@@ -2,46 +2,38 @@
 using System.Drawing;
 using GXPEngine;
 
-public class Button : Canvas
+public class Button : Sprite
 {
-    private Color _buttonColor;
-    public Button(int pWidth, int pHeight) : base(pWidth, pHeight)
-    {
-        width = pWidth;
-        height = pHeight;
-        _buttonColor = Color.DarkBlue;
+    public float radius;
+    private float _distanceX, _distanceY, _distanceTotal;
 
-        Draw();
-    }
-
-    public Color color
+    public Button(string pFileName) : base(pFileName)
     {
-        get
-        {
-            return _buttonColor;
-        }
-        set
-        {
-            _buttonColor = value;
-        }
-    }
-    private void Draw()
-    {
+        radius = 60 / 2;
         SetOrigin(width / 2, height / 2);
+    }
 
-        // Create brush
-        SolidBrush brush = new SolidBrush(_buttonColor);
+    public bool MouseHover()
+    {
+        _distanceX = Mathf.Abs(Input.mouseX - x);
+        _distanceY = Mathf.Abs(Input.mouseY - y);
 
-        // Create rectangle to bound ellipse
-        RectangleF rectangle = new RectangleF(0, 0, width, height);
+        if (_distanceX < width / 2 && _distanceY < height / 2)
+        {
+            alpha = 0.5f;
+            return true;
+        }
 
-        // Draw circle to screen.
-        graphics.FillRectangle(brush, rectangle);
+        else
+        {
+            alpha = 1f;
+            return false;
+        }
     }
 
     private void Update()
     {
-        Draw();
+        MouseHover();
     }
 }
 

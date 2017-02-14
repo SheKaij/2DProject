@@ -5,7 +5,7 @@ using System.Drawing;
 public class MyGame : Game
 {
     private StartScreen _start;
-    private OptionScreen _options;
+    private CreditScreen _credits;
     private Level _level;
     private ResultScreen _result;
     private ShopScreen _shop;
@@ -46,12 +46,12 @@ public class MyGame : Game
                 _start = new StartScreen(this);
                 AddChild(_start);
                 break;
-            //case GameState.OPTIONS:
-            //    _options = new OptionScreen(this);
-            //    AddChild(_options);
-            //    break;
+            case GameState.OPTIONS:
+                _credits = new CreditScreen(this);
+                AddChild(_credits);
+                break;
             case GameState.LEVEL:
-                _level = Level.Instance;
+                _level = new Level(this);
                 AddChild(_level);
                 break;
             //case GameState.RESULT:
@@ -81,10 +81,10 @@ public class MyGame : Game
                 }
                 break;
             case GameState.OPTIONS:
-                if (_options != null)
+                if (_credits != null)
                 {
-                    _options.Destroy();
-                    _options = null;
+                    _credits.Destroy();
+                    _credits = null;
                 }
                 break;
             case GameState.LEVEL:

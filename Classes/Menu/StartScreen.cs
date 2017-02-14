@@ -1,144 +1,73 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Text;
 using GXPEngine;
+using System.IO;
 
 public class StartScreen : GameObject
 {
     private MyGame _myGame;
-    private Button _playButton, _optionsButton, _exitButton;
-    private TextField _title;
-
-    private float _distancePlayX, _distanceOptionsX, _distanceExitX;
-    private float _distancePlayY, _distanceOptionsY, _distanceExitY;
-    private bool _hoverPlayButton, _hoverOptionsButton, _hoverExitButton;
-
+    private Button _playButton, _creditsButton, _exitButton;
+    private Sprite _bg;
+    
+    private Font _font;
+    private PrivateFontCollection _pfc;
 
     public StartScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
 
-        _playButton = new Button(300, 100);
+        _bg = new Sprite("assets/menu/start_screen.png");
+        AddChild(_bg);
+        _bg.SetScaleXY(0.7f);
+
+        _playButton = new Button("assets/menu/start_button.png");
         AddChild(_playButton);
-        _playButton.x = game.width - _playButton.width * 0.66f;
-        _playButton.y = game.height * 0.25f;
+        _playButton.x = game.width * 0.20f;
+        _playButton.y = game.height - _playButton.height * 0.66f;
+        _playButton.SetScaleXY(0.7f);
 
-        _optionsButton = new Button(300, 100);
-        AddChild(_optionsButton);
-        _optionsButton.x = game.width - _optionsButton.width * 0.66f;
-        _optionsButton.y = game.height * 0.5f;
+        _creditsButton = new Button("assets/menu/credits_button.png");
+        AddChild(_creditsButton);
+        _creditsButton.x = game.width * 0.50f;
+        _creditsButton.y = game.height - _creditsButton.height * 0.66f;
+        _creditsButton.SetScaleXY(0.7f);
 
-        _exitButton = new Button(300, 100);
+        _exitButton = new Button("assets/menu/exit_button.png");
         AddChild(_exitButton);
-        _exitButton.x = game.width - _exitButton.width * 0.66f;
-        _exitButton.y = game.height * 0.75f;
+        _exitButton.x = game.width * 0.80f;
+        _exitButton.y = game.height - _exitButton.height * 0.66f;
+        _exitButton.SetScaleXY(0.7f);
 
-        _title = TextField.CreateTextField("Orbital Warfare");
-        AddChild(_title);
+        _pfc = new PrivateFontCollection();
+        _pfc.AddFontFile("assets/font/earthorbiter.ttf");
+        _font = new Font(_pfc.Families[0], 18);
     }
 
-    private void MouseHover()
+    private void HandleButtons()
     {
-        _distancePlayX = Mathf.Abs(Input.mouseX - _playButton.x);
-        _distancePlayY = Mathf.Abs(Input.mouseY - _playButton.y);
-
-        _distanceOptionsX = Mathf.Abs(Input.mouseX - _optionsButton.x);
-        _distanceOptionsY = Mathf.Abs(Input.mouseY - _optionsButton.y);
-
-        _distanceExitX = Mathf.Abs(Input.mouseX - _exitButton.x);
-        _distanceExitY = Mathf.Abs(Input.mouseY - _exitButton.y);
-
-        if (_distancePlayX < _playButton.width / 2 && _distancePlayY < _playButton.height / 2)
-        {
-            _playButton.alpha = 0.5f;
-            _hoverPlayButton = true;
-            Clickable();
-        }
-
-        else
-        {
-            _playButton.alpha = 1f;
-            _playButton.color = Color.DarkBlue;
-            _hoverPlayButton = false;
-        }
-
-        if (_distanceOptionsX < _optionsButton.width / 2 && _distanceOptionsY < _optionsButton.height / 2)
-        {
-            _optionsButton.alpha = 0.5f;
-            _hoverOptionsButton = true;
-            Clickable();
-        }
-
-        else
-        {
-            _optionsButton.alpha = 1f;
-            _optionsButton.color = Color.DarkBlue;
-            _hoverOptionsButton = false;
-        }
-
-        if (_distanceExitX < _exitButton.width / 2 && _distanceExitY < _exitButton.height / 2)
-        {
-            _exitButton.alpha = 0.5f;
-            _hoverExitButton = true;
-            Clickable();
-        }
-
-        else
-        {
-            _exitButton.alpha = 1f;
-            _exitButton.color = Color.DarkBlue;
-            _hoverExitButton = false;
-        }
-    }
-
-    private void Clickable()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            if (_hoverPlayButton == true)
-            {
-                _playButton.color = Color.DarkRed;
-            }
-
-            else if (_hoverOptionsButton == true)
-            {
-                _optionsButton.color = Color.DarkRed;
-            }
-
-            else if (_hoverExitButton == true)
-            {
-                _exitButton.color = Color.DarkRed;
-                if (Input.GetMouseButtonUp(0))
-                {
-                    _exitButton.color = Color.DarkBlue;
-                    _myGame.Destroy();
-                    Environment.Exit(0);
-                }
-            }
-        }
-
         if (Input.GetMouseButtonUp(0))
         {
-            if (_hoverPlayButton == true)
+            if (_playButton.MouseHover())
             {
-                _playButton.color = Color.DarkBlue;
                 _myGame.SetState(MyGame.GameState.LEVEL);
             }
 
-            else if (_hoverOptionsButton == true)
+            else if (_creditsButton.MouseHover())
             {
-                _optionsButton.color = Color.DarkBlue;
                 _myGame.SetState(MyGame.GameState.OPTIONS);
             }
 
-            else if (_hoverOptionsButton == true)
+            else if (_exitButton.MouseHover())
             {
-                
+                _myGame.Destroy();
+                Environment.Exit(0);
             }
         }
     }
 
     private void Update()
     {
-        MouseHover();
+        HandleButtons();
     }
 }

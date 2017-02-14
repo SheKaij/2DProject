@@ -48,7 +48,7 @@
     <Compile Include="Classes\BulletFactory.cs" />
     <Compile Include="Classes\Button.cs" />
     <Compile Include="Classes\Menu\Level.cs" />
-    <Compile Include="Classes\Menu\OptionScreen.cs" />
+    <Compile Include="Classes\Menu\CreditScreen.cs" />
     <Compile Include="Classes\Particle.cs" />
     <Compile Include="Classes\Menu\ShopScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />
@@ -77,7 +77,7 @@
     <Compile Include="gxpengine\FMOD\FMOD.cs" />
     <Compile Include="gxpengine\Game.cs" />
     <Compile Include="gxpengine\GameObject.cs" />
-    <Compile Include="gxpengine\HUD.cs" />
+    <Compile Include="Classes\HUD.cs" />
     <Compile Include="gxpengine\Managers\CollisionManager.cs" />
     <Compile Include="gxpengine\Managers\UpdateManager.cs" />
     <Compile Include="gxpengine\Mathf.cs" />

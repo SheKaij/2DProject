@@ -7,18 +7,8 @@ using static Planet;
 
 public class Level : GameObject
 {
-    private static Level _instance;
-    public static Level Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new Level();
-            }
-            return _instance;
-        }
-    }
+    private MyGame _myGame;
+
     private readonly float GRAVITATIONAL_FORCE = 30000f;
     private const float BULLETSPEED = 0.05f;
 
@@ -33,14 +23,21 @@ public class Level : GameObject
     private List<Bullet> _bullets;
 
     private Bullet _bullet = null;
-    private TextField tf = null;
+
+    private int _timer;
+    private int _turnTimer = 30;
+
+    private Button _exitButton;
+    private HUD _hud;
 
     private string _currentPlayer;
 
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
-    private Level() : base()
+    public Level(MyGame pMyGame) : base()
     {
+        _myGame = pMyGame;
+
         _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
         //_playMusic = _bgMusicSound.Play();
 
@@ -73,12 +70,17 @@ public class Level : GameObject
         _planets.Add(planet);
         AddChild(planet);
 
-        tf = TextField.CreateTextField("Control: Player 0" + "\n"
-                                     + "Speed: 00 mph" + "\n"
-                                     + "Score: 0000" + "\n"
-                                     + "Shots left: 0");
-        tf.backgroundColor = Color.White;
-        AddChild(tf);
+        _exitButton = new Button("assets/menu/exit_button2.png");
+        AddChild(_exitButton);
+        _exitButton.x = game.width - _exitButton.radius;
+        _exitButton.y += _exitButton.radius;
+        _exitButton.SetScaleXY(0.7f);
+        
+        _hud = new HUD(this);
+        AddChild(_hud);
+        _hud.SetScaleXY(0.7f);
+        _hud.x = game.width / 2 - _hud.width / 2;
+
     }
 
     public void HandleBoarders()
@@ -115,53 +117,12 @@ public class Level : GameObject
         }
     }
 
-    private void TestCollision()
+    private void HandleButtons()
     {
-        //if (_bullet != null)
-        //{
-        //    _distanceX = _bullet.x - _test.x;
-        //    _distanceY = _bullet.y - _test.y;
-        //    _distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
-
-        //    if (_distanceTotal < _test.radius)
-        //    {
-        //        _bullet.velocity.SetXY(0, 0);
-        //    }
-        //}
-
-        //_distanceX = _currentSpaceship.x - _test.x;
-        //_distanceY = _currentSpaceship.y - _test.y;
-        //_distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
-
-        //if (_distanceTotal < _test.radius)
-        //{
-        //    _currentSpaceship.velocity.SetXY(0, 0);
-        //    _currentSpaceship.isActive = false;
-
-        //    if (_currentSpaceship.alpha > 0.05f && _currentSpaceship.turret.alpha > 0.05f)
-        //    {
-        //        _currentSpaceship.alpha *= 0.95f;
-        //        _currentSpaceship.turret.alpha *= 0.95f;
-        //    }
-
-        //    else
-        //    {
-        //        _currentSpaceship.Destroy();
-        //        _currentSpaceship.turret.Destroy();
-
-        //        if (_currentSpaceship == _spaceship1)
-        //        {
-        //            _currentSpaceship = _spaceship2;
-        //            _spaceship2.isActive = true;
-        //        }
-
-        //        else if (_currentSpaceship == _spaceship2)
-        //        {
-        //            _currentSpaceship = _spaceship1;
-        //            _spaceship1.isActive = true;
-        //        }
-        //    }
-        //}
+        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover())
+        {
+            _myGame.SetState(MyGame.GameState.START);
+        }
     }
 
     public void HandleAttack()
@@ -172,6 +133,23 @@ public class Level : GameObject
             _bullets.Add(bullet);
             AddChild(bullet);
             _currentSpaceship.bulletCount -= 1;
+        }
+    }
+
+    public string GetCurrentPlayer()
+    {
+        if (_currentSpaceship == _spaceship1)
+        {
+            return "1";
+        }
+        else if (_currentSpaceship == _spaceship2)
+        {
+            return "2";
+        }
+
+        else
+        {
+            return "N/A";
         }
     }
 
@@ -188,54 +166,19 @@ public class Level : GameObject
                 }
             }
         }
-
-        //foreach (Planet planet in _pm.GetAllPlanets())
-        //{
-        //    foreach (GameObject item in planet.GetCollisions())
-        //    {
-        //        if (item is Bullet)
-        //        {
-        //            _currentSpaceship.score += 10;
-        //            _planet.health--;
-        //            Console.WriteLine(_planet.health);
-        //            (item as Bullet).Destroy();
-        //        }
-
-        //        if (item is Spaceship)
-        //        {
-        //            (item as Spaceship).Destroy();
-        //        }
-        //    }
     }
-
-
-    //if (item is Spaceship && item != _currentSpaceship)
-    //{
-    //    (item as Bullet).sfxDestroyed.Play();
-    //    _currentSpaceship.score += 50;
-    //    (item as Bullet).Destroy();
-    //}
 
     public void ScoreIncrease()
     {
         _currentSpaceship.score += 100;
     }
 
-    private void HandleHUD()
-    {
-        if (_currentSpaceship == _spaceship1) { _currentPlayer = "1"; }
-        else if (_currentSpaceship == _spaceship2) { _currentPlayer = "2"; }
-
-        tf.text = "Control: Player " + _currentPlayer + "\n"
-                + "Speed: " + Math.Abs(Math.Round(_currentSpaceship.velocity.x)) + "  Mph" + "\n"
-                + "Score: " + _currentSpaceship.score + "\n"
-                + "Shots left: " + _currentSpaceship.bulletCount;
-    }
-
     private void TurnCheck()
     {
         if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0)
         {
+            _timer = 0;
+            _turnTimer = 30;
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship1;
             _spaceship2.bulletCount = 5;
@@ -245,6 +188,8 @@ public class Level : GameObject
 
         if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0)
         {
+            _timer = 0;
+            _turnTimer = 30;
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship2;
             _spaceship1.bulletCount = 5;
@@ -267,14 +212,47 @@ public class Level : GameObject
         }
     }
 
+    private void TurnHandler()
+    {
+        _timer++;
+
+        if (_timer == 60)
+        {
+            _turnTimer--;
+            _timer = 0;
+        }
+
+        if (_turnTimer == 0)
+        {
+            _turnTimer = 30;
+
+            if (_currentSpaceship == _spaceship2)
+            {
+                _currentSpaceship.velocity.SetXY(0, 0);
+                _currentSpaceship = _spaceship1;
+                _spaceship2.bulletCount = 5;
+                _spaceship1.isActive = true;
+                _spaceship2.isActive = false;
+            }
+
+            else if (_currentSpaceship == _spaceship1)
+            {
+                _currentSpaceship.velocity.SetXY(0, 0);
+                _currentSpaceship = _spaceship2;
+                _spaceship1.bulletCount = 5;
+                _spaceship1.isActive = false;
+                _spaceship2.isActive = true;
+            }
+        }
+    }
     private void Update()
     {
         HandleAttack();
         HandleBoarders();
-        HandleHUD();
+        HandleButtons();
         CheckHitCollision();
         TurnCheck();
-        TestCollision();
         HandleGravity();
+        TurnHandler();
     }
 }

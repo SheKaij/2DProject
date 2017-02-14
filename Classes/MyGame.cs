@@ -22,7 +22,7 @@ public class MyGame : Game
 
     public MyGame() : base(1920, 1080, false)
     {
-        SetState(GameState.LEVEL);
+        SetState(GameState.START);
     }
 
     public GameState GetGameState()

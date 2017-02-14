@@ -7,7 +7,7 @@ public abstract class Bullet : Sprite
     public enum BulletType
     {
         STANDARD,
-        CLUSTER
+        RICOCHET
     }
 
     protected Sound _shotSound;

@@ -26,9 +26,9 @@ public class Level : GameObject
     private Sound _bgMusicSound;
     private SoundChannel _playMusic;
 
-    private Tank _currentTank;
-    private Tank _tank1;
-    private Tank _tank2;
+	private Spaceship _currentSpaceship;
+	private Spaceship _spaceship1;
+	private Spaceship _spaceship2;
     private List<Planet> _planets;
     private List<Bullet> _bullets;
 
@@ -47,12 +47,12 @@ public class Level : GameObject
         _background1 = new Background();
         AddChild(_background1);
 
-        _tank1 = new Tank(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
-        AddChild(_tank1);
-        _currentTank = _tank1;
+        _spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+        AddChild(_spaceship1);
+        _currentSpaceship = _spaceship1;
 
-        _tank2 = new Tank(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
-        AddChild(_tank2);
+        _spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+        AddChild(_spaceship2);
 
         _planets = new List<Planet>();
         _bullets = new List<Bullet>();
@@ -83,26 +83,26 @@ public class Level : GameObject
 
     public void HandleBoarders()
     {
-        if (_currentTank.position.x < 0)
+        if (_currentSpaceship.position.x < 0)
         {
-            _currentTank.position.x = 0;
-            _currentTank.velocity.x = 0;
+            _currentSpaceship.position.x = 0;
+            _currentSpaceship.velocity.x = 0;
         }
-        else if (_currentTank.position.x > game.width)
+        else if (_currentSpaceship.position.x > game.width)
         {
-            _currentTank.position.x = game.width;
-            _currentTank.velocity.x = 0;
+            _currentSpaceship.position.x = game.width;
+            _currentSpaceship.velocity.x = 0;
         }
 
-        if (_currentTank.position.y < 0)
+        if (_currentSpaceship.position.y < 0)
         {
-            _currentTank.position.y = 0;
-            _currentTank.velocity.y = 0;
+            _currentSpaceship.position.y = 0;
+            _currentSpaceship.velocity.y = 0;
         }
-        else if (_currentTank.position.y > game.height)
+        else if (_currentSpaceship.position.y > game.height)
         {
-            _currentTank.position.y = game.height;
-            _currentTank.velocity.y = 0;
+            _currentSpaceship.position.y = game.height;
+            _currentSpaceship.velocity.y = 0;
         }
 
         for (int i = _bullets.Count - 1; i >= 0; i--)
@@ -129,36 +129,36 @@ public class Level : GameObject
         //    }
         //}
 
-        //_distanceX = _currentTank.x - _test.x;
-        //_distanceY = _currentTank.y - _test.y;
+        //_distanceX = _currentSpaceship.x - _test.x;
+        //_distanceY = _currentSpaceship.y - _test.y;
         //_distanceTotal = Mathf.Sqrt(_distanceX * _distanceX + _distanceY * _distanceY);
 
         //if (_distanceTotal < _test.radius)
         //{
-        //    _currentTank.velocity.SetXY(0, 0);
-        //    _currentTank.isActive = false;
+        //    _currentSpaceship.velocity.SetXY(0, 0);
+        //    _currentSpaceship.isActive = false;
 
-        //    if (_currentTank.alpha > 0.05f && _currentTank.turret.alpha > 0.05f)
+        //    if (_currentSpaceship.alpha > 0.05f && _currentSpaceship.turret.alpha > 0.05f)
         //    {
-        //        _currentTank.alpha *= 0.95f;
-        //        _currentTank.turret.alpha *= 0.95f;
+        //        _currentSpaceship.alpha *= 0.95f;
+        //        _currentSpaceship.turret.alpha *= 0.95f;
         //    }
 
         //    else
         //    {
-        //        _currentTank.Destroy();
-        //        _currentTank.turret.Destroy();
+        //        _currentSpaceship.Destroy();
+        //        _currentSpaceship.turret.Destroy();
 
-        //        if (_currentTank == _tank1)
+        //        if (_currentSpaceship == _spaceship1)
         //        {
-        //            _currentTank = _tank2;
-        //            _tank2.isActive = true;
+        //            _currentSpaceship = _spaceship2;
+        //            _spaceship2.isActive = true;
         //        }
 
-        //        else if (_currentTank == _tank2)
+        //        else if (_currentSpaceship == _spaceship2)
         //        {
-        //            _currentTank = _tank1;
-        //            _tank1.isActive = true;
+        //            _currentSpaceship = _spaceship1;
+        //            _spaceship1.isActive = true;
         //        }
         //    }
         //}
@@ -168,10 +168,10 @@ public class Level : GameObject
     {
         if (Input.GetMouseButtonDown(0) && _bullet == null)
         {
-            Bullet bullet = BulletFactory.Create(_currentTank.bulletType, _currentTank.position.Clone(), new Vec2(Input.mouseX - _currentTank.x, Input.mouseY - _currentTank.y));
+            Bullet bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
             _bullets.Add(bullet);
             AddChild(bullet);
-            _currentTank.bulletCount -= 1;
+            _currentSpaceship.bulletCount -= 1;
         }
     }
 
@@ -195,61 +195,61 @@ public class Level : GameObject
         //    {
         //        if (item is Bullet)
         //        {
-        //            _currentTank.score += 10;
+        //            _currentSpaceship.score += 10;
         //            _planet.health--;
         //            Console.WriteLine(_planet.health);
         //            (item as Bullet).Destroy();
         //        }
 
-        //        if (item is Tank)
+        //        if (item is Spaceship)
         //        {
-        //            (item as Tank).Destroy();
+        //            (item as Spaceship).Destroy();
         //        }
         //    }
     }
 
 
-    //if (item is Tank && item != _currentTank)
+    //if (item is Spaceship && item != _currentSpaceship)
     //{
     //    (item as Bullet).sfxDestroyed.Play();
-    //    _currentTank.score += 50;
+    //    _currentSpaceship.score += 50;
     //    (item as Bullet).Destroy();
     //}
 
     public void ScoreIncrease()
     {
-        _currentTank.score += 100;
+        _currentSpaceship.score += 100;
     }
 
     private void HandleHUD()
     {
-        if (_currentTank == _tank1) { _currentPlayer = "1"; }
-        else if (_currentTank == _tank2) { _currentPlayer = "2"; }
+        if (_currentSpaceship == _spaceship1) { _currentPlayer = "1"; }
+        else if (_currentSpaceship == _spaceship2) { _currentPlayer = "2"; }
 
         tf.text = "Control: Player " + _currentPlayer + "\n"
-                + "Speed: " + Math.Abs(Math.Round(_currentTank.velocity.x)) + "  Mph" + "\n"
-                + "Score: " + _currentTank.score + "\n"
-                + "Shots left: " + _currentTank.bulletCount;
+                + "Speed: " + Math.Abs(Math.Round(_currentSpaceship.velocity.x)) + "  Mph" + "\n"
+                + "Score: " + _currentSpaceship.score + "\n"
+                + "Shots left: " + _currentSpaceship.bulletCount;
     }
 
     private void TurnCheck()
     {
-        if (_currentTank == _tank2 && _currentTank.bulletCount <= 0)
+        if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0)
         {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank1;
-            _tank2.bulletCount = 5;
-            _tank1.isActive = true;
-            _tank2.isActive = false;
+            _currentSpaceship.velocity.SetXY(0, 0);
+            _currentSpaceship = _spaceship1;
+            _spaceship2.bulletCount = 5;
+            _spaceship1.isActive = true;
+            _spaceship2.isActive = false;
         }
 
-        if (_currentTank == _tank1 && _currentTank.bulletCount <= 0)
+        if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0)
         {
-            _currentTank.velocity.SetXY(0, 0);
-            _currentTank = _tank2;
-            _tank1.bulletCount = 5;
-            _tank1.isActive = false;
-            _tank2.isActive = true;
+            _currentSpaceship.velocity.SetXY(0, 0);
+            _currentSpaceship = _spaceship2;
+            _spaceship1.bulletCount = 5;
+            _spaceship1.isActive = false;
+            _spaceship2.isActive = true;
         }
     }
 

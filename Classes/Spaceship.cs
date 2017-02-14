@@ -5,7 +5,7 @@ using static Bullet;
 
 namespace GXPEngine
 {
-    public class Tank : Sprite
+    public class Spaceship : Sprite
     {
         private readonly float ACCELERATION = 0.5f;
         private readonly float ANGULAR_ACCELERATION = 0.2f;
@@ -28,7 +28,7 @@ namespace GXPEngine
         private Sound _sfxEngine;
 
 
-        public Tank(Vec2 pPosition, int pRotation, bool pIsActive) : base("assets\\spaceship\\ship.png")
+        public Spaceship(Vec2 pPosition, int pRotation, bool pIsActive) : base("assets\\spaceship\\ship.png")
         {
             turret = new Turret();
             bullets = new List<Bullet>();
@@ -71,7 +71,7 @@ namespace GXPEngine
             //{
             //    Bullet bullet = BulletFactory.Create(BulletType.STANDARD, new Vec2(position), new Vec2(Input.mouseX - x, Input.mouseY - y)));
             //    AddChild(_bullet);
-            //    _currentTank.bulletCount -= 1;
+            //    _currentSpaceship.bulletCount -= 1;
             //}
         }
 
@@ -161,7 +161,7 @@ namespace GXPEngine
 
         //private Turret _barrel;
 
-        //public Tank(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("assets\\spaceship\\ship.png")
+        //public Spaceship(int pRadius, Vec2 pPosition = null, Vec2 pVelocity = null, bool pHasControl = false, Color? pColor = null) : base("assets\\spaceship\\ship.png")
         //{
         //    SetOrigin(width * 0.40f, height / 2);
 

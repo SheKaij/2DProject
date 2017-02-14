@@ -16,7 +16,7 @@ namespace assignment_2.Classes
             switch (type)
             {
                 case BulletType.STANDARD :
-                    return new StandardBullet(position, velocity);
+                    return new StandardBullet(position, velocity, 1f);
                 default:
                     return null;
             }

@@ -92,7 +92,7 @@
     <Compile Include="gxpengine\Utils\Time.cs" />
     <Compile Include="gxpengine\Utils\Utils.cs" />
     <Compile Include="Classes\MyGame.cs" />
-    <Compile Include="Classes\Tank.cs" />
+    <Compile Include="Classes\Spaceship.cs" />
     <Compile Include="Classes\Planet.cs" />
     <Compile Include="Classes\Vec2.cs" />
   </ItemGroup>

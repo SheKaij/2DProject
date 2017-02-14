@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace assignment_2.Classes
 {
-    public class StandardBullet : Bullet
-    {
-        public StandardBullet(Vec2 position, Vec2 velocity, float damage) : base(
+	public class RicochetBullet : Bullet
+	{
+		public RicochetBullet(Vec2 position, Vec2 velocity, float damage) : base(
             position,
             velocity,
 			damage,
@@ -18,13 +18,13 @@ namespace assignment_2.Classes
             "assets\\sfx\\placeholder_hit2.wav",
             0.05f) { }
 
-        protected override void Move()
-        {
-            rotation = velocity.GetAngleDegrees();
+		protected override void Move()
+		{
+			rotation = velocity.GetAngleDegrees();
 
-            position.Add(velocity);
-            x = position.x;
-            y = position.y;
-        }
-    }
+			position.Add(velocity);
+			x = position.x;
+			y = position.y;
+		}
+	}
 }

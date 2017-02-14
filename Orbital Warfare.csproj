@@ -95,6 +95,7 @@
     <Compile Include="Classes\Spaceship.cs" />
     <Compile Include="Classes\Planet.cs" />
     <Compile Include="Classes\Vec2.cs" />
+    <Compile Include="Classes\RicochetBullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

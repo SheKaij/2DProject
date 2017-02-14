@@ -155,17 +155,37 @@ public class Level : GameObject
 
     private void CheckHitCollision()
     {
-        foreach (Planet planet in _planets)
-        {
-            for (int i = _bullets.Count - 1; i >= 0; i--)
-            {
-                if (planet.Contains(_bullets[i].position))
-                {
-                    _bullets[i].Destroy();
-                    _bullets.RemoveAt(i);
-                }
-            }
-        }
+		foreach (Planet planet in _planets)
+		{
+			for (int i = _bullets.Count - 1; i >= 0; i--)
+			{
+				if (planet.Contains(_bullets[i].position))
+				{
+					_bullets[i].Destroy();
+					planet.health -= _bullets[i].damage;
+					_currentSpaceship.score += 10;
+					_bullets.RemoveAt(i);
+				}
+			}
+		}
+
+        //foreach (Planet planet in _pm.GetAllPlanets())
+        //{
+        //    foreach (GameObject item in planet.GetCollisions())
+        //    {
+        //        if (item is Bullet)
+        //        {
+        //            _currentSpaceship.score += 10;
+        //            _planet.health--;
+        //            Console.WriteLine(_planet.health);
+        //            (item as Bullet).Destroy();
+        //        }
+
+        //        if (item is Spaceship)
+        //        {
+        //            (item as Spaceship).Destroy();
+        //        }
+        //    }
     }
 
     public void ScoreIncrease()

@@ -30,6 +30,7 @@ public class Level : GameObject
 
     private Button _exitButton;
     private HUD _hud;
+    private ExitWindow _exitWindow;
 
     private string _currentPlayer;
 
@@ -80,6 +81,8 @@ public class Level : GameObject
         AddChild(_hud);
         _hud.SetScaleXY(0.7f);
         _hud.x = game.width / 2 - _hud.width / 2;
+
+        
 
         _fg = new FadeOut();
         AddChild(_fg);
@@ -151,7 +154,12 @@ public class Level : GameObject
         {
             // Add the instance of a new class called notification popup
             // Add two buttons in the class with one to return to game, or exit for realsies
-            _myGame.SetState(MyGame.GameState.START);
+            _currentSpaceship.isActive = false;
+            _exitWindow = new ExitWindow(_myGame);
+            AddChildAt(_exitWindow, 300);
+            _exitWindow.x = 0;
+            _exitWindow.y = 0;
+            //_myGame.SetState(MyGame.GameState.START);
         }
     }
 

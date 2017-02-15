@@ -37,8 +37,8 @@ public class Level : GameObject
     {
         _myGame = pMyGame;
 
-        _bgMusicSound = new Sound("assets\\sfx\\placeholder_music2.mp3", true, true);
-        //_playMusic = _bgMusicSound.Play();
+        _bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
+        _playMusic = _bgMusicSound.Play();
 
         _background1 = new Background();
         AddChild(_background1);

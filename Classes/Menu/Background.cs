@@ -8,8 +8,8 @@ using GXPEngine;
 public class Background : Sprite
 {
     public Background() : base("assets\\background.png")
-    {
-        SetScaleXY(0.7f);
+    { 
+        // empty
     }
 }
 

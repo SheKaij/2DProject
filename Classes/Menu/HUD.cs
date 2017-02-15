@@ -40,7 +40,7 @@ public class HUD : Sprite
             //_shotsleft.graphics.DrawImage(Image.FromFile("assets/bullet.png"), (width * 0.15f) * i, height / 2, 128, 128);
 
             _shotsleft.graphics.Clear(Color.Transparent);
-            _shotsleft.graphics.DrawString("Bullets Left: " + _level.GetBulletCount(), _font, Brushes.AliceBlue, width * 0.23f, height / 2);
+            _shotsleft.graphics.DrawString("Bullets Left: " + _level.GetBulletCount(), _font, Brushes.AliceBlue, width * 0.17f, height * 0.33f);
         }
     }
 
@@ -49,17 +49,17 @@ public class HUD : Sprite
         if (_level.GetCurrentPlayer() == "1")
         {
             _currentPlayer.graphics.Clear(Color.Transparent);
-            _currentPlayer.graphics.DrawString("Current Player: " + _level.GetCurrentPlayer(), _font, Brushes.AliceBlue, width * 0.15f , height * 0.15f);
+            _currentPlayer.graphics.DrawString("Current Player: " + _level.GetCurrentPlayer(), _font, Brushes.AliceBlue, width * 0.10f , height * 0.15f);
         }
 
         else if (_level.GetCurrentPlayer() == "2")
         {
             _currentPlayer.graphics.Clear(Color.Transparent);
-            _currentPlayer.graphics.DrawString("Current Player: " + _level.GetCurrentPlayer(), _font, Brushes.AliceBlue, width * 0.15f, height * 0.15f);
+            _currentPlayer.graphics.DrawString("Current Player: " + _level.GetCurrentPlayer(), _font, Brushes.AliceBlue, width * 0.10f, height * 0.15f);
         }
 
         _timeLeft.graphics.Clear(Color.Transparent);
-        _timeLeft.graphics.DrawString(_level.GetTurnTimer(), _font, Brushes.AliceBlue, width * 0.64f, height);
+        _timeLeft.graphics.DrawString(_level.GetTurnTimer(), _font, Brushes.AliceBlue, width * 0.44f, height * 0.70f);
     }
 
     private void Update()

@@ -16,12 +16,10 @@ public class StoreScreen : GameObject
 
         _bg = new Sprite("assets/background.png");
         AddChild(_bg);
-        _bg.SetScaleXY(0.7f);
 
         _window = new Sprite("assets/menu/window.png");
         AddChild(_window);
         _window.SetOrigin(_window.width / 2, _window.height / 2);
-        _window.SetScaleXY(0.7f);
         _window.x = game.width / 2;
         _window.y = game.height / 2;
 

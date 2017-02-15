@@ -22,6 +22,9 @@ public class Planet : AnimationSprite
 
 	public bool planetstage0, planetStage1, planetStage2, planetStage3, planetStage4;
 
+	private Sound planetExplode;
+	private SoundChannel planetChannel;
+
     public Planet(Vec2 position, float mass, float health, float maxHealth, float scale, String asset) : base(asset, 3, 2)
     {
         _radius = (int)(400/2*scale);
@@ -35,6 +38,10 @@ public class Planet : AnimationSprite
         SetScaleXY(scale);
         x = position.x;
         y = position.y;
+
+		planetExplode = new Sound("assets\\sfx\\planetexplosion.wav");
+		planetChannel = planetExplode.Play();
+		planetChannel.IsPaused = true;
     }
 
     public bool Contains(Vec2 vector)
@@ -70,6 +77,11 @@ public class Planet : AnimationSprite
 
         if (health <= 0)
         {
+			if (planetChannel.IsPaused)
+			{
+				planetChannel.IsPaused = false;
+				planetExplode.Play();
+			}
 			_timer--;
 			alpha = _timer / 100f;
 			SetFrame(5);

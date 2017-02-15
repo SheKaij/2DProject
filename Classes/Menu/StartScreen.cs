@@ -7,6 +7,9 @@ public class StartScreen : GameObject
     private Button _playButton, _creditsButton, _exitButton;
     private Sprite _bg;
 
+	private Sound _bgmusic;
+	private SoundChannel _bgmusicChannel;
+
     public StartScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
@@ -30,6 +33,9 @@ public class StartScreen : GameObject
 
         Sprite _fg = new FadeOut();
         AddChild(_fg);
+
+		_bgmusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+		_bgmusicChannel = _bgmusic.Play();
     }
 
     private void HandleButtons()

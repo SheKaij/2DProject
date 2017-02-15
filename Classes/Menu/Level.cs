@@ -64,11 +64,11 @@ public class Level : GameObject
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.6f));
+        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.7f, game.height * 0.4f));
+        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
         _planets.Add(planet);
         AddChild(planet);
 
@@ -79,10 +79,9 @@ public class Level : GameObject
 
         _hud = new HUD(this);
         AddChild(_hud);
-        _hud.SetScaleXY(0.7f);
         _hud.x = game.width / 2 - _hud.width / 2;
 
-        
+        _exitWindow = new ExitWindow(_myGame);
 
         _fg = new FadeOut();
         AddChild(_fg);
@@ -150,27 +149,27 @@ public class Level : GameObject
 
     private void HandleButtons()
     {
-        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover())
+        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover() && _exitWindow.windowActive == false)
         {
-            // Add the instance of a new class called notification popup
-            // Add two buttons in the class with one to return to game, or exit for realsies
-            _currentSpaceship.isActive = false;
             _exitWindow = new ExitWindow(_myGame);
             AddChildAt(_exitWindow, 300);
-            _exitWindow.x = 0;
-            _exitWindow.y = 0;
-            //_myGame.SetState(MyGame.GameState.START);
+            _exitWindow.windowActive = true;
+            _currentSpaceship.isActive = false;
+        }
+
+        if (_exitWindow.windowActive == false)
+        {
+            _currentSpaceship.isActive = true;
         }
     }
 
     public void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0) && _bullet == null)
+
+        if (Input.GetMouseButtonDown(0) && _bullet == null && _exitButton.MouseHover() == false)
         {
             Bullet bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
             _bullets.Add(bullet);
-            AddChild(bullet);
-            _currentSpaceship.bulletCount -= 1;
         }
     }
 
@@ -300,14 +299,19 @@ public class Level : GameObject
     }
     private void Update()
     {
-        HandleAttack();
-        HandleBoarders();
         HandleButtons();
-        HudOpacity();
-        CheckHitCollision();
-        TurnCheck();
+
+        if (_exitWindow.windowActive == false)
+        {
+            TurnCheck();
+            TurnHandler();
+            HandleAttack();
+        }
+
         HandleGravity();
-        TurnHandler();
+        CheckHitCollision();
+        HandleBoarders();
+        HudOpacity();
 
         if (Input.GetKeyDown(Key.R))
         {

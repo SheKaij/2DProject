@@ -12,31 +12,45 @@ public class ExitWindow : Sprite
 
     private PrivateFontCollection _pfc;
     private Font _font;
+    private bool _windowActive;
 
     public ExitWindow(MyGame pMyGame) : base("assets/menu/window.png")
     {
         alpha = 0;
+        //SetScaleXY(0.75f);
 
         _myGame = pMyGame;
 
         _backButton = new Button("assets/menu/back_button.png");
         AddChild(_backButton);
-        _backButton.x = 0;
-        _backButton.y = 0;
+        _backButton.x = width * 0.25f;
+        _backButton.y = height - _backButton.height * 1.25f;
 
-        _confirmButton = new Button("assets/menu/next_button.png");
+        _confirmButton = new Button("assets/menu/ok_button.png");
         AddChild(_confirmButton);
-        _confirmButton.x = width;
-        _confirmButton.y = height;
+        _confirmButton.x = width * 0.75f;
+        _confirmButton.y = height - _backButton.height * 1.25f;
 
         _pfc = new PrivateFontCollection();
         _pfc.AddFontFile("assets\\font\\earthorbiter.ttf");
         _font = new Font(_pfc.Families[0], 24);
     }
 
+    public bool windowActive
+    {
+        get
+        {
+            return _windowActive;
+        }
+        set
+        {
+            _windowActive = value;
+        }
+    }
+
     private void DrawText()
     { 
-        //drawstring stuffs
+        
     }
 
 
@@ -50,14 +64,19 @@ public class ExitWindow : Sprite
 
     private void HandleButtons()
     {
-        if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
+        if (_windowActive == true)
         {
-            this.Destroy();
-        }
+            if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
+            {
+                _windowActive = false;
+                this.Destroy();
+            }
 
-        else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
-        {
-            _myGame.SetState(MyGame.GameState.START);
+            else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
+            {
+                _windowActive = false;
+                _myGame.SetState(MyGame.GameState.START);
+            }
         }
     }
 

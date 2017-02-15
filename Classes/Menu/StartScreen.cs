@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Text;
 using GXPEngine;
-using System.IO;
 
 public class StartScreen : GameObject
 {
@@ -16,7 +13,6 @@ public class StartScreen : GameObject
 
         _bg = new Sprite("assets/menu/start_screen.png");
         AddChild(_bg);
-        _bg.SetScaleXY(0.7f);
 
         _playButton = new Button("assets/menu/start_button.png");
         AddChild(_playButton);

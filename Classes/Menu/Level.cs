@@ -21,19 +21,17 @@ public class Level : GameObject
 	private Spaceship _spaceship2;
     private List<Planet> _planets;
     private List<Bullet> _bullets;
+	private List<Spaceship> _spaceships;
 
     private Bullet _bullet = null;
     private FadeOut _fg;
 
     private int _timer;
     private int _turnTimer = 30;
+	private int _destroyTimer = 100;
 
     private Button _exitButton;
     private HUD _hud;
-
-    private string _currentPlayer;
-
-    private const float _gravForceConstant = 6.67408f * 10 - 11;
 
     public Level(MyGame pMyGame) : base()
     {
@@ -45,11 +43,15 @@ public class Level : GameObject
         _background1 = new Background();
         AddChild(_background1);
 
+		_spaceships = new List<Spaceship>();
+
         _spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+		_spaceships.Add(_spaceship1);
         AddChild(_spaceship1);
         _currentSpaceship = _spaceship1;
 
         _spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+		_spaceships.Add(_spaceship2);
         AddChild(_spaceship2);
 
         _planets = new List<Planet>();
@@ -208,6 +210,30 @@ public class Level : GameObject
 					planet.health -= _bullets[i].damage;
 					_currentSpaceship.score += 10;
 					_bullets.RemoveAt(i);
+				}
+			}
+			if (planet.Contains(_currentSpaceship.position))
+			{
+				_destroyTimer--;
+				_currentSpaceship.alpha = _destroyTimer / 100f;
+				_currentSpaceship.Destroy();
+				_myGame.SetState(MyGame.GameState.RESULT);
+			}
+		}
+
+		foreach (Spaceship spaceship in _spaceships)
+		{
+			for (int i = _bullets.Count - 1; i >= 0; i--)
+			{
+				if (spaceship != _currentSpaceship)
+				{
+					if (_bullets[i].x >= spaceship.x - spaceship.width / 2 && _bullets[i].x <= spaceship.x + spaceship.width / 2 && _bullets[i].y <= spaceship.y + spaceship.height / 2 && _bullets[i].y >= spaceship.y - spaceship.height)
+					{
+						_bullets[i].Destroy();
+						_bullets.RemoveAt(i);
+						spaceship.Destroy();
+						_myGame.SetState(MyGame.GameState.RESULT);
+					}
 				}
 			}
 		}

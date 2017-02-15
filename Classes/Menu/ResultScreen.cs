@@ -16,12 +16,11 @@ public class ResultScreen : GameObject
 
         _bg = new Sprite("assets/background.png");
         AddChild(_bg);
-        _bg.SetScaleXY(0.7f);
 
         _window = new Sprite("assets/menu/window.png");
         AddChild(_window);
+        _window.alpha = 0;
         _window.SetOrigin(_window.width / 2, _window.height / 2);
-        _window.SetScaleXY(0.7f);
         _window.x = game.width / 2;
         _window.y = game.height / 2;
 
@@ -34,6 +33,14 @@ public class ResultScreen : GameObject
         AddChild(_nextButton);
         _nextButton.x = _window.width * 0.72f; ;
         _nextButton.y = _window.height - _nextButton.height * 1.33f;
+    }
+
+    private void WindowAppear()
+    {
+        if (_window.alpha <= 1)
+        {
+            _window.alpha += 0.05f;
+        }
     }
 
     private void HandleButtons()
@@ -52,5 +59,6 @@ public class ResultScreen : GameObject
     private void Update()
     {
         HandleButtons();
+        WindowAppear();
     }
 }

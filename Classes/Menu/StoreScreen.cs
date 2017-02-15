@@ -8,7 +8,7 @@ public class StoreScreen : GameObject
 
     private Sprite _bg, _window;
 
-    private Button _backButton, _nextButton;
+    private Button _backButton;
 
     public StoreScreen(MyGame pMyGame) : base()
     {
@@ -16,24 +16,26 @@ public class StoreScreen : GameObject
 
         _bg = new Sprite("assets/background.png");
         AddChild(_bg);
-        _bg.SetScaleXY(0.7f);
 
         _window = new Sprite("assets/menu/window.png");
         AddChild(_window);
+        _window.alpha = 0;
         _window.SetOrigin(_window.width / 2, _window.height / 2);
-        _window.SetScaleXY(0.7f);
         _window.x = game.width / 2;
         _window.y = game.height / 2;
 
         _backButton = new Button("assets/menu/back_button.png");
         AddChild(_backButton);
-        _backButton.x = _window.width * 0.292f; ;
+        _backButton.x = _window.width  / 2;
         _backButton.y = _window.height - _backButton.height * 1.33f;
+    }
 
-        _nextButton = new Button("assets/menu/next_button.png");
-        AddChild(_nextButton);
-        _nextButton.x = _window.width * 0.72f; ;
-        _nextButton.y = _window.height - _nextButton.height * 1.33f;
+    private void WindowAppear()
+    {
+        if (_window.alpha <= 1)
+        {
+            _window.alpha += 0.05f;
+        }
     }
 
     private void HandleButtons()
@@ -42,15 +44,11 @@ public class StoreScreen : GameObject
         {
             _myGame.SetState(MyGame.GameState.RESULT);
         }
-
-        else if (Input.GetMouseButtonUp(0) && _nextButton.MouseHover())
-        {
-            _myGame.SetState(MyGame.GameState.LEVEL);
-        }
     }
 
     private void Update()
     {
         HandleButtons();
+        WindowAppear();
     }
 }

@@ -21,18 +21,19 @@ public class Level : GameObject
 	private Spaceship _spaceship2;
     private List<Planet> _planets;
     private List<Bullet> _bullets;
+	private List<Spaceship> _spaceships;
 
     private Bullet _bullet = null;
+    private Bullet bullet;
     private FadeOut _fg;
 
     private int _timer;
     private int _turnTimer = 30;
+	private int _destroyTimer = 100;
 
     private Button _exitButton;
     private HUD _hud;
     private ExitWindow _exitWindow;
-
-    private string _currentPlayer;
 
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
@@ -46,11 +47,15 @@ public class Level : GameObject
         _background1 = new Background();
         AddChild(_background1);
 
+		_spaceships = new List<Spaceship>();
+
         _spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+		_spaceships.Add(_spaceship1);
         AddChild(_spaceship1);
         _currentSpaceship = _spaceship1;
 
         _spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+		_spaceships.Add(_spaceship2);
         AddChild(_spaceship2);
 
         _planets = new List<Planet>();
@@ -64,11 +69,11 @@ public class Level : GameObject
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.6f));
+        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
         _planets.Add(planet);
         AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.7f, game.height * 0.4f));
+        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
         _planets.Add(planet);
         AddChild(planet);
 
@@ -79,10 +84,9 @@ public class Level : GameObject
 
         _hud = new HUD(this);
         AddChild(_hud);
-        _hud.SetScaleXY(0.7f);
         _hud.x = game.width / 2 - _hud.width / 2;
 
-        
+        _exitWindow = new ExitWindow(_myGame);
 
         _fg = new FadeOut();
         AddChild(_fg);
@@ -150,27 +154,28 @@ public class Level : GameObject
 
     private void HandleButtons()
     {
-        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover())
+        if (_exitWindow.windowActive == false)
         {
-            // Add the instance of a new class called notification popup
-            // Add two buttons in the class with one to return to game, or exit for realsies
-            _currentSpaceship.isActive = false;
+            _currentSpaceship.isActive = true;
+        }
+
+        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover() && _exitWindow.windowActive == false)
+        {
             _exitWindow = new ExitWindow(_myGame);
             AddChildAt(_exitWindow, 300);
-            _exitWindow.x = 0;
-            _exitWindow.y = 0;
-            //_myGame.SetState(MyGame.GameState.START);
+            _exitWindow.windowActive = true;
+            _currentSpaceship.isActive = false;
         }
     }
 
     public void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0) && _bullet == null)
+
+        if (Input.GetMouseButtonDown(0) && _bullet == null && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
         {
-            Bullet bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
+            bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
             _bullets.Add(bullet);
-            AddChild(bullet);
-            _currentSpaceship.bulletCount -= 1;
+            _currentSpaceship.bulletCount--;
         }
     }
 
@@ -218,6 +223,34 @@ public class Level : GameObject
 					_bullets.RemoveAt(i);
 				}
 			}
+			if (planet.Contains(_currentSpaceship.position))
+			{
+				_destroyTimer--;
+				_currentSpaceship.alpha = _destroyTimer / 100f;
+				_currentSpaceship.Destroy();
+				_myGame.SetState(MyGame.GameState.RESULT);
+			}
+		}
+
+		foreach (Spaceship spaceship in _spaceships)
+		{
+			for (int i = _bullets.Count - 1; i >= 0; i--)
+			{
+				if (spaceship != _currentSpaceship)
+				{
+					if (_bullets[i].x >= spaceship.x - spaceship.width / 2 && _bullets[i].x <= spaceship.x + spaceship.width / 2 && _bullets[i].y <= spaceship.y + spaceship.height / 2 && _bullets[i].y >= spaceship.y - spaceship.height)
+					{
+						_bullets[i].Destroy();
+						_bullets.RemoveAt(i);
+						spaceship.Destroy();
+
+                        if (_bullets.Contains(bullet) == false)
+                        {
+                            _myGame.SetState(MyGame.GameState.RESULT);
+                        }
+					}
+				}
+			}
 		}
     }
 
@@ -228,7 +261,7 @@ public class Level : GameObject
 
     private void TurnCheck()
     {
-        if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0)
+        if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
         {
             _timer = 0;
             _turnTimer = 30;
@@ -239,7 +272,7 @@ public class Level : GameObject
             _spaceship2.isActive = false;
         }
 
-        if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0)
+        if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
         {
             _timer = 0;
             _turnTimer = 30;
@@ -300,18 +333,18 @@ public class Level : GameObject
     }
     private void Update()
     {
-        HandleAttack();
-        HandleBoarders();
         HandleButtons();
-        HudOpacity();
-        CheckHitCollision();
-        TurnCheck();
-        HandleGravity();
-        TurnHandler();
 
-        if (Input.GetKeyDown(Key.R))
+        if (_exitWindow.windowActive == false)
         {
-            _myGame.SetState(MyGame.GameState.RESULT);
+            TurnCheck();
+            TurnHandler();
+            HandleAttack();
         }
+
+        HandleGravity();
+        CheckHitCollision();
+        HandleBoarders();
+        HudOpacity();
     }
 }

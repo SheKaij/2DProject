@@ -51,7 +51,7 @@
     <Compile Include="Classes\Effects\FadeIn.cs" />
     <Compile Include="Classes\Effects\FadeOut.cs" />
     <Compile Include="Classes\Menu\Level.cs" />
-    <Compile Include="Classes\Menu\CreditScreen.cs" />
+    <Compile Include="Classes\Menu\ControlScreen.cs" />
     <Compile Include="Classes\Effects\Particle.cs" />
     <Compile Include="Classes\Menu\StoreScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />

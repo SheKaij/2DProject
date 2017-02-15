@@ -7,6 +7,7 @@ using GXPEngine;
 public class ExitWindow : Sprite
 {
     private MyGame _myGame;
+    private Level _level;
 
     private Button _backButton, _confirmButton;
 
@@ -14,13 +15,13 @@ public class ExitWindow : Sprite
 
     private PrivateFontCollection _pfc;
     private Font _font;
-    private bool _windowActive;
 
-    public ExitWindow(MyGame pMyGame) : base("assets/menu/window.png")
+    public ExitWindow(MyGame pMyGame, Level pLevel) : base("assets/menu/window.png")
     {
         alpha = 0;
 
         _myGame = pMyGame;
+        _level = pLevel;
 
         _warningMessage = new Canvas(width, height);
         _warningMessage.alpha = 0;
@@ -39,18 +40,6 @@ public class ExitWindow : Sprite
         _pfc = new PrivateFontCollection();
         _pfc.AddFontFile("assets\\font\\earthorbiter.ttf");
         _font = new Font(_pfc.Families[0], 48);
-    }
-
-    public bool windowActive
-    {
-        get
-        {
-            return _windowActive;
-        }
-        set
-        {
-            _windowActive = value;
-        }
     }
 
     private void DrawText()
@@ -77,21 +66,19 @@ public class ExitWindow : Sprite
 
     private void HandleButtons()
     {
-        if (_windowActive == true)
+        if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
         {
-            if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
-            {
-                _windowActive = false;
-                this.Destroy();
-            }
+            _level.SetWindowActive(false);
+            Destroy();
+        }
 
-            else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
-            {
-                _windowActive = false;
-                _myGame.SetState(MyGame.GameState.START);
-            }
+        else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
+        {
+            //_level.GetMusic().Stop();
+            _myGame.SetState(MyGame.GameState.START);
         }
     }
+    
 
     private void Update()
     {

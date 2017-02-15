@@ -34,6 +34,7 @@ public class Level : GameObject
     private Button _exitButton;
     private HUD _hud;
     private ExitWindow _exitWindow;
+    private bool _windowActive;
 
     private const float _gravForceConstant = 6.67408f * 10 - 11;
 
@@ -42,7 +43,7 @@ public class Level : GameObject
         _myGame = pMyGame;
 
         _bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
-        _playMusic = _bgMusicSound.Play();
+        //_playMusic = _bgMusicSound.Play();
 
         _background1 = new Background();
         AddChild(_background1);
@@ -86,10 +87,19 @@ public class Level : GameObject
         AddChild(_hud);
         _hud.x = game.width / 2 - _hud.width / 2;
 
-        _exitWindow = new ExitWindow(_myGame);
-
         _fg = new FadeOut();
         AddChild(_fg);
+    }
+
+    public bool SetWindowActive(bool value)
+    {
+        _windowActive = value;
+        return _windowActive;
+    }
+
+    public SoundChannel GetMusic()
+    {
+        return _playMusic;
     }
 
     public int GetBulletCount()
@@ -154,24 +164,29 @@ public class Level : GameObject
 
     private void HandleButtons()
     {
-        if (_exitWindow.windowActive == false)
+        if (_windowActive == false)
         {
             _currentSpaceship.isActive = true;
         }
 
-        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover() && _exitWindow.windowActive == false)
+        if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover() && _windowActive == false)
         {
-            _exitWindow = new ExitWindow(_myGame);
+            _exitWindow = new ExitWindow(_myGame, this);
             AddChildAt(_exitWindow, 300);
-            _exitWindow.windowActive = true;
+            _windowActive = true;
             _currentSpaceship.isActive = false;
+
+            //if (_exitWindow.IsDestroyed())
+            //{
+            //    _windowActive = false;
+            //}
         }
     }
 
     public void HandleAttack()
     {
 
-        if (Input.GetMouseButtonDown(0) && _bullet == null && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
+        if (Input.GetMouseButtonDown(0) && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
         {
             bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
             _bullets.Add(bullet);
@@ -228,7 +243,9 @@ public class Level : GameObject
 				_destroyTimer--;
 				_currentSpaceship.alpha = _destroyTimer / 100f;
 				_currentSpaceship.Destroy();
-				_myGame.SetState(MyGame.GameState.RESULT);
+
+                _myGame.SaveLevelInfo(this);
+                _myGame.StopState(MyGame.GameState.LEVEL);
 			}
 		}
 
@@ -246,7 +263,8 @@ public class Level : GameObject
 
                         if (_bullets.Contains(bullet) == false)
                         {
-                            _myGame.SetState(MyGame.GameState.RESULT);
+                            _myGame.SaveLevelInfo(this);
+                            _myGame.StopState(MyGame.GameState.LEVEL);
                         }
 					}
 				}
@@ -333,15 +351,14 @@ public class Level : GameObject
     }
     private void Update()
     {
-        HandleButtons();
-
-        if (_exitWindow.windowActive == false)
+        if (_windowActive == false)
         {
+            HandleAttack();
             TurnCheck();
             TurnHandler();
-            HandleAttack();
         }
 
+        HandleButtons();
         HandleGravity();
         CheckHitCollision();
         HandleBoarders();

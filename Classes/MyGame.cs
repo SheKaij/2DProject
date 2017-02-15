@@ -39,6 +39,17 @@ public class MyGame : Game
         StartState(_gameState);
     }
 
+    public void SaveLevelInfo(Level pLevel)
+    {
+        _result = new ResultScreen(this);
+        _result.SetCurrentPlayer(pLevel.GetCurrentPlayer());
+        AddChild(_result);
+    }
+
+    public void SwitchState(GameState pGameState)
+    {
+        _gameState = pGameState;
+    }
 
     public void StartState(GameState pGameState)
     {

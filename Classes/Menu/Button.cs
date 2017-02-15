@@ -17,13 +17,9 @@ public class Button : Sprite
         SetOrigin(width / 2, height / 2);
         radius = 60 / 2;
         alpha = 0;
-<<<<<<< HEAD
-        SetScaleXY(0.7f);
 
 		_hoverButton = new Sound("assets\\sfx\\buttonsound.wav");
 		_clickButton = new Sound("assets\\sfx\\buttonsv2.wav");
-=======
->>>>>>> origin/master
     }
 
     private void ButtonAppear()

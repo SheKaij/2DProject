@@ -42,7 +42,8 @@ public class StoreScreen : GameObject
     {
         if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
         {
-            _myGame.SetState(MyGame.GameState.RESULT);
+            _myGame.SwitchState(MyGame.GameState.RESULT);
+            _myGame.StopState(MyGame.GameState.STORE);
         }
     }
 

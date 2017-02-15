@@ -5,12 +5,22 @@ using GXPEngine;
 public class Button : Sprite
 {
     public float radius;
-    private float _distanceX, _distanceY, _distanceTotal;
+    private float _distanceX, _distanceY;
 
     public Button(string pFileName) : base(pFileName)
     {
-        radius = 60 / 2;
         SetOrigin(width / 2, height / 2);
+        radius = 60 / 2;
+        alpha = 0;
+        SetScaleXY(0.7f);
+    }
+
+    private void ButtonAppear()
+    {
+        if (alpha <= 1)
+        {
+            alpha += 0.05f;
+        }
     }
 
     public bool MouseHover()
@@ -26,7 +36,6 @@ public class Button : Sprite
 
         else
         {
-            alpha = 1f;
             return false;
         }
     }
@@ -34,6 +43,7 @@ public class Button : Sprite
     private void Update()
     {
         MouseHover();
+        ButtonAppear();
     }
 }
 

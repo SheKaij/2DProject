@@ -8,7 +8,7 @@ public class MyGame : Game
     private CreditScreen _credits;
     private Level _level;
     private ResultScreen _result;
-    private ShopScreen _shop;
+    private StoreScreen _store;
     private GameState _gameState;
 
     public enum GameState
@@ -17,7 +17,7 @@ public class MyGame : Game
         OPTIONS,
         LEVEL,
         RESULT,
-        SHOP
+        STORE
     }
 
     public MyGame() : base(1920, 1080, false)
@@ -54,14 +54,14 @@ public class MyGame : Game
                 _level = new Level(this);
                 AddChild(_level);
                 break;
-            //case GameState.RESULT:
-            //    _result = new ResultScreen(this);
-            //    AddChild(_result);
-            //    break;
-            //case GameState.SHOP:
-            //    _shop = new ShopScreen(this);
-            //    AddChild(_shop);
-            //    break;
+            case GameState.RESULT:
+                _result = new ResultScreen(this);
+                AddChild(_result);
+                break;
+            case GameState.STORE:
+                _store = new StoreScreen(this);
+                AddChild(_store);
+                break;
 
             default:
                 break;
@@ -101,11 +101,11 @@ public class MyGame : Game
                     _result = null;
                 }
                 break;
-            case GameState.SHOP:
-                if (_shop != null)
+            case GameState.STORE:
+                if (_store != null)
                 {
-                    _shop.Destroy();
-                    _shop = null;
+                    _store.Destroy();
+                    _store = null;
                 }
                 break;
 

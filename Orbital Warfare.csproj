@@ -44,20 +44,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Background.cs" />
-    <Compile Include="Classes\BulletFactory.cs" />
-    <Compile Include="Classes\Button.cs" />
+    <Compile Include="Classes\Menu\Background.cs" />
+    <Compile Include="Classes\Menu\ExitWindow.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\BulletFactory.cs" />
+    <Compile Include="Classes\Menu\Button.cs" />
+    <Compile Include="Classes\Effects\FadeIn.cs" />
+    <Compile Include="Classes\Effects\FadeOut.cs" />
     <Compile Include="Classes\Menu\Level.cs" />
     <Compile Include="Classes\Menu\CreditScreen.cs" />
-    <Compile Include="Classes\Particle.cs" />
-    <Compile Include="Classes\Menu\ShopScreen.cs" />
+    <Compile Include="Classes\Effects\Particle.cs" />
+    <Compile Include="Classes\Menu\StoreScreen.cs" />
     <Compile Include="Classes\Menu\StartScreen.cs" />
     <Compile Include="Classes\Menu\ResultScreen.cs" />
-    <Compile Include="Classes\PlanetFactory.cs" />
-    <Compile Include="Classes\StandardBullet.cs" />
-    <Compile Include="Classes\Test_hitbox.cs" />
-    <Compile Include="Classes\Turret.cs" />
-    <Compile Include="Classes\Bullet.cs" />
+    <Compile Include="Classes\Planet\PlanetFactory.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\StandardBullet.cs" />
+    <Compile Include="Classes\Planet\Test_hitbox.cs" />
+    <Compile Include="Classes\Spaceship\Turret.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\Bullet.cs" />
     <Compile Include="Components\Arrow.cs" />
     <Compile Include="Components\DragHandler.cs" />
     <Compile Include="Components\LineSegment.cs" />
@@ -77,7 +80,7 @@
     <Compile Include="gxpengine\FMOD\FMOD.cs" />
     <Compile Include="gxpengine\Game.cs" />
     <Compile Include="gxpengine\GameObject.cs" />
-    <Compile Include="Classes\HUD.cs" />
+    <Compile Include="Classes\Menu\HUD.cs" />
     <Compile Include="gxpengine\Managers\CollisionManager.cs" />
     <Compile Include="gxpengine\Managers\UpdateManager.cs" />
     <Compile Include="gxpengine\Mathf.cs" />
@@ -92,10 +95,10 @@
     <Compile Include="gxpengine\Utils\Time.cs" />
     <Compile Include="gxpengine\Utils\Utils.cs" />
     <Compile Include="Classes\MyGame.cs" />
-    <Compile Include="Classes\Spaceship.cs" />
-    <Compile Include="Classes\Planet.cs" />
-    <Compile Include="Classes\Vec2.cs" />
-    <Compile Include="Classes\RicochetBullet.cs" />
+    <Compile Include="Classes\Spaceship\Spaceship.cs" />
+    <Compile Include="Classes\Planet\Planet.cs" />
+    <Compile Include="Classes\Spaceship\Vec2.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\RicochetBullet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

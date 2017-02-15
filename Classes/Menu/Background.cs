@@ -9,7 +9,7 @@ public class Background : Sprite
 {
     public Background() : base("assets\\background.png")
     {
-        //Empty
+        SetScaleXY(0.7f);
     }
 }
 

@@ -2,15 +2,15 @@
 using System.Drawing;
 using GXPEngine;
 
-public class ResultScreen : GameObject
+public class StoreScreen : GameObject
 {
     private MyGame _myGame;
 
     private Sprite _bg, _window;
 
-    private Button _storeButton, _nextButton;
+    private Button _backButton, _nextButton;
 
-    public ResultScreen(MyGame pMyGame) : base()
+    public StoreScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
 
@@ -25,10 +25,10 @@ public class ResultScreen : GameObject
         _window.x = game.width / 2;
         _window.y = game.height / 2;
 
-        _storeButton = new Button("assets/menu/store_button.png");
-        AddChild(_storeButton);
-        _storeButton.x = _window.width * 0.292f; ;
-        _storeButton.y = _window.height - _storeButton.height * 1.33f;
+        _backButton = new Button("assets/menu/back_button.png");
+        AddChild(_backButton);
+        _backButton.x = _window.width * 0.292f; ;
+        _backButton.y = _window.height - _backButton.height * 1.33f;
 
         _nextButton = new Button("assets/menu/next_button.png");
         AddChild(_nextButton);
@@ -38,9 +38,9 @@ public class ResultScreen : GameObject
 
     private void HandleButtons()
     {
-        if (Input.GetMouseButtonUp(0) && _storeButton.MouseHover())
+        if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
         {
-            _myGame.SetState(MyGame.GameState.STORE);
+            _myGame.SetState(MyGame.GameState.RESULT);
         }
 
         else if (Input.GetMouseButtonUp(0) && _nextButton.MouseHover())

@@ -23,6 +23,7 @@ public class Level : GameObject
     private List<Bullet> _bullets;
 
     private Bullet _bullet = null;
+    private FadeOut _fg;
 
     private int _timer;
     private int _turnTimer = 30;
@@ -72,15 +73,42 @@ public class Level : GameObject
 
         _exitButton = new Button("assets/menu/exit_button2.png");
         AddChild(_exitButton);
-        _exitButton.x = game.width - _exitButton.radius;
-        _exitButton.y += _exitButton.radius;
-        _exitButton.SetScaleXY(0.7f);
-        
+        _exitButton.x = game.width - (_exitButton.radius * 2);
+        _exitButton.y += _exitButton.radius * 2;
+
         _hud = new HUD(this);
         AddChild(_hud);
         _hud.SetScaleXY(0.7f);
         _hud.x = game.width / 2 - _hud.width / 2;
 
+        _fg = new FadeOut();
+        AddChild(_fg);
+    }
+
+    public int GetBulletCount()
+    {
+        return _currentSpaceship.bulletCount;
+    }
+
+    public string GetTurnTimer()
+    {
+        return (_turnTimer).ToString();
+    }
+
+    public string GetCurrentPlayer()
+    {
+        if (_currentSpaceship == _spaceship1)
+        {
+            return "1";
+        }
+        else if (_currentSpaceship == _spaceship2)
+        {
+            return "2";
+        }
+        else
+        {
+            return "N/A";
+        }
     }
 
     public void HandleBoarders()
@@ -121,6 +149,8 @@ public class Level : GameObject
     {
         if (Input.GetMouseButtonUp(0) && _exitButton.MouseHover())
         {
+            // Add the instance of a new class called notification popup
+            // Add two buttons in the class with one to return to game, or exit for realsies
             _myGame.SetState(MyGame.GameState.START);
         }
     }
@@ -136,20 +166,33 @@ public class Level : GameObject
         }
     }
 
-    public string GetCurrentPlayer()
+    private void HudOpacity()
     {
-        if (_currentSpaceship == _spaceship1)
+        if (_spaceship1.x < _hud.x + _hud.width && _spaceship1.x > _hud.x && _spaceship1.y < _hud.y + _hud.height)
         {
-            return "1";
+            _hud.alpha -= 0.01f;
+            if (_hud.alpha <= 0.5f)
+            {
+                _hud.alpha = 0.5f;
+            }
         }
-        else if (_currentSpaceship == _spaceship2)
+
+        else if (_spaceship2.x < _hud.x + _hud.width && _spaceship2.x > _hud.x && _spaceship2.y < _hud.y + _hud.height)
         {
-            return "2";
+            _hud.alpha -= 0.01f;
+            if (_hud.alpha <= 0.5f)
+            {
+                _hud.alpha = 0.5f;
+            }
         }
 
         else
         {
-            return "N/A";
+            _hud.alpha += 0.05f;
+            if (_hud.alpha >= 1)
+            {
+                _hud.alpha = 1;
+            }
         }
     }
 
@@ -168,24 +211,6 @@ public class Level : GameObject
 				}
 			}
 		}
-
-        //foreach (Planet planet in _pm.GetAllPlanets())
-        //{
-        //    foreach (GameObject item in planet.GetCollisions())
-        //    {
-        //        if (item is Bullet)
-        //        {
-        //            _currentSpaceship.score += 10;
-        //            _planet.health--;
-        //            Console.WriteLine(_planet.health);
-        //            (item as Bullet).Destroy();
-        //        }
-
-        //        if (item is Spaceship)
-        //        {
-        //            (item as Spaceship).Destroy();
-        //        }
-        //    }
     }
 
     public void ScoreIncrease()
@@ -270,9 +295,15 @@ public class Level : GameObject
         HandleAttack();
         HandleBoarders();
         HandleButtons();
+        HudOpacity();
         CheckHitCollision();
         TurnCheck();
         HandleGravity();
         TurnHandler();
+
+        if (Input.GetKeyDown(Key.R))
+        {
+            _myGame.SetState(MyGame.GameState.RESULT);
+        }
     }
 }

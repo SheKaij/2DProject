@@ -14,7 +14,7 @@ public class CreditScreen : GameObject
     {
         _myGame = pMyGame;
 
-        _bg = new Sprite("assets/menu/start_screen.png");
+        _bg = new Sprite("assets/background.png");
         AddChild(_bg);
         _bg.SetScaleXY(0.7f);
 
@@ -22,7 +22,6 @@ public class CreditScreen : GameObject
         AddChild(_backButton);
         _backButton.x = game.width * 0.80f;
         _backButton.y = game.height - _backButton.height * 0.66f;
-        _backButton.SetScaleXY(0.7f);
     }
 
     private void HandleButtons()

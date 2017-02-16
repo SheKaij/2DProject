@@ -21,10 +21,13 @@ namespace GXPEngine
         public bool isActive { get; set; }
         public BulletType bulletType { get; set; }
         public int bulletCount { get; set; }
+        
+        public int currency { get; set; }
+        public int health { get; set; }
+        public int maxHealth { get; set; }
+        public bool shopping { get; set; }
 
-        public int score { get; set; }
-
-
+        private Healthbar _healthbar;
         private Sound _sfxEngine;
 
 
@@ -38,6 +41,15 @@ namespace GXPEngine
             isActive = pIsActive;
             bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
+
+            //_healthbar = new Healthbar(this);
+            //AddChild(_healthbar);
+            //_healthbar.x -= this.width / 2;
+            //_healthbar.y -= this.height * 0.66f;
+            
+
+            health = 8;
+            maxHealth = 8;
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
 			//_sfxEngine.Play();

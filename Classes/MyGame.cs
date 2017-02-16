@@ -11,6 +11,11 @@ public class MyGame : Game
     private StoreScreen _store;
     private GameState _gameState;
 
+    //private int _currency;
+    //private int _clusterCount;
+    //private int _thrusterCount;
+    //private int _ricochetCount;
+
     public enum GameState
     {
         START,

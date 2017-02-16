@@ -8,8 +8,8 @@ public class StoreScreen : GameObject
     private MyGame _myGame;
 
     private Sprite _bg, _window, _storeTitle;
-    private Canvas _textDefault, _textCluster, _textThruster, _textRicochet;
-    
+    private Canvas _textDefault, _textCluster, _textThruster, _textRicochet, _textPlayer;
+    private string _currentPlayer;
 
     private Button _backButton, _arrowBackButton, _arrowNextButton, _defaultBullet, _upgradeCluster, _upgradeThruster, _upgradeRicochet;
     private PrivateFontCollection _pfc;
@@ -93,6 +93,10 @@ public class StoreScreen : GameObject
         _font = new Font(_pfc.Families[0], 34);
         _fontMega = new Font(_pfc.Families[0], 80);
 
+        _textPlayer = new Canvas(game.width, game.height);
+        SetChildIndex(_textPlayer, 10);
+        _textPlayer.alpha = 0;
+
         _textDefault = new Canvas(game.width, game.height);
         SetChildIndex(_textDefault, 10);
         _textDefault.alpha = 0;
@@ -115,6 +119,21 @@ public class StoreScreen : GameObject
         DrawText();
     }
 
+    public string GetCurrentPlayer()
+    {
+        return _currentPlayer;
+    }
+
+    public void SetCurrentPlayer(string pCurrentPlayer)
+    {
+        _currentPlayer = pCurrentPlayer;
+    }
+
+    private void DrawCurrentPlayer()
+    {
+        _textPlayer.graphics.DrawString("Current player: " + _currentPlayer, _font, Brushes.AliceBlue, game.width * 0.5f, _upgradeRicochet.y - _upgradeRicochet.height / 2);
+    }
+
     //ð = currency
 
     private void DrawText()
@@ -131,7 +150,6 @@ public class StoreScreen : GameObject
         _textRicochet.graphics.DrawString("Ricochet bullet:" + "\n"
                                        + "bullets bounce off" + "\n"
                                        + "damage: 0.8", _font, Brushes.AliceBlue, game.width * 0.5f, _upgradeRicochet.y - _upgradeRicochet.height / 2);
-        _backButton.y = _window.height - _backButton.height * 1.33f;
     }
 
     private void WindowAppear()
@@ -141,30 +159,42 @@ public class StoreScreen : GameObject
             _window.alpha += 0.05f;
         }
 
-        if (_storeTitle.alpha <= 1)
-        {
-            _storeTitle.alpha += 0.05f;
-        }
+        _storeTitle.alpha = _window.alpha;
+        _textDefault.alpha = _window.alpha;
+        _textCluster.alpha = _window.alpha;
+        _textThruster.alpha = _window.alpha;
+        _textRicochet.alpha = _window.alpha;
+        _textPlayer.alpha = _window.alpha;
 
-        if (_textDefault.alpha <= 1)
-        {
-            _textDefault.alpha += 0.05f;
-        }
+        //if (_storeTitle.alpha <= 1)
+        //{
+        //    _storeTitle.alpha += 0.05f;
+        //}
 
-        if (_textCluster.alpha <= 1)
-        {
-            _textCluster.alpha += 0.05f;
-        }
+        //if (_textDefault.alpha <= 1)
+        //{
+        //    _textDefault.alpha += 0.05f;
+        //}
 
-        if (_textThruster.alpha <= 1)
-        {
-            _textThruster.alpha += 0.05f;
-        }
+        //if (_textCluster.alpha <= 1)
+        //{
+        //    _textCluster.alpha += 0.05f;
+        //}
 
-        if (_textRicochet.alpha <= 1)
-        {
-            _textRicochet.alpha += 0.05f;
-        }
+        //if (_textThruster.alpha <= 1)
+        //{
+        //    _textThruster.alpha += 0.05f;
+        //}
+
+        //if (_textRicochet.alpha <= 1)
+        //{
+        //    _textRicochet.alpha += 0.05f;
+        //}
+
+        //if (_textPlayer.alpha <= 1)
+        //{
+        //    _textPlayer.alpha += 0.05f;
+        //}
     }
 
     private void HandleButtons()

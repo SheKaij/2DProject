@@ -7,10 +7,10 @@ using GXPEngine;
 public class HUD : Sprite
 {
     private Level _level;
+    private Spaceship _player1;
+    private Spaceship _player2;
 
-    private Canvas _currentPlayer;
-    private Canvas _shotsleft;
-    private Canvas _timeLeft;
+    private Canvas _currentPlayer, _currency, _shotsleft, _timeLeft;
 
     private AnimationSprite _currentBullet;
 
@@ -23,6 +23,9 @@ public class HUD : Sprite
 
         _currentPlayer = new Canvas(width, height);
         SetChildIndex(_currentPlayer, 1);
+
+        _currency = new Canvas(width, height);
+        SetChildIndex(_currency, 1);
 
         _shotsleft = new Canvas(width, height);
         SetChildIndex(_shotsleft, 1);
@@ -47,8 +50,11 @@ public class HUD : Sprite
         _currentPlayer.alpha = alpha;
         _shotsleft.alpha = alpha;
         _timeLeft.alpha = alpha;
+        _currentBullet.alpha = alpha;
     }
 
+    
+    
     private void HandleCurrentBullet()
     {
         if (Input.GetKeyDown(Key.ONE))

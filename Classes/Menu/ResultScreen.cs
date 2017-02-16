@@ -7,7 +7,6 @@ using GXPEngine;
 public class ResultScreen : GameObject
 {
     private MyGame _myGame;
-    private Level _level;
 
     private Sprite _bg, _window;
     private Canvas _playerWon, _stats;
@@ -55,6 +54,11 @@ public class ResultScreen : GameObject
 
 		_victoryMusic = new Sound("assets\\sfx\\victorymusic.mp3", false, true);
 		_victoryChannel = _victoryMusic.Play();
+    }
+
+    public string GetCurrentPlayer()
+    {
+        return _currentPlayer;
     }
 
     public void SetCurrentPlayer(string pCurrentPlayer)

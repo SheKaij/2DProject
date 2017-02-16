@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Classes\Menu\Background.cs" />
     <Compile Include="Classes\Menu\ExitWindow.cs" />
+    <Compile Include="Classes\Menu\Healthbar.cs" />
     <Compile Include="Classes\Spaceship\Bullet\BulletFactory.cs" />
     <Compile Include="Classes\Menu\Button.cs" />
     <Compile Include="Classes\Effects\FadeIn.cs" />

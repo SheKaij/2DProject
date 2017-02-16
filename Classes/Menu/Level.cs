@@ -16,12 +16,15 @@ public class Level : GameObject
     private Sound _bgMusicSound;
     private SoundChannel _playMusic;
 
-	private Spaceship _currentSpaceship;
+    private Spaceship _currentSpaceship;
 	private Spaceship _spaceship1;
 	private Spaceship _spaceship2;
     private List<Planet> _planets;
     private List<Bullet> _bullets;
 	private List<Spaceship> _spaceships;
+
+    private Healthbar _healthbar1;
+    private Healthbar _healthbar2;
 
     private Bullet _bullet = null;
     private Bullet bullet;
@@ -45,7 +48,9 @@ public class Level : GameObject
 		_background1 = new Background();
 		AddChild(_background1);
 
-		_spaceships = new List<Spaceship>();
+        
+
+        _spaceships = new List<Spaceship>();
         
         _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
 		_spaceships.Add(_spaceship1);
@@ -80,14 +85,20 @@ public class Level : GameObject
 		_exitButton.x = game.width - (_exitButton.radius * 2);
 		_exitButton.y += _exitButton.radius * 2;
 
-		_hud = new HUD(this);
+        _healthbar1 = new Healthbar(_spaceship1);
+        AddChild(_healthbar1);
+
+        _healthbar2 = new Healthbar(_spaceship1);
+        AddChild(_healthbar2);
+
+        _hud = new HUD(this);
 		AddChild(_hud);
 		_hud.x = game.width / 2 - _hud.width / 2;
 
-		_fg = new FadeOut();
+        _fg = new FadeOut();
 		AddChild(_fg);
 
-		_bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
+        _bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
 		_playMusic = _bgMusicSound.Play();
 	}
 
@@ -247,7 +258,7 @@ public class Level : GameObject
 				{
 					_bullets[i].Destroy();
 					planet.health -= _bullets[i].damage;
-					_currentSpaceship.score += 10;
+					_currentSpaceship.currency += 10;
 					_bullets.RemoveAt(i);
 				}
 			}
@@ -255,11 +266,17 @@ public class Level : GameObject
 			{
 				_destroyTimer--;
 				_currentSpaceship.alpha = _destroyTimer / 100f;
-				_currentSpaceship.Destroy();
+                _currentSpaceship.alpha -= 0.1f;
+                _currentSpaceship.turret.alpha -= 0.1f;
+                _currentSpaceship.velocity.SetXY(0, 0);
+                _currentSpaceship.isActive = false;
 
-                _myGame.SaveLevelInfo(this);
-                _myGame.StopState(MyGame.GameState.LEVEL);
-				_playMusic.Stop();
+                if (_currentSpaceship.alpha <= 0)
+                {
+                    _myGame.SaveLevelInfo(this);
+                    _myGame.StopState(MyGame.GameState.LEVEL);
+                    _playMusic.Stop();
+                }
 			}
 		}
 
@@ -273,11 +290,12 @@ public class Level : GameObject
 					{
 						_bullets[i].Destroy();
 						_bullets.RemoveAt(i);
-						spaceship.Destroy();
+                        spaceship.health--;
 
-                        if (_bullets.Contains(bullet) == false)
+                        if (_bullets.Contains(bullet) == false && _currentSpaceship.health <= 0)
                         {
                             _myGame.SaveLevelInfo(this);
+                            spaceship.Destroy();
                             _myGame.StopState(MyGame.GameState.LEVEL);
 							_playMusic.Stop();
                         }
@@ -285,11 +303,6 @@ public class Level : GameObject
 				}
 			}
 		}
-    }
-
-    public void ScoreIncrease()
-    {
-        _currentSpaceship.score += 100;
     }
 
     private void TurnCheck()
@@ -379,5 +392,11 @@ public class Level : GameObject
         CheckHitCollision();
         HandleBoarders();
         HudOpacity();
+
+        _healthbar1.x = _spaceship1.x - _spaceship1.width / 2;
+        _healthbar1.y = _spaceship1.y - 100;
+
+        _healthbar2.x = _spaceship2.x - _spaceship1.width / 2;
+        _healthbar2.y = _spaceship2.y - 100;
     }
 }

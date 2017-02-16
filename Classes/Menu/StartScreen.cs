@@ -8,7 +8,7 @@ public class StartScreen : GameObject
     private Sprite _bg;
 
 	private Sound _bgmusic;
-	private SoundChannel _bgmusicChannel;
+    private SoundChannel _bgmusicChannel;
 
     public StartScreen(MyGame pMyGame) : base()
     {
@@ -20,21 +20,23 @@ public class StartScreen : GameObject
         _playButton = new Button("assets/menu/start_button.png");
         AddChild(_playButton);
         _playButton.x = game.width * 0.20f;
-        _playButton.y = game.height - _playButton.height * 0.66f;
+        _playButton.y = game.height - _playButton.height;
 
         _creditsButton = new Button("assets/menu/controls_button.png");
         AddChild(_creditsButton);
         _creditsButton.x = game.width * 0.50f;
-        _creditsButton.y = game.height - _creditsButton.height * 0.66f;
+        _creditsButton.y = game.height - _creditsButton.height;
+
         _exitButton = new Button("assets/menu/exit_button.png");
         AddChild(_exitButton);
         _exitButton.x = game.width * 0.80f;
-        _exitButton.y = game.height - _exitButton.height * 0.66f;
+        _exitButton.y = game.height - _exitButton.height;
 
         Sprite _fg = new FadeOut();
         AddChild(_fg);
 
 		_bgmusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+
         _bgmusicChannel = _bgmusic.Play();
     }
 

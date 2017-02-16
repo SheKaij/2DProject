@@ -5,7 +5,7 @@ using static Bullet;
 
 namespace GXPEngine
 {
-    public class Spaceship : Sprite
+    public class Spaceship : AnimationSprite
     {
         private readonly float ACCELERATION = 0.5f;
         private readonly float ANGULAR_ACCELERATION = 0.2f;
@@ -27,8 +27,7 @@ namespace GXPEngine
 
         private Sound _sfxEngine;
 
-
-        public Spaceship(Vec2 pPosition, int pRotation, bool pIsActive, float health) : base("assets\\spaceship\\ship.png")
+		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive, float health) : base(pFilename, 2, 1)
         {
             turret = new Turret();
             bullets = new List<Bullet>();

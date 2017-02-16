@@ -95,5 +95,11 @@ public class ResultScreen : GameObject
         HandleButtons();
         WindowAppear();
         DrawText();
+
+        if (Input.GetKeyDown(Key.S))
+        {
+            _myGame.StartState(MyGame.GameState.STORE);
+            _myGame.SwitchState(MyGame.GameState.STORE);
+        }
     }
 }

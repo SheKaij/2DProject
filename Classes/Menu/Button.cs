@@ -2,7 +2,7 @@
 using System.Drawing;
 using GXPEngine;
 
-public class Button : Sprite
+public class Button : AnimationSprite
 {
     public float radius;
     private float _distanceX, _distanceY;
@@ -12,12 +12,11 @@ public class Button : Sprite
 
 	private bool hasPlayed;
 
-    public Button(string pFileName) : base(pFileName)
+    public Button(string pFileName, int pCols = 1, int pRows = 1) : base(pFileName, pCols, pRows)
     {
         SetOrigin(width / 2, height / 2);
         radius = 60 / 2;
         alpha = 0;
-		SetScaleXY(0.7f);
 
 		_hoverButton = new Sound("assets\\sfx\\buttonsound.wav");
 		_clickButton = new Sound("assets\\sfx\\buttonsv2.wav");
@@ -25,7 +24,7 @@ public class Button : Sprite
 
     private void ButtonAppear()
     {
-        if (alpha <= 1)
+        if (alpha <= 0.5f)
         {
             alpha += 0.05f;
         }
@@ -38,7 +37,8 @@ public class Button : Sprite
 
         if (_distanceX < width / 2 && _distanceY < height / 2)
         {
-            alpha = 0.5f;
+            alpha = 1f;
+            SetScaleXY(1.1f);
 			if (hasPlayed == false)
 			{
 				_hoverButton.Play();
@@ -49,7 +49,12 @@ public class Button : Sprite
 
         else
         {
-			hasPlayed = false;
+            SetScaleXY(1f);
+            if (alpha >= 0.5f)
+            {
+                alpha -= 0.05f;
+            }
+            hasPlayed = false;
             return false;
         }
     }

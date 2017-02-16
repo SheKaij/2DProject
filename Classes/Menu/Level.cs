@@ -274,6 +274,7 @@ public class Level : GameObject
 					{
 						_bullets[i].Destroy();
 						spaceship.health -= _bullets[i].damage;
+						_bullets.RemoveAt(i);
 
 						if (_bullets.Contains(bullet) == false)
                         {

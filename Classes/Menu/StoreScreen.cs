@@ -10,6 +10,9 @@ public class StoreScreen : GameObject
 
     private Button _backButton;
 
+	private Sound _storeMusic;
+	private SoundChannel _storeChannel;
+
     public StoreScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
@@ -28,6 +31,10 @@ public class StoreScreen : GameObject
         AddChild(_backButton);
         _backButton.x = _window.width  / 2;
         _backButton.y = _window.height - _backButton.height * 1.33f;
+
+		_storeMusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+		_storeChannel = _storeMusic.Play();
+
     }
 
     private void WindowAppear()

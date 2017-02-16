@@ -149,5 +149,10 @@ namespace GXPEngine
         {
 
         }
+
+        public float Dotproduct(Vec2 vector)
+        {
+            return this.Length() * vector.Length() * (Mathf.Cos(this.GetAngleRadians() - vector.GetAngleRadians()));
+        }
     }
 }

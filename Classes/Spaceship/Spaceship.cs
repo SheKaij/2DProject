@@ -40,7 +40,7 @@ namespace GXPEngine
             bulletCount = MAX_BULLET;
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
-			_sfxEngine.Play();
+			//_sfxEngine.Play();
             SetOrigin(width * 0.40f, height / 2);
             x = position.x;
             y = position.y;

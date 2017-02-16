@@ -7,19 +7,25 @@ using GXPEngine;
 public class ExitWindow : Sprite
 {
     private MyGame _myGame;
+    private Level _level;
 
     private Button _backButton, _confirmButton;
 
+    private Canvas _warningMessage;
+
     private PrivateFontCollection _pfc;
     private Font _font;
-    private bool _windowActive;
 
-    public ExitWindow(MyGame pMyGame) : base("assets/menu/window.png")
+    public ExitWindow(MyGame pMyGame, Level pLevel) : base("assets/menu/window.png")
     {
         alpha = 0;
-        //SetScaleXY(0.75f);
 
         _myGame = pMyGame;
+        _level = pLevel;
+
+        _warningMessage = new Canvas(width, height);
+        _warningMessage.alpha = 0;
+        SetChildIndex(_warningMessage, 1);
 
         _backButton = new Button("assets/menu/back_button.png");
         AddChild(_backButton);
@@ -33,26 +39,17 @@ public class ExitWindow : Sprite
 
         _pfc = new PrivateFontCollection();
         _pfc.AddFontFile("assets\\font\\earthorbiter.ttf");
-        _font = new Font(_pfc.Families[0], 24);
-    }
-
-    public bool windowActive
-    {
-        get
-        {
-            return _windowActive;
-        }
-        set
-        {
-            _windowActive = value;
-        }
+        _font = new Font(_pfc.Families[0], 48);
     }
 
     private void DrawText()
-    { 
-        
+    {
+        _warningMessage.graphics.Clear(Color.Transparent);
+        _warningMessage.graphics.DrawString("                   Warning!" + "\n"
+                                          + "\n"
+                                          + "Do you want to exit the game?",
+                                            _font, Brushes.AliceBlue, width * 0.19f, height * 0.15f);
     }
-
 
     private void WindowAppear()
     {
@@ -60,25 +57,28 @@ public class ExitWindow : Sprite
         {
             alpha += 0.05f;
         }
+
+        if (_warningMessage.alpha <= 1)
+        {
+            _warningMessage.alpha += 0.05f;
+        }
     }
 
     private void HandleButtons()
     {
-        if (_windowActive == true)
+        if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
         {
-            if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
-            {
-                _windowActive = false;
-                this.Destroy();
-            }
+            _level.SetWindowActive(false);
+            Destroy();
+        }
 
-            else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
-            {
-                _windowActive = false;
-                _myGame.SetState(MyGame.GameState.START);
-            }
+        else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
+        {
+            //_level.GetMusic().Stop();
+            _myGame.SetState(MyGame.GameState.START);
         }
     }
+    
 
     private void Update()
     {

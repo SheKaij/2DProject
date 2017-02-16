@@ -5,7 +5,7 @@ public class StartScreen : GameObject
 {
     private MyGame _myGame;
     private Button _playButton, _creditsButton, _exitButton;
-    private Sprite _bg, _fg;
+    private Sprite _bg;
 
 	private Sound _bgmusic;
 	private SoundChannel _bgmusicChannel;
@@ -22,7 +22,7 @@ public class StartScreen : GameObject
         _playButton.x = game.width * 0.20f;
         _playButton.y = game.height - _playButton.height * 0.66f;
 
-        _creditsButton = new Button("assets/menu/credits_button.png");
+        _creditsButton = new Button("assets/menu/controls_button.png");
         AddChild(_creditsButton);
         _creditsButton.x = game.width * 0.50f;
         _creditsButton.y = game.height - _creditsButton.height * 0.66f;
@@ -31,11 +31,11 @@ public class StartScreen : GameObject
         _exitButton.x = game.width * 0.80f;
         _exitButton.y = game.height - _exitButton.height * 0.66f;
 
-        _fg = new FadeOut();
+        Sprite _fg = new FadeOut();
         AddChild(_fg);
 
 		_bgmusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
-		_bgmusicChannel = _bgmusic.Play();
+        //_bgmusicChannel = _bgmusic.Play();
     }
 
     private void HandleButtons()
@@ -44,12 +44,13 @@ public class StartScreen : GameObject
         {
             if (_playButton.MouseHover())
             {
+                //_bgmusicChannel.Stop();
                 _myGame.SetState(MyGame.GameState.LEVEL);
             }
 
             else if (_creditsButton.MouseHover())
             {
-                _myGame.SetState(MyGame.GameState.OPTIONS);
+                _myGame.SetState(MyGame.GameState.CONTROLS);
             }
 
             else if (_exitButton.MouseHover())

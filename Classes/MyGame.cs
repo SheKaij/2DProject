@@ -20,9 +20,9 @@ public class MyGame : Game
         STORE
     }
 
-    public MyGame() : base(1920, 1080, false)
+    public MyGame() : base(1920, 1080, true)
     {
-        SetScaleXY(0.7f);
+        //SetScaleXY(0.7f);
         ShowMouse(true);
         SetState(GameState.START);
     }

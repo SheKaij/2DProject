@@ -20,10 +20,10 @@ public class Level : GameObject
 	private Spaceship _spaceship1;
 	private Spaceship _spaceship2;
     private List<Planet> _planets;
-    private List<Bullet> _bullets;
+    //private List<Bullet> _bullets;
 	private List<Spaceship> _spaceships;
 
-    private Bullet _bullet = null;
+    //private Bullet _bullet = null;
     private Bullet bullet;
     private FadeOut _fg;
 
@@ -47,18 +47,18 @@ public class Level : GameObject
 
 		_spaceships = new List<Spaceship>();
         
-        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true, 8, 120);
+        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
 		_spaceships.Add(_spaceship1);
 		AddChild(_spaceship1);
 		_currentSpaceship = _spaceship1;
 
 
-        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false, 8, 120);
+        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
 		_spaceships.Add(_spaceship2);
 		AddChild(_spaceship2);
 
 		_planets = new List<Planet>();
-		_bullets = new List<Bullet>();
+		//_bullets = new List<Bullet>();
 
 		Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
 		_planets.Add(planet);
@@ -148,13 +148,18 @@ public class Level : GameObject
             _currentSpaceship.velocity.y = 0;
         }
 
-        for (int i = _bullets.Count - 1; i >= 0; i--)
+        //for (int i = _bullets.Count - 1; i >= 0; i--)
+        //{
+        //    if (_bullets[i].x > game.width + 100 || _bullets[i].x < - 100 || _bullets[i].y > game.height + 100 || _bullets[i].y < - 100)
+        //    {
+        //        _bullets[i].Destroy();
+        //        _bullets.RemoveAt(i);
+        //    }
+        //}
+        if (bullet != null && (bullet.x > game.width + 100 || bullet.x < -100 || bullet.y > game.height + 100 || bullet.y < -100))
         {
-            if (_bullets[i].x > game.width + 100 || _bullets[i].x < - 100 || _bullets[i].y > game.height + 100 || _bullets[i].y < - 100)
-            {
-                _bullets[i].Destroy();
-                _bullets.RemoveAt(i);
-            }
+            bullet.Destroy();
+            bullet = null;
         }
     }
     
@@ -199,10 +204,15 @@ public class Level : GameObject
 
     public void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0) && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
+        //if (Input.GetMouseButtonDown(0) && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
+        //{
+        //    bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
+        //    _bullets.Add(bullet);
+        //    _currentSpaceship.bulletCount--;
+        //}
+        if (Input.GetMouseButtonDown(0) && _exitButton.MouseHover() == false && bullet == null)
         {
             bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
-            _bullets.Add(bullet);
             _currentSpaceship.bulletCount--;
         }
     }
@@ -241,20 +251,49 @@ public class Level : GameObject
     {
 		foreach (Planet planet in _planets)
 		{
-			for (int i = _bullets.Count - 1; i >= 0; i--)
-			{
-				if (planet.Contains(_bullets[i].position))
-				{
-					//_bullets[i].Destroy();
-					planet.health -= _bullets[i].damage;
-					_currentSpaceship.score += 10;
-                    //_bullets.RemoveAt(i);
-                    Vec2 normal = bullet.position.Clone().Substract(planet.position).Normalize();
-                    bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal))).Scale(ELACITY);
-				}
-			}
+			//for (int i = _bullets.Count - 1; i >= 0; i--)
+			//{
+			//	if (planet.Contains(_bullets[i].position))
+			//	{
+   //                 planet.health -= _bullets[i].damage;
+   //                 _currentSpaceship.score += 10;
+   //                 if (_bullets[i].health > 0)
+   //                 {
+   //                     --_bullets[i].health;
+   //                     if (_bullets[i] is RicochetBullet)
+   //                     {
+   //                         Vec2 normal = _bullets[i].position.Clone().Substract(planet.position).Normalize();
+   //                         _bullets[i].velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal))).Scale(ELACITY);
+   //                     }
+   //                 } else
+   //                 {
+   //                     _bullets[i].Destroy();
+   //                     _bullets.RemoveAt(i);
+   //                 }
+			//	}
+			//}
+            
+            if (bullet != null && planet.Contains(bullet.position))
+            {
+                planet.health -= bullet.damage;
+                _currentSpaceship.score += 10;
+                if (bullet.health > 0)
+                {
+                    --bullet.health;
+                    if (bullet is RicochetBullet)
+                    {
+                        Vec2 normal = bullet.position.Clone().Substract(planet.position).Normalize();
+                        bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal))).Scale(ELACITY);
+                    }
+                }
+                else
+                {
+                    bullet.Destroy();
+                    bullet = null;
+                }
+            }
 
-			if (planet.Contains(_currentSpaceship.position))
+            if (planet.Contains(_currentSpaceship.position))
 			{
 				_destroyTimer--;
 				_currentSpaceship.alpha = _destroyTimer / 100f;
@@ -267,26 +306,43 @@ public class Level : GameObject
 
 		foreach (Spaceship spaceship in _spaceships)
 		{
-			for (int i = _bullets.Count - 1; i >= 0; i--)
-			{
-				if (spaceship != _currentSpaceship)
-				{
-					if (_bullets[i].x >= spaceship.x - spaceship.width / 2 && _bullets[i].x <= spaceship.x + spaceship.width / 2 && _bullets[i].y <= spaceship.y + spaceship.height / 2 && _bullets[i].y >= spaceship.y - spaceship.height)
-					{
-						_bullets[i].Destroy();
-						spaceship.health -= _bullets[i].damage;
-						_bullets.RemoveAt(i);
+            //for (int i = _bullets.Count - 1; i >= 0; i--)
+            //{
+            //	if (spaceship != _currentSpaceship)
+            //	{
+            //		if (_bullets[i].x >= spaceship.x - spaceship.width / 2 && _bullets[i].x <= spaceship.x + spaceship.width / 2 && _bullets[i].y <= spaceship.y + spaceship.height / 2 && _bullets[i].y >= spaceship.y - spaceship.height)
+            //		{
+            //			_bullets[i].Destroy();
+            //			spaceship.health -= _bullets[i].damage;
+            //			_bullets.RemoveAt(i);
 
-						if (_bullets.Contains(bullet) == false)
-                        {
-                            _myGame.SaveLevelInfo(this);
-                            _myGame.StopState(MyGame.GameState.LEVEL);
-							_playMusic.Stop();
-                        }
-					}
-				}
-			}
-		}
+            //			if (_bullets.Contains(bullet) == false)
+            //                     {
+            //                         _myGame.SaveLevelInfo(this);
+            //                         _myGame.StopState(MyGame.GameState.LEVEL);
+            //				_playMusic.Stop();
+            //                     }
+            //		}
+            //	}
+            //}
+            
+            if (spaceship != _currentSpaceship && bullet != null)
+            {
+                if (bullet.x >= spaceship.x - spaceship.width / 2 && bullet.x <= spaceship.x + spaceship.width / 2 && bullet.y <= spaceship.y + spaceship.height / 2 && bullet.y >= spaceship.y - spaceship.height)
+                {
+                    bullet.Destroy();
+                    spaceship.health -= bullet.damage;
+                    bullet = null;
+
+                    if (bullet == null)
+                    {
+                        _myGame.SaveLevelInfo(this);
+                        _myGame.StopState(MyGame.GameState.LEVEL);
+                        _playMusic.Stop();
+                    }
+                }
+            }
+        }
     }
 
     public void ScoreIncrease()
@@ -296,26 +352,50 @@ public class Level : GameObject
 
     private void TurnCheck()
     {
-        if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
+        //     if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
+        //     {
+        //         _timer = 0;
+        //         _turnTimer = 30;
+        //         _currentSpaceship.velocity.SetXY(0, 0);
+        //         _currentSpaceship = _spaceship1;
+        //         _spaceship2.bulletCount = 5;
+        //_spaceship2.fuel = 120;
+        //         _spaceship1.isActive = true;
+        //         _spaceship2.isActive = false;
+        //     }
+
+        //     if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
+        //     {
+        //         _timer = 0;
+        //         _turnTimer = 30;
+        //         _currentSpaceship.velocity.SetXY(0, 0);
+        //         _currentSpaceship = _spaceship2;
+        //         _spaceship1.bulletCount = 5;
+        //_spaceship1.fuel = 120;
+        //         _spaceship1.isActive = false;
+        //         _spaceship2.isActive = true;
+        //     }
+
+        if (_currentSpaceship == _spaceship2 && _currentSpaceship.bulletCount <= 0 && bullet == null)
         {
             _timer = 0;
             _turnTimer = 30;
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship1;
             _spaceship2.bulletCount = 5;
-			_spaceship2.fuel = 120;
+            _spaceship2.fuel = 120;
             _spaceship1.isActive = true;
             _spaceship2.isActive = false;
         }
 
-        if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0 && _bullets.Contains(bullet) == false)
+        if (_currentSpaceship == _spaceship1 && _currentSpaceship.bulletCount <= 0 && bullet == null)
         {
             _timer = 0;
             _turnTimer = 30;
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship2;
             _spaceship1.bulletCount = 5;
-			_spaceship1.fuel = 120;
+            _spaceship1.fuel = 120;
             _spaceship1.isActive = false;
             _spaceship2.isActive = true;
         }
@@ -325,13 +405,21 @@ public class Level : GameObject
     {
         foreach(Planet planet in _planets)
         {
-            foreach (Bullet bullet in _bullets)
+            //foreach (Bullet bullet in _bullets)
+            //{
+            //    Vec2 gravityVector = new Vec2(planet.x - bullet.x, planet.y - bullet.y);
+            //    gravityVector.Normalize();
+            //    gravityVector.Scale(GRAVITATIONAL_FORCE * planet.mass / Mathf.Pow(bullet.DistanceTo(planet), 2));
+            //    bullet.velocity.Add(gravityVector);
+            //}
+            if (bullet != null)
             {
                 Vec2 gravityVector = new Vec2(planet.x - bullet.x, planet.y - bullet.y);
                 gravityVector.Normalize();
                 gravityVector.Scale(GRAVITATIONAL_FORCE * planet.mass / Mathf.Pow(bullet.DistanceTo(planet), 2));
                 bullet.velocity.Add(gravityVector);
             }
+            
         }
     }
 

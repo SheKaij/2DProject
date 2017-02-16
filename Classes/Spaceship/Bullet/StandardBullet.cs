@@ -13,6 +13,7 @@ namespace assignment_2.Classes
             position,
             velocity,
 			damage,
+            1,
             "assets\\bullet.png",
             "assets\\sfx\\placeholder_shoot2.wav",
             "assets\\sfx\\placeholder_hit2.wav",

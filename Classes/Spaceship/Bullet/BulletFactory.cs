@@ -13,6 +13,10 @@ namespace assignment_2.Classes
                     return new StandardBullet(position, velocity, 1f);
 				case BulletType.RICOCHET:
 					return new RicochetBullet(position, velocity, 0.5f);
+                case BulletType.THIRD:
+                    return new StandardBullet(position, velocity, 1f);
+                case BulletType.FOURTH:
+                    return new StandardBullet(position, velocity, 1f);
                 default:
                     return null;
             }

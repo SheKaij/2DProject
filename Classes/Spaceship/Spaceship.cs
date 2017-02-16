@@ -11,6 +11,8 @@ namespace GXPEngine
         private readonly float ANGULAR_ACCELERATION = 0.2f;
         private readonly float FRICTION = 0.95f;
         private readonly int MAX_BULLET = 5;
+        private readonly int MAX_HEALTH = 10;
+        private readonly int MAX_FUEL = 120;
 
         public Turret turret { get; set; }
         public List<Bullet> bullets { get; set; }
@@ -27,7 +29,7 @@ namespace GXPEngine
 
         private Sound _sfxEngine;
 
-		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive, float health, int fuel) : base(pFilename, 2, 1)
+		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive) : base(pFilename, 2, 1)
         {
             turret = new Turret();
             bullets = new List<Bullet>();
@@ -37,8 +39,8 @@ namespace GXPEngine
             isActive = pIsActive;
             bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
-			this.health = health;
-			this.fuel = fuel;
+			health = MAX_HEALTH;
+			fuel = MAX_FUEL;
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
 			//_sfxEngine.Play();
@@ -58,7 +60,6 @@ namespace GXPEngine
 				{
 					velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
 					fuel--;
-
 				}
 
 				if (Input.GetKey(Key.D))
@@ -70,7 +71,27 @@ namespace GXPEngine
 				{
 					angular_velocity -= ANGULAR_ACCELERATION;
 				}
-			}
+
+                if (Input.GetKey(Key.ONE))
+                {
+                    bulletType = BulletType.STANDARD;
+                }
+
+                if (Input.GetKey(Key.TWO))
+                {
+                    bulletType = BulletType.THIRD;
+                }
+
+                if (Input.GetKey(Key.THREE))
+                {
+                    bulletType = BulletType.FOURTH;
+                }
+
+                if (Input.GetKey(Key.FOUR))
+                {
+                    bulletType = BulletType.RICOCHET;
+                }
+            }
         }
 
         private void HandleFriction()

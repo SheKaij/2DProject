@@ -16,7 +16,7 @@ namespace assignment_2.Classes
             "assets\\bullet.png",
             "assets\\sfx\\placeholder_shoot2.wav",
             "assets\\sfx\\placeholder_hit2.wav",
-            0.05f) { }
+            0.04f) { }
 
         protected override void Move()
         {

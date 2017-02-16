@@ -9,8 +9,8 @@ public class Level : GameObject
 {
     private MyGame _myGame;
 
-    private readonly float GRAVITATIONAL_FORCE = 30000f;
-    private const float BULLETSPEED = 0.05f;
+    private const float GRAVITATIONAL_FORCE = 30000f;
+    private const float ELACITY = 0.85f;
 
     private Background _background1;
     private Sound _bgMusicSound;
@@ -251,7 +251,7 @@ public class Level : GameObject
 					_currentSpaceship.score += 10;
                     //_bullets.RemoveAt(i);
                     Vec2 normal = bullet.position.Clone().Substract(planet.position).Normalize();
-                    bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal)));
+                    bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal))).Scale(ELACITY);
 				}
 			}
 

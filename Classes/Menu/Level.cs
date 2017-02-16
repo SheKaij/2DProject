@@ -47,12 +47,13 @@ public class Level : GameObject
 
 		_spaceships = new List<Spaceship>();
         
-        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true, 8);
 		_spaceships.Add(_spaceship1);
 		AddChild(_spaceship1);
 		_currentSpaceship = _spaceship1;
 
-        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+
+        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false, 8);
 		_spaceships.Add(_spaceship2);
 		AddChild(_spaceship2);
 
@@ -253,12 +254,12 @@ public class Level : GameObject
                     bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal)));
 				}
 			}
+
 			if (planet.Contains(_currentSpaceship.position))
 			{
 				_destroyTimer--;
 				_currentSpaceship.alpha = _destroyTimer / 100f;
 				_currentSpaceship.Destroy();
-
                 _myGame.SaveLevelInfo(this);
                 _myGame.StopState(MyGame.GameState.LEVEL);
 				_playMusic.Stop();
@@ -274,10 +275,10 @@ public class Level : GameObject
 					if (_bullets[i].x >= spaceship.x - spaceship.width / 2 && _bullets[i].x <= spaceship.x + spaceship.width / 2 && _bullets[i].y <= spaceship.y + spaceship.height / 2 && _bullets[i].y >= spaceship.y - spaceship.height)
 					{
 						_bullets[i].Destroy();
+						spaceship.health -= _bullets[i].damage;
 						_bullets.RemoveAt(i);
-						spaceship.Destroy();
 
-                        if (_bullets.Contains(bullet) == false)
+						if (_bullets.Contains(bullet) == false)
                         {
                             _myGame.SaveLevelInfo(this);
                             _myGame.StopState(MyGame.GameState.LEVEL);

@@ -245,10 +245,12 @@ public class Level : GameObject
 			{
 				if (planet.Contains(_bullets[i].position))
 				{
-					_bullets[i].Destroy();
+					//_bullets[i].Destroy();
 					planet.health -= _bullets[i].damage;
 					_currentSpaceship.score += 10;
-					_bullets.RemoveAt(i);
+                    //_bullets.RemoveAt(i);
+                    Vec2 normal = bullet.position.Clone().Substract(planet.position).Normalize();
+                    bullet.velocity.Substract(normal.Scale(2 * bullet.velocity.Dotproduct(normal)));
 				}
 			}
 			if (planet.Contains(_currentSpaceship.position))

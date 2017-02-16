@@ -12,7 +12,7 @@ public class Planet : AnimationSprite
         LARGE
     }
 
-    private int _radius;
+    public int radius { get; set; }
 	private int _timer = 100;
 
     public Vec2 position { get; set; }
@@ -27,7 +27,7 @@ public class Planet : AnimationSprite
 
     public Planet(Vec2 position, float mass, float health, float maxHealth, float scale, string asset) : base(asset, 3, 2)
     {
-        _radius = (int)(400/2*scale);
+        radius = (int)(400/2*scale);
         this.position = position;
         this.mass = mass;
         this.health = health;
@@ -46,7 +46,7 @@ public class Planet : AnimationSprite
 
     public bool Contains(Vec2 vector)
     {
-        return position.Clone().Substract(vector).Length() <= _radius;
+        return position.Clone().Substract(vector).Length() <= radius;
     }
 
     private void Update()
@@ -88,7 +88,7 @@ public class Planet : AnimationSprite
 			if (_timer <= 0)
 			{
 				this.Destroy();
-				_radius = 0;
+				radius = 0;
 				mass = 0;
 			}
         }

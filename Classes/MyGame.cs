@@ -11,6 +11,11 @@ public class MyGame : Game
     private StoreScreen _store;
     private GameState _gameState;
 
+    //private int _currency;
+    //private int _clusterCount;
+    //private int _thrusterCount;
+    //private int _ricochetCount;
+
     public enum GameState
     {
         START,
@@ -20,9 +25,9 @@ public class MyGame : Game
         STORE
     }
 
-    public MyGame() : base(1920, 1080, false)
+    public MyGame() : base(1920, 1080, true)
     {
-        SetScaleXY(0.7f);
+        //SetScaleXY(0.7f);
         ShowMouse(true);
         SetState(GameState.START);
     }

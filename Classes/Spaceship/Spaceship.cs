@@ -10,9 +10,10 @@ namespace GXPEngine
         private readonly float ACCELERATION = 0.5f;
         private readonly float ANGULAR_ACCELERATION = 0.2f;
         private readonly float FRICTION = 0.95f;
-        private readonly int MAX_BULLET = 5;
-        private readonly int MAX_HEALTH = 10;
-        private readonly int MAX_FUEL = 120;
+
+        public readonly int MAX_BULLET = 5;
+        public readonly int MAX_HEALTH = 10;
+        public readonly int MAX_FUEL = 80;
 
         public Turret turret { get; set; }
         public List<Bullet> bullets { get; set; }
@@ -23,12 +24,15 @@ namespace GXPEngine
         public bool isActive { get; set; }
         public BulletType bulletType { get; set; }
         public int bulletCount { get; set; }
-		public float health { get; set; }
+        
+        public int currency { get; set; }
+        public float health { get; set; }
+        public float maxHealth { get; set; }
+        public bool shopping { get; set; }
+        
 		public int fuel { get; set; }
-        public int score { get; set; }
-
         private Sound _sfxEngine;
-
+        
 		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive) : base(pFilename, 2, 1)
         {
             turret = new Turret();
@@ -38,9 +42,16 @@ namespace GXPEngine
             angular_velocity = 0;
             isActive = pIsActive;
             bulletType = BulletType.STANDARD;
+
             bulletCount = MAX_BULLET;
 			health = MAX_HEALTH;
 			fuel = MAX_FUEL;
+
+            //_healthbar = new Healthbar(this);
+            //AddChild(_healthbar);
+            //_healthbar.x -= this.width / 2;
+            //_healthbar.y -= this.height * 0.66f;
+           
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
 			//_sfxEngine.Play();

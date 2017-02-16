@@ -7,12 +7,13 @@ using GXPEngine;
 public class HUD : Sprite
 {
     private Level _level;
+    private Spaceship _player1;
+    private Spaceship _player2;
 
-    private Canvas _currentPlayer;
-    private Canvas _shotsleft;
-    private Canvas _timeLeft;
+    private Canvas _currentPlayer, _currency, _shotsleft, _timeLeft, _fuelLeft;
 
     private AnimationSprite _currentBullet;
+    private Sprite _fuelMeter;
 
     private PrivateFontCollection _pfc;
     private Font _font;
@@ -21,14 +22,27 @@ public class HUD : Sprite
     {
         _level = pLevel;
 
+        _fuelMeter = new Sprite("assets/menu/small_button2.png");
+        AddChild(_fuelMeter);
+        _fuelMeter.SetScaleXY(0.5f, 0.45f);
+        _fuelMeter.x -= width * 0.119f;
+        _fuelMeter.y = height * 0.06f;
+
         _currentPlayer = new Canvas(width, height);
-        SetChildIndex(_currentPlayer, 1);
+        SetChildIndex(_currentPlayer, 10);
+
+        _currency = new Canvas(width, height);
+        SetChildIndex(_currency, 10);
 
         _shotsleft = new Canvas(width, height);
-        SetChildIndex(_shotsleft, 1);
+        SetChildIndex(_shotsleft, 10);
 
         _timeLeft = new Canvas(width, height);
-        SetChildIndex(_timeLeft, 1);
+        SetChildIndex(_timeLeft, 10);
+
+        _fuelLeft = new Canvas(game.width, game.height);
+        SetChildIndex(_fuelLeft, 10);
+        _fuelLeft.x -= 40;
 
         _currentBullet = new AnimationSprite("assets/menu/bullet_sheet.png", 4, 1);
         AddChild(_currentBullet);
@@ -36,6 +50,8 @@ public class HUD : Sprite
         _currentBullet.currentFrame = 0;
         _currentBullet.x = width * 0.95f;
         _currentBullet.y = height * 0.06f;
+
+        
 
         _pfc = new PrivateFontCollection();
         _pfc.AddFontFile("assets\\font\\earthorbiter.ttf");
@@ -47,8 +63,12 @@ public class HUD : Sprite
         _currentPlayer.alpha = alpha;
         _shotsleft.alpha = alpha;
         _timeLeft.alpha = alpha;
+        _currentBullet.alpha = alpha;
+        _fuelMeter.alpha = alpha;
     }
 
+    
+    
     private void HandleCurrentBullet()
     {
         if (Input.GetKeyDown(Key.ONE))
@@ -99,6 +119,9 @@ public class HUD : Sprite
 
         _timeLeft.graphics.Clear(Color.Transparent);
         _timeLeft.graphics.DrawString(_level.GetTurnTimer(), _font, Brushes.AliceBlue, width * 0.45f, height * 0.70f);
+
+        _fuelLeft.graphics.Clear(Color.Transparent);
+        _fuelLeft.graphics.DrawString(_level.GetCurrentShip().fuel.ToString(), _font, Brushes.AliceBlue, 0, _fuelMeter.height / 2);
     }
 
     private void Update()

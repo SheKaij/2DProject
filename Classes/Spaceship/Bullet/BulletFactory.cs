@@ -12,7 +12,7 @@ namespace assignment_2.Classes
                 case BulletType.STANDARD :
                     return new StandardBullet(position, velocity, 1f);
 				case BulletType.RICOCHET:
-					return new RicochetBullet(position, velocity, 0.5f);
+					return new RicochetBullet(position, velocity, 1f);
                 default:
                     return null;
             }

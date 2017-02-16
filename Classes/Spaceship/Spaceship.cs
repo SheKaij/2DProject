@@ -23,15 +23,14 @@ namespace GXPEngine
         public int bulletCount { get; set; }
         
         public int currency { get; set; }
-        public int health { get; set; }
-        public int maxHealth { get; set; }
+        public float health { get; set; }
+        public float maxHealth { get; set; }
         public bool shopping { get; set; }
-
-        private Healthbar _healthbar;
+        
+		public int fuel { get; set; }
         private Sound _sfxEngine;
 
-
-        public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive) : base(pFilename, 2, 1)
+		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive, int pFuel) : base(pFilename, 2, 1)
         {
             turret = new Turret();
             bullets = new List<Bullet>();
@@ -41,6 +40,7 @@ namespace GXPEngine
             isActive = pIsActive;
             bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
+			fuel = pFuel;
 
             //_healthbar = new Healthbar(this);
             //AddChild(_healthbar);
@@ -63,21 +63,24 @@ namespace GXPEngine
 
         private void HandleControls()
         {
+			if (fuel != 0)
+			{
+				if (Input.GetKey(Key.W))
+				{
+					velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
+					fuel--;
+				}
 
-            if (Input.GetKey(Key.W))
-            {
-                velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
-            }
+				if (Input.GetKey(Key.D))
+				{
+					angular_velocity += ANGULAR_ACCELERATION;
+				}
 
-            if (Input.GetKey(Key.D))
-            {
-                angular_velocity += ANGULAR_ACCELERATION;
-            }
-
-            if (Input.GetKey(Key.A))
-            {
-                angular_velocity -= ANGULAR_ACCELERATION;
-            }
+				if (Input.GetKey(Key.A))
+				{
+					angular_velocity -= ANGULAR_ACCELERATION;
+				}
+			}
         }
 
         private void HandleFriction()
@@ -129,10 +132,14 @@ namespace GXPEngine
             {
                 HandleControls();
                 turret.Move();
-                //FireParticles();
             }
             HandleFriction();
             Move();
+
+			if (health <= 0)
+			{
+				this.Destroy();
+			}
         }
     }
 }

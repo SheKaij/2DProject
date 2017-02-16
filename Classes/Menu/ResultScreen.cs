@@ -18,6 +18,9 @@ public class ResultScreen : GameObject
 
     private string _currentPlayer;
 
+	private Sound _victoryMusic;
+	private SoundChannel _victoryChannel;
+
     public ResultScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
@@ -50,6 +53,8 @@ public class ResultScreen : GameObject
         _font = new Font(_pfc.Families[0], 36);
         _fontMega = new Font(_pfc.Families[0], 60);
 
+		_victoryMusic = new Sound("assets\\sfx\\victorymusic.mp3", false, true);
+		_victoryChannel = _victoryMusic.Play();
     }
 
     public void SetCurrentPlayer(string pCurrentPlayer)
@@ -75,11 +80,13 @@ public class ResultScreen : GameObject
         {
             _myGame.StartState(MyGame.GameState.STORE);
             _myGame.SwitchState(MyGame.GameState.STORE);
+			_victoryChannel.Stop();
         }
 
         else if (Input.GetMouseButtonUp(0) && _nextButton.MouseHover())
         {
             _myGame.SetState(MyGame.GameState.LEVEL);
+			_victoryChannel.Stop();
         }
     }
 

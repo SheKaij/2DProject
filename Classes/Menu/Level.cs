@@ -42,64 +42,59 @@ public class Level : GameObject
     {
         _myGame = pMyGame;
 
-        _bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
-        //_playMusic = _bgMusicSound.Play();
-
-        _background1 = new Background();
-        AddChild(_background1);
+		_background1 = new Background();
+		AddChild(_background1);
 
 		_spaceships = new List<Spaceship>();
 
-        _spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+		_spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
 		_spaceships.Add(_spaceship1);
-        AddChild(_spaceship1);
-        _currentSpaceship = _spaceship1;
+		AddChild(_spaceship1);
+		_currentSpaceship = _spaceship1;
 
-        _spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+		_spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
 		_spaceships.Add(_spaceship2);
-        AddChild(_spaceship2);
+		AddChild(_spaceship2);
 
-        _planets = new List<Planet>();
-        _bullets = new List<Bullet>();
+		_planets = new List<Planet>();
+		_bullets = new List<Bullet>();
 
-        Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
-        _planets.Add(planet);
-        AddChild(planet);
+		Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
+		_planets.Add(planet);
+		AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.MEDIUM, new Vec2(game.width * 0.2f, game.height * 0.8f));
-        _planets.Add(planet);
-        AddChild(planet);
+		planet = PlanetFactory.Create(PlanetType.MEDIUM, new Vec2(game.width * 0.2f, game.height * 0.8f));
+		_planets.Add(planet);
+		AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
-        _planets.Add(planet);
-        AddChild(planet);
+		planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
+		_planets.Add(planet);
+		AddChild(planet);
 
-        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
-        _planets.Add(planet);
-        AddChild(planet);
+		planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
+		_planets.Add(planet);
+		AddChild(planet);
 
-        _exitButton = new Button("assets/menu/exit_button2.png");
-        AddChild(_exitButton);
-        _exitButton.x = game.width - (_exitButton.radius * 2);
-        _exitButton.y += _exitButton.radius * 2;
+		_exitButton = new Button("assets/menu/exit_button2.png");
+		AddChild(_exitButton);
+		_exitButton.x = game.width - (_exitButton.radius * 2);
+		_exitButton.y += _exitButton.radius * 2;
 
-        _hud = new HUD(this);
-        AddChild(_hud);
-        _hud.x = game.width / 2 - _hud.width / 2;
+		_hud = new HUD(this);
+		AddChild(_hud);
+		_hud.x = game.width / 2 - _hud.width / 2;
 
-        _fg = new FadeOut();
-        AddChild(_fg);
-    }
+		_fg = new FadeOut();
+		AddChild(_fg);
+
+		_bgMusicSound = new Sound("assets\\sfx\\levelmusic.wav", true, true);
+		_playMusic = _bgMusicSound.Play();
+	}
 
     public bool SetWindowActive(bool value)
     {
         _windowActive = value;
         return _windowActive;
-    }
-
-    public SoundChannel GetMusic()
-    {
-        return _playMusic;
     }
 
     public int GetBulletCount()
@@ -246,6 +241,7 @@ public class Level : GameObject
 
                 _myGame.SaveLevelInfo(this);
                 _myGame.StopState(MyGame.GameState.LEVEL);
+				_playMusic.Stop();
 			}
 		}
 
@@ -265,6 +261,7 @@ public class Level : GameObject
                         {
                             _myGame.SaveLevelInfo(this);
                             _myGame.StopState(MyGame.GameState.LEVEL);
+							_playMusic.Stop();
                         }
 					}
 				}

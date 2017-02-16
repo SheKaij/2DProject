@@ -32,9 +32,8 @@ public class StoreScreen : GameObject
         _backButton.x = _window.width  / 2;
         _backButton.y = _window.height - _backButton.height * 1.33f;
 
-		_storeMusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+		_storeMusic = new Sound("assets\\sfx\\storemusic.mp3", true, true);
 		_storeChannel = _storeMusic.Play();
-
     }
 
     private void WindowAppear()
@@ -51,6 +50,7 @@ public class StoreScreen : GameObject
         {
             _myGame.SwitchState(MyGame.GameState.RESULT);
             _myGame.StopState(MyGame.GameState.STORE);
+			_storeChannel.Stop();
         }
     }
 

@@ -11,8 +11,6 @@ public class MyGame : Game
     private StoreScreen _store;
     private GameState _gameState;
 
-	private Sound _startMusic, _levelMusic, _storeMusic, _victoryMusic;
-
     public enum GameState
     {
         START,
@@ -60,26 +58,22 @@ public class MyGame : Game
             case GameState.START:
                 _start = new StartScreen(this);
                 AddChild(_start);
-				_startMusic.Play(false, 1);
                 break;
-            //case GameState.CONTROLS:
-            //    _controls = new ControlScreen(this);
-            //    AddChild(_controls);
-            //    break;
+            case GameState.CONTROLS:
+                _controls = new ControlScreen(this);
+                AddChild(_controls);
+                break;
             case GameState.LEVEL:
                 _level = new Level(this);
                 AddChild(_level);
-				_levelMusic.Play(false, 1);
                 break;
             case GameState.RESULT:
                 _result = new ResultScreen(this);
                 AddChild(_result);
-				_victoryMusic.Play(false, 1);
                 break;
             case GameState.STORE:
                 _store = new StoreScreen(this);
                 AddChild(_store);
-				_storeMusic.Play(false, 1);
                 break;
 
             default:

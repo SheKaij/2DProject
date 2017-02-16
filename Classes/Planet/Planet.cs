@@ -25,7 +25,7 @@ public class Planet : AnimationSprite
 	private Sound planetExplode;
 	private SoundChannel planetChannel;
 
-    public Planet(Vec2 position, float mass, float health, float maxHealth, float scale, String asset) : base(asset, 3, 2)
+    public Planet(Vec2 position, float mass, float health, float maxHealth, float scale, string asset) : base(asset, 3, 2)
     {
         _radius = (int)(400/2*scale);
         this.position = position;
@@ -80,7 +80,6 @@ public class Planet : AnimationSprite
 			if (planetChannel.IsPaused)
 			{
 				planetChannel.IsPaused = false;
-				planetExplode.Play();
 			}
 			_timer--;
 			alpha = _timer / 100f;

@@ -18,7 +18,7 @@ public abstract class Bullet : Sprite
     public Vec2 velocity { get; set; }
 	public float damage { get; set; }
 
-    public Bullet(Vec2 position, Vec2 velocity, float damage, string pAsset, String shotSound,  String hitSound,  float speed) : base(pAsset)
+    public Bullet(Vec2 position, Vec2 velocity, float damage, string pAsset, string shotSound, string hitSound,  float speed) : base(pAsset)
     {
         this.position = position;
         this.velocity = velocity.Scale(speed);

@@ -21,14 +21,14 @@ namespace GXPEngine
         public bool isActive { get; set; }
         public BulletType bulletType { get; set; }
         public int bulletCount { get; set; }
-
+		public float health { get; set; }
         public int score { get; set; }
 
 
         private Sound _sfxEngine;
 
 
-        public Spaceship(Vec2 pPosition, int pRotation, bool pIsActive) : base("assets\\spaceship\\ship.png")
+        public Spaceship(Vec2 pPosition, int pRotation, bool pIsActive, float health) : base("assets\\spaceship\\ship.png")
         {
             turret = new Turret();
             bullets = new List<Bullet>();
@@ -38,6 +38,7 @@ namespace GXPEngine
             isActive = pIsActive;
             bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
+			this.health = health;
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
 			//_sfxEngine.Play();
@@ -117,10 +118,14 @@ namespace GXPEngine
             {
                 HandleControls();
                 turret.Move();
-                //FireParticles();
             }
             HandleFriction();
             Move();
+
+			if (health <= 0)
+			{
+				this.Destroy();
+			}
         }
     }
 }

@@ -30,7 +30,7 @@ public class HUD : Sprite
         _timeLeft = new Canvas(width, height);
         SetChildIndex(_timeLeft, 1);
 
-        _currentBullet = new AnimationSprite("assets/menu/bullet_sheet.png", 3, 1);
+        _currentBullet = new AnimationSprite("assets/menu/bullet_sheet.png", 4, 1);
         AddChild(_currentBullet);
         _currentBullet.SetScaleXY(0.5f);
         _currentBullet.currentFrame = 0;
@@ -64,6 +64,11 @@ public class HUD : Sprite
         else if (Input.GetKeyDown(Key.THREE))
         {
             _currentBullet.currentFrame = 2;
+        }
+
+        else if (Input.GetKeyDown(Key.FOUR))
+        {
+            _currentBullet.currentFrame = 3;
         }
     }
 

@@ -17,7 +17,6 @@ public class Button : AnimationSprite
         SetOrigin(width / 2, height / 2);
         radius = 60 / 2;
         alpha = 0;
-        SetScaleXY(0.7f);
 
 		_hoverButton = new Sound("assets\\sfx\\buttonsound.wav");
 		_clickButton = new Sound("assets\\sfx\\buttonsv2.wav");
@@ -50,7 +49,7 @@ public class Button : AnimationSprite
 
         else
         {
-            SetScaleXY(1.0f);
+            SetScaleXY(1f);
             if (alpha >= 0.5f)
             {
                 alpha -= 0.05f;

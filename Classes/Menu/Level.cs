@@ -11,6 +11,7 @@ public class Level : GameObject
 
     private const float GRAVITATIONAL_FORCE = 30000f;
     private const float ELACITY = 0.85f;
+    private const float FRICTION = 0.9995f;
 
     private Background _background1;
     private Sound _bgMusicSound;
@@ -58,25 +59,25 @@ public class Level : GameObject
 		AddChild(_spaceship2);
 
 		_planets = new List<Planet>();
-		//_bullets = new List<Bullet>();
+        //_bullets = new List<Bullet>();
 
-		Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
-		_planets.Add(planet);
-		AddChild(planet);
+        Planet planet = PlanetFactory.Create(PlanetType.SMALL, new Vec2(game.width * 0.3f, game.height * 0.2f));
+        _planets.Add(planet);
+        AddChild(planet);
 
-		planet = PlanetFactory.Create(PlanetType.MEDIUM, new Vec2(game.width * 0.2f, game.height * 0.8f));
-		_planets.Add(planet);
-		AddChild(planet);
+        planet = PlanetFactory.Create(PlanetType.MEDIUM, new Vec2(game.width * 0.2f, game.height * 0.8f));
+        _planets.Add(planet);
+        AddChild(planet);
 
-		planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
-		_planets.Add(planet);
-		AddChild(planet);
+        planet = PlanetFactory.Create(PlanetType.BIG, new Vec2(game.width * 0.5f, game.height * 0.7f));
+        _planets.Add(planet);
+        AddChild(planet);
 
-		planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
-		_planets.Add(planet);
-		AddChild(planet);
+        planet = PlanetFactory.Create(PlanetType.LARGE, new Vec2(game.width * 0.8f, game.height * 0.3f));
+        _planets.Add(planet);
+        AddChild(planet);
 
-		_exitButton = new Button("assets/menu/exit_button2.png");
+        _exitButton = new Button("assets/menu/exit_button2.png");
 		AddChild(_exitButton);
 		_exitButton.x = game.width - (_exitButton.radius * 2);
 		_exitButton.y += _exitButton.radius * 2;
@@ -417,7 +418,7 @@ public class Level : GameObject
                 Vec2 gravityVector = new Vec2(planet.x - bullet.x, planet.y - bullet.y);
                 gravityVector.Normalize();
                 gravityVector.Scale(GRAVITATIONAL_FORCE * planet.mass / Mathf.Pow(bullet.DistanceTo(planet), 2));
-                bullet.velocity.Add(gravityVector);
+                bullet.velocity.Add(gravityVector).Scale(FRICTION);
             }
             
         }

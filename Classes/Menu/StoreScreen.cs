@@ -15,6 +15,9 @@ public class StoreScreen : GameObject
     private PrivateFontCollection _pfc;
     private Font _font, _fontMega;
 
+	private Sound _storeMusic;
+	private SoundChannel _storeChannel;
+
     public StoreScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
@@ -106,6 +109,9 @@ public class StoreScreen : GameObject
         SetChildIndex(_textRicochet, 10);
         _textRicochet.alpha = 0;
 
+        _storeMusic = new Sound("assets\\sfx\\storemusic.mp3", true, true);
+        _storeChannel = _storeMusic.Play();
+
         DrawText();
     }
 
@@ -125,6 +131,7 @@ public class StoreScreen : GameObject
         _textRicochet.graphics.DrawString("Ricochet bullet:" + "\n"
                                        + "bullets bounce off" + "\n"
                                        + "damage: 0.8", _font, Brushes.AliceBlue, game.width * 0.5f, _upgradeRicochet.y - _upgradeRicochet.height / 2);
+        _backButton.y = _window.height - _backButton.height * 1.33f;
     }
 
     private void WindowAppear()
@@ -166,6 +173,7 @@ public class StoreScreen : GameObject
         {
             _myGame.SwitchState(MyGame.GameState.RESULT);
             _myGame.StopState(MyGame.GameState.STORE);
+			_storeChannel.Stop();
         }
     }
 

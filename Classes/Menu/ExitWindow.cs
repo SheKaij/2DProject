@@ -74,7 +74,6 @@ public class ExitWindow : Sprite
 
         else if (Input.GetMouseButtonUp(0) && _confirmButton.MouseHover())
         {
-            //_level.GetMusic().Stop();
             _myGame.SetState(MyGame.GameState.START);
         }
     }

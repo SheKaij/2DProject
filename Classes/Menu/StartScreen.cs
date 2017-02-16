@@ -8,6 +8,7 @@ public class StartScreen : GameObject
     private Sprite _bg;
 
 	private Sound _bgmusic;
+    private SoundChannel _bgmusicChannel;
 
     public StartScreen(MyGame pMyGame) : base()
     {
@@ -35,6 +36,8 @@ public class StartScreen : GameObject
         AddChild(_fg);
 
 		_bgmusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+
+        _bgmusicChannel = _bgmusic.Play();
     }
 
     private void HandleButtons()
@@ -44,6 +47,7 @@ public class StartScreen : GameObject
             if (_playButton.MouseHover())
             {
                 _myGame.SetState(MyGame.GameState.LEVEL);
+				_bgmusicChannel.Stop();
             }
 
             else if (_creditsButton.MouseHover())

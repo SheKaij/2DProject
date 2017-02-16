@@ -47,13 +47,13 @@ public class Level : GameObject
 
 		_spaceships = new List<Spaceship>();
         
-        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true, 8);
+        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true, 8, 120);
 		_spaceships.Add(_spaceship1);
 		AddChild(_spaceship1);
 		_currentSpaceship = _spaceship1;
 
 
-        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false, 8);
+        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false, 8, 120);
 		_spaceships.Add(_spaceship2);
 		AddChild(_spaceship2);
 
@@ -199,7 +199,6 @@ public class Level : GameObject
 
     public void HandleAttack()
     {
-
         if (Input.GetMouseButtonDown(0) && _exitButton.MouseHover() == false && _bullets.Contains(bullet) == false)
         {
             bullet = BulletFactory.Create(_currentSpaceship.bulletType, _currentSpaceship.position.Clone(), new Vec2(Input.mouseX - _currentSpaceship.x, Input.mouseY - _currentSpaceship.y));
@@ -304,6 +303,7 @@ public class Level : GameObject
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship1;
             _spaceship2.bulletCount = 5;
+			_spaceship2.fuel = 120;
             _spaceship1.isActive = true;
             _spaceship2.isActive = false;
         }
@@ -315,6 +315,7 @@ public class Level : GameObject
             _currentSpaceship.velocity.SetXY(0, 0);
             _currentSpaceship = _spaceship2;
             _spaceship1.bulletCount = 5;
+			_spaceship1.fuel = 120;
             _spaceship1.isActive = false;
             _spaceship2.isActive = true;
         }
@@ -353,6 +354,7 @@ public class Level : GameObject
                 _currentSpaceship.velocity.SetXY(0, 0);
                 _currentSpaceship = _spaceship1;
                 _spaceship2.bulletCount = 5;
+				_spaceship2.fuel = 120;
                 _spaceship1.isActive = true;
                 _spaceship2.isActive = false;
             }
@@ -362,6 +364,7 @@ public class Level : GameObject
                 _currentSpaceship.velocity.SetXY(0, 0);
                 _currentSpaceship = _spaceship2;
                 _spaceship1.bulletCount = 5;
+				_spaceship1.fuel = 120;
                 _spaceship1.isActive = false;
                 _spaceship2.isActive = true;
             }

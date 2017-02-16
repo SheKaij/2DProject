@@ -22,12 +22,12 @@ namespace GXPEngine
         public BulletType bulletType { get; set; }
         public int bulletCount { get; set; }
 		public float health { get; set; }
+		public int fuel { get; set; }
         public int score { get; set; }
-
 
         private Sound _sfxEngine;
 
-		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive, float health) : base(pFilename, 2, 1)
+		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive, float health, int fuel) : base(pFilename, 2, 1)
         {
             turret = new Turret();
             bullets = new List<Bullet>();
@@ -38,6 +38,7 @@ namespace GXPEngine
             bulletType = BulletType.STANDARD;
             bulletCount = MAX_BULLET;
 			this.health = health;
+			this.fuel = fuel;
 
             _sfxEngine = new Sound("assets\\sfx\\enginesound.wav", true);
 			//_sfxEngine.Play();
@@ -51,21 +52,25 @@ namespace GXPEngine
 
         private void HandleControls()
         {
+			if (fuel != 0)
+			{
+				if (Input.GetKey(Key.W))
+				{
+					velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
+					fuel--;
 
-            if (Input.GetKey(Key.W))
-            {
-                velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
-            }
+				}
 
-            if (Input.GetKey(Key.D))
-            {
-                angular_velocity += ANGULAR_ACCELERATION;
-            }
+				if (Input.GetKey(Key.D))
+				{
+					angular_velocity += ANGULAR_ACCELERATION;
+				}
 
-            if (Input.GetKey(Key.A))
-            {
-                angular_velocity -= ANGULAR_ACCELERATION;
-            }
+				if (Input.GetKey(Key.A))
+				{
+					angular_velocity -= ANGULAR_ACCELERATION;
+				}
+			}
         }
 
         private void HandleFriction()

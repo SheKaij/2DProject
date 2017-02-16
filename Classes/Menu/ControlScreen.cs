@@ -56,8 +56,8 @@ public class ControlScreen : GameObject
                                  _font, Brushes.AliceBlue, game.width * 0.40f, game.height * 0.44f);
 
         _info.graphics.DrawImage(Image.FromFile("assets/icons/controls_icon3.png"), game.width * 0.1f, game.height * 0.61f);
-        _info.graphics.DrawString("You buy upgrades with currency" + "\n"
-                                 + "Currency is earned by destroying" + "\n"
+        _info.graphics.DrawString("You buy upgrades with Starbux" + "\n"
+                                 + "Starbux is earned by destroying" + "\n"
                                  + "planets and damaging spaceships",
                                  _font, Brushes.AliceBlue, game.width * 0.40f, game.height * 0.61f);
     }

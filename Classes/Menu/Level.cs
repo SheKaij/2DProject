@@ -50,12 +50,12 @@ public class Level : GameObject
 
 		_spaceships = new List<Spaceship>();
 
-        _spaceship1 = new Spaceship(new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
+        _spaceship1 = new Spaceship("assets/spaceship/player_1.png", new Vec2(game.width * 0.1f, game.height * 0.4f), 0, true);
 		_spaceships.Add(_spaceship1);
         AddChild(_spaceship1);
         _currentSpaceship = _spaceship1;
 
-        _spaceship2 = new Spaceship(new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
+        _spaceship2 = new Spaceship("assets/spaceship/player_2.png", new Vec2(game.width * 0.9f, game.height * 0.6f), 180, false);
 		_spaceships.Add(_spaceship2);
         AddChild(_spaceship2);
 
@@ -161,6 +161,29 @@ public class Level : GameObject
             }
         }
     }
+    
+    private void HandlePlayerGlow()
+    {
+        if (_spaceship1.isActive == true)
+        {
+            _spaceship1.currentFrame = 1;
+        }
+
+        else
+        {
+            _spaceship1.currentFrame = 0;
+        }
+
+        if (_spaceship2.isActive == true)
+        {
+            _spaceship2.currentFrame = 1;
+        }
+
+        else
+        {
+            _spaceship2.currentFrame = 0;
+        }
+    }
 
     private void HandleButtons()
     {
@@ -175,11 +198,6 @@ public class Level : GameObject
             AddChildAt(_exitWindow, 300);
             _windowActive = true;
             _currentSpaceship.isActive = false;
-
-            //if (_exitWindow.IsDestroyed())
-            //{
-            //    _windowActive = false;
-            //}
         }
     }
 
@@ -358,6 +376,7 @@ public class Level : GameObject
             TurnHandler();
         }
 
+        HandlePlayerGlow();
         HandleButtons();
         HandleGravity();
         CheckHitCollision();

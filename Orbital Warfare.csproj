@@ -58,6 +58,9 @@
     <Compile Include="Classes\Menu\StartScreen.cs" />
     <Compile Include="Classes\Menu\ResultScreen.cs" />
     <Compile Include="Classes\Planet\PlanetFactory.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\ClusterBullet.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\ControlledBullet.cs" />
+    <Compile Include="Classes\Spaceship\Bullet\Fragile.cs" />
     <Compile Include="Classes\Spaceship\Bullet\StandardBullet.cs" />
     <Compile Include="Classes\Planet\Test_hitbox.cs" />
     <Compile Include="Classes\Spaceship\Turret.cs" />

@@ -44,10 +44,10 @@ public class MyGame : Game
         StartState(_gameState);
     }
 
-    public void SaveLevelInfo(Level pLevel)
+    public void SaveLevelInfo(Level pLevel, String player)
     {
         _result = new ResultScreen(this);
-        _result.SetCurrentPlayer(pLevel.GetCurrentPlayer());
+        _result.SetCurrentPlayer(player);
         AddChild(_result);
     }
 

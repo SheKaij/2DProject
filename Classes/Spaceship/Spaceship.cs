@@ -13,7 +13,7 @@ namespace GXPEngine
 
         public readonly int MAX_BULLET = 5;
         public readonly int MAX_HEALTH = 10;
-        public readonly int MAX_FUEL = 80;
+        public readonly int MAX_FUEL = 50;
 
         public Turret turret { get; set; }
         public List<Bullet> bullets { get; set; }
@@ -90,12 +90,12 @@ namespace GXPEngine
 
                 if (Input.GetKey(Key.TWO))
                 {
-                    bulletType = BulletType.THIRD;
+                    bulletType = BulletType.CONTROLLED;
                 }
 
                 if (Input.GetKey(Key.THREE))
                 {
-                    bulletType = BulletType.FOURTH;
+                    bulletType = BulletType.CLUSTER;
                 }
 
                 if (Input.GetKey(Key.FOUR))

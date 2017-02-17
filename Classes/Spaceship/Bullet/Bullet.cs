@@ -7,9 +7,10 @@ public abstract class Bullet : Sprite
     public enum BulletType
     {
         STANDARD,
+        CONTROLLED,
         RICOCHET,
-        THIRD,
-        FOURTH
+        CLUSTER,
+        FRAGILE
     }
 
     protected Sound _shotSound;
@@ -18,10 +19,10 @@ public abstract class Bullet : Sprite
 
     public Vec2 position { get; set; }
     public Vec2 velocity { get; set; }
-	public float damage { get; set; }
+	public int damage { get; set; }
     public int health { get; set; }
 
-    public Bullet(Vec2 position, Vec2 velocity, float damage, int health, string pAsset, string shotSound, string hitSound,  float speed) : base(pAsset)
+    public Bullet(Vec2 position, Vec2 velocity, int damage, int health, string pAsset, string shotSound, string hitSound,  float speed) : base(pAsset)
     {
         this.position = position;
         this.velocity = velocity.Scale(speed);

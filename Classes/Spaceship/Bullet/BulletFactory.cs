@@ -10,13 +10,15 @@ namespace assignment_2.Classes
             switch (type)
             {
                 case BulletType.STANDARD :
-                    return new StandardBullet(position, velocity, 1f);
+                    return new StandardBullet(position, velocity);
 				case BulletType.RICOCHET:
-					return new RicochetBullet(position, velocity, 0.5f);
-                case BulletType.THIRD:
-                    return new StandardBullet(position, velocity, 1f);
-                case BulletType.FOURTH:
-                    return new StandardBullet(position, velocity, 1f);
+					return new RicochetBullet(position, velocity);
+                case BulletType.CONTROLLED:
+                    return new ControlledBullet(position, velocity);
+                case BulletType.CLUSTER:
+                    return new ClusterBullet(position, velocity);
+                case BulletType.FRAGILE:
+                    return new Fragile(position, velocity);
                 default:
                     return null;
             }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections.Specialized;
 using System.Drawing.Text;
 using GXPEngine;
+using static Bullet;
 
 public class HUD : Sprite
 {
@@ -71,26 +72,22 @@ public class HUD : Sprite
     
     private void HandleCurrentBullet()
     {
-        if (Input.GetKeyDown(Key.ONE))
+        switch (_level.GetCurrentShip().bulletType)
         {
-            _currentBullet.currentFrame = 0;
+            case BulletType.STANDARD:
+                _currentBullet.currentFrame = 0;
+                break;
+            case BulletType.CONTROLLED:
+                _currentBullet.currentFrame = 1;
+                break;
+            case BulletType.CLUSTER:
+                _currentBullet.currentFrame = 2;
+                break;
+            case BulletType.RICOCHET:
+                _currentBullet.currentFrame = 3;
+                break;
         }
-
-        else if (Input.GetKeyDown(Key.TWO))
-        {
-            _currentBullet.currentFrame = 1;
-        }
-
-        else if (Input.GetKeyDown(Key.THREE))
-        {
-            _currentBullet.currentFrame = 2;
-        }
-
-        else if (Input.GetKeyDown(Key.FOUR))
-        {
-            _currentBullet.currentFrame = 3;
-        }
-    }
+     }
 
     private void HandleBulletCount()
     {

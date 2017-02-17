@@ -128,14 +128,14 @@ namespace GXPEngine
             //
         }
 
-        public void RotateDegrees()
+        public Vec2 RotateDegrees(float degrees)
         {
-            //
+            return RotateRadians(Deg2Rad(degrees));
         }
 
-        public void RotateRadians()
+        public Vec2 RotateRadians(float radiants)
         {
-            //
+            return new Vec2(this.x * Mathf.Cos(radiants) - this.y * Mathf.Sin(radiants), this.x * Mathf.Sin(radiants) + this.y * Mathf.Cos(radiants));
         }
 
         public Vec2 RotateAroundDegrees(float px, float py, float degrees)

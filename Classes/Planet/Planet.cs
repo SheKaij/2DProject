@@ -25,13 +25,13 @@ public class Planet : AnimationSprite
 	private Sound planetExplode;
 	private SoundChannel planetChannel;
 
-    public Planet(Vec2 position, float mass, float health, float maxHealth, float scale, string asset) : base(asset, 3, 2)
+    public Planet(Vec2 position, float mass, float maxHealth, float scale, string asset) : base(asset, 3, 2)
     {
         radius = (int)(400/2*scale);
         this.position = position;
         this.mass = mass;
-        this.health = health;
 		this.maxHealth = maxHealth;
+        health = maxHealth;
 
         SetOrigin(width / 2, height / 2);
 

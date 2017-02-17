@@ -16,8 +16,8 @@ public class Healthbar : GameObject
     public Healthbar(Spaceship pSpaceship) : base()
     {
         _spaceship = pSpaceship;
-
         _shipCanvas = new Canvas(game.width, game.height);
+        _shipCanvas.alpha = 0.85f;
         SetChildIndex(_shipCanvas, 1);
     }
 
@@ -26,7 +26,7 @@ public class Healthbar : GameObject
         // more than 75% and lower or equal than 100%;
         if (_spaceship.health > (Mathf.Ceiling(Convert.ToSingle(_spaceship.maxHealth) / 100 * 75)) && _spaceship.health <= _spaceship.maxHealth)
         {
-            _healthBrushColor = Brushes.Green;
+            _healthBrushColor = Brushes.ForestGreen;
             // more or equal than 25% and less than 75%
         }
         else if (_spaceship.health > (Mathf.Ceiling(Convert.ToSingle(_spaceship.maxHealth) / 100 * 25)) && _spaceship.health <= (Mathf.Floor(Convert.ToSingle(_spaceship.maxHealth) / 100 * 75)))
@@ -65,7 +65,7 @@ public class Healthbar : GameObject
 
     private void Update()
     {
-        //dawsd_shipCanvas.graphics.FillRectangle(GetHealthBrushColor(), 0, 0, GetHealthBarWidth(), 20); // hp bar itself
-        GetHealthBrushColor();
+        _shipCanvas.graphics.Clear(Color.Transparent);
+        _shipCanvas.graphics.FillRectangle(GetHealthBrushColor(), 0, 0, GetHealthBarWidth(), 20); // hp bar itself
     }
 }

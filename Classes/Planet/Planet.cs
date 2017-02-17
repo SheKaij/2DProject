@@ -84,12 +84,12 @@ public class Planet : AnimationSprite
 			_timer--;
 			alpha = _timer / 100f;
 			SetFrame(5);
+            radius = 0;
+            mass = 0;
 
 			if (_timer <= 0)
 			{
 				this.Destroy();
-				radius = 0;
-				mass = 0;
 			}
         }
     }

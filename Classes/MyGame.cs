@@ -11,10 +11,11 @@ public class MyGame : Game
     private StoreScreen _store;
     private GameState _gameState;
 
-    //private int _currency;
-    //private int _clusterCount;
-    //private int _thrusterCount;
-    //private int _ricochetCount;
+    public Spaceship currentSpaceship { get; set; }
+    public bool playerOneWon { get; set; }
+    public bool playerTwoWon { get; set; }
+    public bool startMusic { get; set; }
+    public bool levelMusic { get; set; }
 
     public enum GameState
     {
@@ -42,18 +43,6 @@ public class MyGame : Game
         StopState(_gameState);
         _gameState = pGameState;
         StartState(_gameState);
-    }
-
-    public void SaveLevelInfo(Level pLevel, String player)
-    {
-        _result = new ResultScreen(this);
-        _result.SetCurrentPlayer(player);
-        AddChild(_result);
-    }
-
-    public void SwitchState(GameState pGameState)
-    {
-        _gameState = pGameState;
     }
 
     public void StartState(GameState pGameState)
@@ -94,6 +83,7 @@ public class MyGame : Game
             case GameState.START:
                 if (_start != null)
                 {
+                    _start.playMusic.Stop();
                     _start.Destroy();
                     _start = null;
                 }
@@ -101,6 +91,7 @@ public class MyGame : Game
             case GameState.CONTROLS:
                 if (_controls != null)
                 {
+                    _controls.playMusic.Stop();
                     _controls.Destroy();
                     _controls = null;
                 }
@@ -108,6 +99,7 @@ public class MyGame : Game
             case GameState.LEVEL:
                 if (_level != null)
                 {
+                    _level.playMusic.Stop();
                     _level.Destroy();
                     _level = null;
                 }
@@ -122,6 +114,7 @@ public class MyGame : Game
             case GameState.STORE:
                 if (_store != null)
                 {
+                    _store.playMusic.Stop();
                     _store.Destroy();
                     _store = null;
                 }

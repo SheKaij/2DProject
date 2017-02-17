@@ -21,7 +21,7 @@ namespace assignment_2.Classes
                 case PlanetType.BIG:
                     return new Planet(position, 2f, 40, 1f, "assets\\planet_Tilesheets\\Planet_E_500.png");
                 case PlanetType.LARGE:
-                    return new Planet(position, 8f, 80, 1.25f, "assets\\planet_Tilesheets\\Planet_Q_500.png");
+                    return new Planet(position, 4f, 80, 1.25f, "assets\\planet_Tilesheets\\Planet_Q_500.png");
                 default:
                     return null;
             }

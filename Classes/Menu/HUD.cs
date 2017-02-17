@@ -8,12 +8,10 @@ using static Bullet;
 public class HUD : Sprite
 {
     private Level _level;
-    private Spaceship _player1;
-    private Spaceship _player2;
 
     private Canvas _currentPlayer, _currency, _shotsleft, _timeLeft, _fuelLeft;
 
-    private AnimationSprite _currentBullet;
+    public AnimationSprite currentBullet { get; set; }
     private Sprite _fuelMeter;
 
     private PrivateFontCollection _pfc;
@@ -45,12 +43,12 @@ public class HUD : Sprite
         SetChildIndex(_fuelLeft, 10);
         _fuelLeft.x -= 40;
 
-        _currentBullet = new AnimationSprite("assets/menu/bullet_sheet.png", 4, 1);
-        AddChild(_currentBullet);
-        _currentBullet.SetScaleXY(0.5f);
-        _currentBullet.currentFrame = 0;
-        _currentBullet.x = width * 0.95f;
-        _currentBullet.y = height * 0.06f;
+        currentBullet = new AnimationSprite("assets/menu/bullet_sheet.png", 4, 1);
+        AddChild(currentBullet);
+        currentBullet.SetScaleXY(0.5f);
+        currentBullet.currentFrame = 0;
+        currentBullet.x = width * 0.95f;
+        currentBullet.y = height * 0.06f;
 
         
 
@@ -64,27 +62,26 @@ public class HUD : Sprite
         _currentPlayer.alpha = alpha;
         _shotsleft.alpha = alpha;
         _timeLeft.alpha = alpha;
-        _currentBullet.alpha = alpha;
+        currentBullet.alpha = alpha;
         _fuelMeter.alpha = alpha;
+        _fuelLeft.alpha = alpha; 
     }
-
-    
     
     private void HandleCurrentBullet()
     {
         switch (_level.GetCurrentShip().bulletType)
         {
             case BulletType.STANDARD:
-                _currentBullet.currentFrame = 0;
+                currentBullet.currentFrame = 0;
                 break;
             case BulletType.CONTROLLED:
-                _currentBullet.currentFrame = 1;
+                currentBullet.currentFrame = 1;
                 break;
             case BulletType.CLUSTER:
-                _currentBullet.currentFrame = 2;
+                currentBullet.currentFrame = 2;
                 break;
             case BulletType.RICOCHET:
-                _currentBullet.currentFrame = 3;
+                currentBullet.currentFrame = 3;
                 break;
         }
      }

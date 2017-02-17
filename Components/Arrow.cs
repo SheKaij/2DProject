@@ -6,7 +6,6 @@ namespace GXPEngine
 	{
 		private Vec2 _startPoint;
 		private Vec2 _vector;
-		public float scale;
 
 		public uint color = 0xffffffff;
 		public uint lineWidth = 1;

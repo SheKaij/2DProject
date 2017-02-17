@@ -9,7 +9,7 @@ public class ResultScreen : GameObject
     private MyGame _myGame;
 
     private Sprite _bg, _window;
-    private Canvas _playerWon, _stats;
+    private Canvas _playerWon;
 
     private Button _storeButton, _nextButton;
     private PrivateFontCollection _pfc;
@@ -82,8 +82,7 @@ public class ResultScreen : GameObject
     {
         if (Input.GetMouseButtonUp(0) && _storeButton.MouseHover())
         {
-            _myGame.StartState(MyGame.GameState.STORE);
-            _myGame.SwitchState(MyGame.GameState.STORE);
+            _myGame.SetState(MyGame.GameState.STORE);
 			_victoryChannel.Stop();
         }
 
@@ -99,11 +98,5 @@ public class ResultScreen : GameObject
         HandleButtons();
         WindowAppear();
         DrawText();
-
-        if (Input.GetKeyDown(Key.S))
-        {
-            _myGame.StartState(MyGame.GameState.STORE);
-            _myGame.SwitchState(MyGame.GameState.STORE);
-        }
     }
 }

@@ -15,6 +15,9 @@ public class ControlScreen : GameObject
     private PrivateFontCollection _pfc;
     private Font _font;
 
+    private Sound _bgmusic;
+    public SoundChannel playMusic { get; set; }
+
     public ControlScreen(MyGame pMyGame) : base()
     {
         _myGame = pMyGame;
@@ -52,7 +55,7 @@ public class ControlScreen : GameObject
         _backButton = new Button("assets/menu/back_button.png");
         AddChild(_backButton);
         _backButton.x = game.width * 0.80f;
-        _backButton.y = game.height - _backButton.height * 0.66f;
+        _backButton.y = game.height - _backButton.height;
 
         _pfc = new PrivateFontCollection();
         _pfc.AddFontFile("assets\\font\\earthorbiter.ttf");
@@ -60,6 +63,9 @@ public class ControlScreen : GameObject
 
         Sprite _fg = new FadeOut();
         AddChild(_fg);
+
+        _bgmusic = new Sound("assets\\sfx\\menumusic.mp3", true, true);
+        playMusic = _bgmusic.Play();
     }
 
     private void DrawText()

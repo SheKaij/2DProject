@@ -11,8 +11,9 @@ namespace GXPEngine
         private readonly float ANGULAR_ACCELERATION = 0.2f;
         private readonly float FRICTION = 0.95f;
 
-        public readonly int MAX_BULLET = 5;
-        public readonly int MAX_HEALTH = 10;
+        public readonly int MAX_BULLET = 3;
+        public readonly int HEALTH = 30;
+        public readonly int MAX_HEALTH = 30;
         public readonly int MAX_FUEL = 50;
 
         public Turret turret { get; set; }
@@ -32,6 +33,8 @@ namespace GXPEngine
         
 		public int fuel { get; set; }
         private Sound _sfxEngine;
+        private AnimationSprite _thrusterFlame;
+        private int _thrusterTimer = 10;
         
 		public Spaceship(string pFilename, Vec2 pPosition, int pRotation, bool pIsActive) : base(pFilename, 2, 1)
         {
@@ -44,7 +47,8 @@ namespace GXPEngine
             bulletType = BulletType.STANDARD;
 
             bulletCount = MAX_BULLET;
-			health = MAX_HEALTH;
+			health = HEALTH;
+            maxHealth = MAX_HEALTH;
 			fuel = MAX_FUEL;
 
             //_healthbar = new Healthbar(this);
@@ -60,7 +64,31 @@ namespace GXPEngine
             y = position.y;
             rotation = pRotation;
 
+            _thrusterFlame = new AnimationSprite("assets/spaceship/flames.png", 4, 1);
+            _thrusterFlame.SetOrigin(_thrusterFlame.width / 2, _thrusterFlame.height / 2);
+            _thrusterFlame.rotation = 90;
+            _thrusterFlame.alpha = 0;
+            AddChild(_thrusterFlame);
+            _thrusterFlame.x -= 125;
+            _thrusterFlame.y = 0;
+
             AddChild(turret);
+        }
+
+        private void HandleFlames()
+        {
+            _thrusterTimer--;
+            _thrusterFlame.alpha -= 0.03f;
+            if (_thrusterFlame.alpha <= 0)
+            {
+                _thrusterFlame.alpha = 0;
+            }
+
+            if (_thrusterTimer <= 0)
+            {
+                //_thrusterFlame.NextFrame();
+                _thrusterTimer = 10;
+            }
         }
 
         private void HandleControls()
@@ -71,7 +99,12 @@ namespace GXPEngine
 				{
 					velocity.Add(Vec2.GetUnitVectorDegrees(rotation).Scale(ACCELERATION));
 					fuel--;
-				}
+
+                    if (_thrusterFlame.alpha <= 0.8f)
+                    {
+                        _thrusterFlame.alpha += 0.07f;
+                    }
+                }
 
 				if (Input.GetKey(Key.D))
 				{
@@ -82,26 +115,26 @@ namespace GXPEngine
 				{
 					angular_velocity -= ANGULAR_ACCELERATION;
 				}
+            }
 
-                if (Input.GetKey(Key.ONE))
-                {
-                    bulletType = BulletType.STANDARD;
-                }
+            if (Input.GetKey(Key.ONE))
+            {
+                bulletType = BulletType.STANDARD;
+            }
 
-                if (Input.GetKey(Key.TWO))
-                {
-                    bulletType = BulletType.CONTROLLED;
-                }
+            if (Input.GetKey(Key.TWO))
+            {
+                bulletType = BulletType.CONTROLLED;
+            }
 
-                if (Input.GetKey(Key.THREE))
-                {
-                    bulletType = BulletType.CLUSTER;
-                }
+            if (Input.GetKey(Key.THREE))
+            {
+                bulletType = BulletType.CLUSTER;
+            }
 
-                if (Input.GetKey(Key.FOUR))
-                {
-                    bulletType = BulletType.RICOCHET;
-                }
+            if (Input.GetKey(Key.FOUR))
+            {
+                bulletType = BulletType.RICOCHET;
             }
         }
 
@@ -162,6 +195,8 @@ namespace GXPEngine
 			{
 				this.Destroy();
 			}
+
+            HandleFlames();
         }
     }
 }

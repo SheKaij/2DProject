@@ -9,14 +9,14 @@ public class StoreScreen : GameObject
 
     private Sprite _bg, _window, _storeTitle;
     private Canvas _textDefault, _textCluster, _textThruster, _textRicochet, _textPlayer;
-    private string _currentPlayer;
+    private string _currentPlayer = "Current player: 1";
 
     private Button _backButton, _arrowBackButton, _arrowNextButton, _defaultBullet, _upgradeCluster, _upgradeThruster, _upgradeRicochet;
     private PrivateFontCollection _pfc;
     private Font _font, _fontMega;
 
 	private Sound _storeMusic;
-	private SoundChannel _storeChannel;
+	public SoundChannel playMusic { get; set; }
 
     public StoreScreen(MyGame pMyGame) : base()
     {
@@ -70,7 +70,7 @@ public class StoreScreen : GameObject
 
 
 
-        _backButton = new Button("assets/menu/back_button.png");
+        _backButton = new Button("assets/menu/next_button.png");
         AddChild(_backButton);
         _backButton.x = _window.width  / 2;
         _backButton.y = _window.height - _backButton.height * 1.2f;
@@ -113,25 +113,16 @@ public class StoreScreen : GameObject
         SetChildIndex(_textRicochet, 10);
         _textRicochet.alpha = 0;
 
-        _storeMusic = new Sound("assets\\sfx\\storemusic.mp3", true, true);
-        _storeChannel = _storeMusic.Play();
+        _storeMusic = new Sound("assets/sfx/levelmusic.mp3", true, true);
+        playMusic = _storeMusic.Play();
 
         DrawText();
     }
 
-    public string GetCurrentPlayer()
-    {
-        return _currentPlayer;
-    }
-
-    public void SetCurrentPlayer(string pCurrentPlayer)
-    {
-        _currentPlayer = pCurrentPlayer;
-    }
-
     private void DrawCurrentPlayer()
     {
-        _textPlayer.graphics.DrawString("Current player: " + _currentPlayer, _font, Brushes.AliceBlue, game.width * 0.5f, _upgradeRicochet.y - _upgradeRicochet.height / 2);
+        _textPlayer.graphics.Clear(Color.Transparent);
+        _textPlayer.graphics.DrawString(_currentPlayer, _font, Brushes.AliceBlue, game.width * 0.4f, game.height * 0.25f);
     }
 
     //ð = currency
@@ -165,50 +156,30 @@ public class StoreScreen : GameObject
         _textThruster.alpha = _window.alpha;
         _textRicochet.alpha = _window.alpha;
         _textPlayer.alpha = _window.alpha;
-
-        //if (_storeTitle.alpha <= 1)
-        //{
-        //    _storeTitle.alpha += 0.05f;
-        //}
-
-        //if (_textDefault.alpha <= 1)
-        //{
-        //    _textDefault.alpha += 0.05f;
-        //}
-
-        //if (_textCluster.alpha <= 1)
-        //{
-        //    _textCluster.alpha += 0.05f;
-        //}
-
-        //if (_textThruster.alpha <= 1)
-        //{
-        //    _textThruster.alpha += 0.05f;
-        //}
-
-        //if (_textRicochet.alpha <= 1)
-        //{
-        //    _textRicochet.alpha += 0.05f;
-        //}
-
-        //if (_textPlayer.alpha <= 1)
-        //{
-        //    _textPlayer.alpha += 0.05f;
-        //}
     }
 
     private void HandleButtons()
     {
         if (Input.GetMouseButtonUp(0) && _backButton.MouseHover())
         {
-            _myGame.SwitchState(MyGame.GameState.RESULT);
-            _myGame.StopState(MyGame.GameState.STORE);
-			_storeChannel.Stop();
+            _myGame.SetState(MyGame.GameState.LEVEL);
+			playMusic.Stop();
+        }
+
+        if (Input.GetMouseButtonUp(0) && _arrowBackButton.MouseHover() && _currentPlayer != "Current player: 1")
+        {
+            _currentPlayer = "Current player: 1";
+        }
+
+        else if (Input.GetMouseButtonUp(0) && _arrowNextButton.MouseHover() && _currentPlayer != "Current player: 2")
+        {
+            _currentPlayer = "Current Player: 2";
         }
     }
 
     private void Update()
     {
+        DrawCurrentPlayer();
         HandleButtons();
         WindowAppear();
     }

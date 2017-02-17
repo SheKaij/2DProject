@@ -7,10 +7,10 @@ public class Button : AnimationSprite
     public float radius;
     private float _distanceX, _distanceY;
 
-	private Sound _hoverButton;
-	private Sound _clickButton;
+    private Sound _hoverButton;
+    private Sound _clickButton;
 
-	private bool hasPlayed;
+    private bool hasPlayed;
 
     public Button(string pFileName, int pCols = 1, int pRows = 1) : base(pFileName, pCols, pRows)
     {
@@ -18,8 +18,8 @@ public class Button : AnimationSprite
         radius = 60 / 2;
         alpha = 0;
 
-		_hoverButton = new Sound("assets\\sfx\\buttonsound.wav");
-		_clickButton = new Sound("assets\\sfx\\buttonsv2.wav");
+        _hoverButton = new Sound("assets\\sfx\\buttonsound.wav");
+        _clickButton = new Sound("assets\\sfx\\buttonsv2.wav");
     }
 
     private void ButtonAppear()
@@ -39,11 +39,11 @@ public class Button : AnimationSprite
         {
             alpha = 1f;
             SetScaleXY(1.1f);
-			if (hasPlayed == false)
-			{
-				_hoverButton.Play();
-				hasPlayed = true;
-			}
+            if (hasPlayed == false)
+            {
+                //_hoverButton.Play();
+                hasPlayed = true;
+            }
             return true;
         }
 
@@ -59,16 +59,17 @@ public class Button : AnimationSprite
         }
     }
 
-	private void MouseClick()
-	{
-		if (Input.GetMouseButtonUp(0) && MouseHover() == true)
-		{
-			_clickButton.Play();
-		}
-	}
+    private void MouseClick()
+    {
+        if (Input.GetMouseButtonUp(0) && MouseHover() == true)
+        {
+            _clickButton.Play();
+        }
+    }
 
     private void Update()
     {
+        MouseClick();
         MouseHover();
         ButtonAppear();
     }
